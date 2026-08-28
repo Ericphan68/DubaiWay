@@ -43,7 +43,9 @@ export function SignInForm({ next }: { next?: string }) {
     <form action={action} className="space-y-4">
       {next ? <input type="hidden" name="next" value={next} /> : null}
       <Field label="Email" name="email" type="email" required autoComplete="email"
-             placeholder="ban@email.com" error={state.fieldErrors?.email} />
+             placeholder="ban@email.com" error={state.fieldErrors?.email}
+             defaultValue={state.values?.email} />
+      {/* Mật khẩu KHÔNG bao giờ được điền lại từ máy chủ. */}
       <Field label="Mật khẩu" name="password" type="password" required autoComplete="current-password"
              placeholder="••••••••" error={state.fieldErrors?.password} />
 
@@ -68,14 +70,16 @@ export function SignUpForm({ referralCode }: { referralCode?: string }) {
   return (
     <form action={action} className="space-y-4">
       <Field label="Họ và tên" name="fullName" required autoComplete="name"
-             placeholder="Nguyễn Văn A" error={state.fieldErrors?.fullName} />
+             placeholder="Nguyễn Văn A" error={state.fieldErrors?.fullName}
+             defaultValue={state.values?.fullName} />
       <Field label="Email" name="email" type="email" required autoComplete="email"
-             placeholder="ban@email.com" error={state.fieldErrors?.email} />
+             placeholder="ban@email.com" error={state.fieldErrors?.email}
+             defaultValue={state.values?.email} />
       <Field label="Mật khẩu" name="password" type="password" required autoComplete="new-password"
              placeholder="Ít nhất 8 ký tự" error={state.fieldErrors?.password}
              hint="Dùng ít nhất 8 ký tự, nên có cả chữ và số." />
       <Field label="Mã giới thiệu" name="referralCode" placeholder="Nếu có"
-             defaultValue={referralCode}
+             defaultValue={state.values?.referralCode ?? referralCode}
              hint="Người giới thiệu bạn sẽ nhận thưởng khi bạn hoàn tất giao dịch đầu tiên." />
 
       <label className="flex items-start gap-2.5 text-sm text-ink-muted">

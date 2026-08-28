@@ -11,6 +11,23 @@ export interface AuthFormState {
   readonly error: string | null;
   readonly notice?: string | null;
   readonly fieldErrors?: Record<string, string>;
+  /**
+   * Những giá trị cần điền lại vào form sau khi lỗi.
+   * React 19 xoá trắng form sau mỗi form action, nên nếu không trả lại thì
+   * người dùng phải gõ lại từ đầu — và lần bấm tiếp theo sẽ gửi ô rỗng.
+   * KHÔNG BAO GIỜ đưa mật khẩu vào đây.
+   */
+  readonly values?: Record<string, string>;
+}
+
+/** Đọc lại các ô an toàn để điền vào form. Bỏ qua mật khẩu và các ô nhạy cảm. */
+function keepValues(formData: FormData, fields: readonly string[]): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const f of fields) {
+    const v = formData.get(f);
+    if (typeof v === 'string' && v !== '') out[f] = v;
+  }
+  return out;
 }
 
 function fieldErrorsOf(error: z.ZodError): Record<string, string> {
@@ -26,15 +43,20 @@ const signInSchema = z.object({
 });
 
 export async function signInAction(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
+  const keep = keepValues(formData, ['email']);
   const parsed = signInSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { error: 'Vui lòng kiểm tra lại thông tin.', fieldErrors: fieldErrorsOf(parsed.error) };
+    return {
+      error: 'Vui lòng kiểm tra lại thông tin.',
+      fieldErrors: fieldErrorsOf(parsed.error),
+      values: keep,
+    };
   }
   const result = await getAuthProvider().signIn({
     email: parsed.data.email,
     password: parsed.data.password,
   });
-  if (!result.ok) return { error: result.error };
+  if (!result.ok) return { error: result.error, values: keep };
 
   await setSessionCookie(result.token);
   // Chỉ nhận đường dẫn nội bộ — chặn chuyển hướng sang tên miền lạ (open redirect).
@@ -51,9 +73,14 @@ const signUpSchema = z.object({
 });
 
 export async function signUpAction(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
+  const keep = keepValues(formData, ['fullName', 'email', 'referralCode']);
   const parsed = signUpSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { error: 'Vui lòng kiểm tra lại thông tin.', fieldErrors: fieldErrorsOf(parsed.error) };
+    return {
+      error: 'Vui lòng kiểm tra lại thông tin.',
+      fieldErrors: fieldErrorsOf(parsed.error),
+      values: keep,
+    };
   }
   const result = await getAuthProvider().signUp({
     email: parsed.data.email,
@@ -61,7 +88,7 @@ export async function signUpAction(_prev: AuthFormState, formData: FormData): Pr
     fullName: parsed.data.fullName,
     referralCode: parsed.data.referralCode || undefined,
   });
-  if (!result.ok) return { error: result.error };
+  if (!result.ok) return { error: result.error, values: keep };
 
   // Mỗi tài khoản có mã giới thiệu riêng ngay từ lúc đăng ký.
   getOrCreateReferralCode(result.user.id);
@@ -87,7 +114,11 @@ const resetSchema = z.object({ email: z.string().trim().email('Email không hợ
 export async function requestResetAction(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
   const parsed = resetSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { error: null, fieldErrors: fieldErrorsOf(parsed.error) };
+    return {
+      error: null,
+      fieldErrors: fieldErrorsOf(parsed.error),
+      values: keepValues(formData, ['email']),
+    };
   }
   const r = await getAuthProvider().requestPasswordReset(parsed.data.email);
   return { error: null, notice: r.message };

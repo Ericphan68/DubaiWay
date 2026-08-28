@@ -63,7 +63,6 @@ export async function Footer() {
 
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
             {[
-              [t.partnerCta.stat1Value, t.partnerCta.stat1Title, t.partnerCta.stat1Desc],
               [t.partnerCta.stat2Value, t.partnerCta.stat2Title, t.partnerCta.stat2Desc],
               [t.partnerCta.stat3Value, t.partnerCta.stat3Title, t.partnerCta.stat3Desc],
             ].map(([value, title, desc]) => (
