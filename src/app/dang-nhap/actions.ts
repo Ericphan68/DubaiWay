@@ -1,7 +1,9 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import { z } from 'zod';
+import { AREA_HOME, AREA_SIGN_IN, areaForHost } from '@/config/hosts';
 import { clearSessionCookie, getAuthProvider, setSessionCookie } from '@/server/auth';
 import {
   getOrCreateReferralCode, getUserByCode, recordAttribution,
@@ -18,6 +20,15 @@ export interface AuthFormState {
    * KHÔNG BAO GIỜ đưa mật khẩu vào đây.
    */
   readonly values?: Record<string, string>;
+  /**
+   * Đích cần TẢI LẠI ĐẦY ĐỦ sau khi đăng nhập.
+   *
+   * Dùng cho khu đối tác và quản trị. `redirect()` của Next là điều hướng mềm,
+   * mà điều hướng mềm giữ nguyên khung trang đã dựng lúc đầu — đăng nhập xong
+   * vẫn thấy thanh menu của trang khách trên tên miền nội bộ. Để trình duyệt
+   * tải lại thật thì khung trang được dựng lại đúng theo tên miền.
+   */
+  readonly hardRedirect?: string;
 }
 
 /** Đọc lại các ô an toàn để điền vào form. Bỏ qua mật khẩu và các ô nhạy cảm. */
@@ -59,9 +70,16 @@ export async function signInAction(_prev: AuthFormState, formData: FormData): Pr
   if (!result.ok) return { error: result.error, values: keep };
 
   await setSessionCookie(result.token);
+
   // Chỉ nhận đường dẫn nội bộ — chặn chuyển hướng sang tên miền lạ (open redirect).
-  const next = parsed.data.next;
-  redirect(next && next.startsWith('/') && !next.startsWith('//') ? next : '/tai-khoan');
+  const raw = parsed.data.next;
+  const safe = raw && raw.startsWith('/') && !raw.startsWith('//') ? raw : null;
+  const area = areaForHost((await headers()).get('host') ?? '');
+
+  // Mỗi khu về đúng nhà của mình; middleware sẽ chặn nếu đích không hợp lệ.
+  const target = safe ?? AREA_HOME[area];
+  if (area !== 'customer') return { error: null, hardRedirect: target };
+  redirect(target);
 }
 
 const signUpSchema = z.object({
@@ -106,7 +124,10 @@ export async function signUpAction(_prev: AuthFormState, formData: FormData): Pr
 
 export async function signOutAction(): Promise<void> {
   await clearSessionCookie();
-  redirect('/');
+  const area = areaForHost((await headers()).get('host') ?? '');
+  // Đăng xuất khỏi khu nội bộ thì về đúng trang đăng nhập của khu đó,
+  // không đẩy người ta ra trang bán hàng cho khách.
+  redirect(AREA_SIGN_IN[area]);
 }
 
 const resetSchema = z.object({ email: z.string().trim().email('Email không hợp lệ') });

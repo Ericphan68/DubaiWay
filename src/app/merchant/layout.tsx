@@ -20,7 +20,9 @@ const NAV = [
 
 export default async function MerchantLayout({ children }: { children: ReactNode }) {
   const user = await getSessionUser();
-  if (!user) redirect('/dang-nhap?next=/merchant');
+  // Trang đăng nhập riêng của khu đối tác. Đặt ngoài /merchant nên không lọt
+  // vào chính lớp chặn này, tránh chuyển hướng vòng tròn.
+  if (!user) redirect('/dang-nhap-doi-tac');
   // Người đã có hồ sơ đối tác hoặc có vai trò merchant đều vào được.
   // Người chưa có gì thì đẩy sang trang đăng ký thay vì chặn cụt.
   const merchant = getMerchantForUser(user.id);

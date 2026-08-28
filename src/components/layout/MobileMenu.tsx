@@ -6,6 +6,7 @@ import { mainNav } from '@/config/nav';
 import { siteConfig } from '@/config/site';
 import { LocalePicker } from './LocalePicker';
 import { AllCategoriesButton } from '@/components/categories/AllCategoriesButton';
+import { urlForArea } from '@/config/hosts';
 import type { CategoryGroup } from '@/config/category-groups';
 import { getDictionary, type Locale } from '@/i18n';
 import type { HeaderUser } from './Header';
@@ -150,16 +151,16 @@ export function MobileMenu({
                 {user.fullName ?? user.email}
               </Link>
               {user.isMerchant ? (
-                <Link href="/merchant" onClick={onClose}
+                <a href={urlForArea('merchant')} onClick={onClose}
                       className="block rounded-full border border-white/25 py-2.5 text-center text-sm text-white hover:bg-white/10">
                   {t.account.merchantArea}
-                </Link>
+                </a>
               ) : null}
               {user.isStaff ? (
-                <Link href="/admin" onClick={onClose}
+                <a href={urlForArea('admin')} onClick={onClose}
                       className="block rounded-full border border-white/25 py-2.5 text-center text-sm text-white hover:bg-white/10">
                   {t.account.adminArea}
-                </Link>
+                </a>
               ) : null}
             </div>
           ) : (

@@ -3,6 +3,7 @@ import { Section } from '@/components/ui/Section';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { LeadForm } from '@/components/shared/LeadForm';
 import { siteConfig } from '@/config/site';
+import { urlForArea } from '@/config/hosts';
 
 export const metadata: Metadata = {
   title: 'Trở thành đối tác',
@@ -75,7 +76,7 @@ export default function BecomePartnerPage() {
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <a
-              href="/merchant/dang-ky"
+              href={urlForArea('merchant', '/dang-ky')}
               className="inline-flex h-11 items-center rounded-full bg-champagne px-6 text-sm font-medium text-white transition-colors hover:bg-champagne-600"
             >
               Tạo hồ sơ đối tác

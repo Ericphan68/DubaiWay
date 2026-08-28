@@ -24,7 +24,7 @@ const NAV = [
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const user = await getSessionUser();
-  if (!user) redirect('/dang-nhap?next=/admin');
+  if (!user) redirect('/dang-nhap-quan-tri');
   // Chặn ở máy chủ theo vai trò, không dựa vào việc giấu link.
   if (!isPlatformStaff(user)) redirect('/');
 

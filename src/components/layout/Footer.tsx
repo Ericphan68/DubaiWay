@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { urlForArea } from '@/config/hosts';
 import { footerNav } from '@/config/nav';
 import { siteConfig } from '@/config/site';
 import { Logo } from '@/components/ui/Logo';
@@ -47,7 +48,7 @@ export async function Footer() {
 
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
-                href="/merchant/dang-ky"
+                href={urlForArea('merchant', '/dang-ky')}
                 className="inline-flex h-12 items-center rounded-full bg-champagne px-7 text-sm font-medium text-white transition-colors hover:bg-champagne-600"
               >
                 {t.partnerCta.primary}

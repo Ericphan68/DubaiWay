@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
@@ -39,6 +39,12 @@ function Field({
 
 export function SignInForm({ next }: { next?: string }) {
   const [state, action, pending] = useActionState(signInAction, initial);
+
+  // Khu đối tác / quản trị: tải lại đầy đủ để khung trang dựng đúng theo tên miền.
+  useEffect(() => {
+    if (state.hardRedirect) window.location.assign(state.hardRedirect);
+  }, [state.hardRedirect]);
+
   return (
     <form action={action} className="space-y-4">
       {next ? <input type="hidden" name="next" value={next} /> : null}
@@ -53,8 +59,9 @@ export function SignInForm({ next }: { next?: string }) {
         <p role="alert" className="rounded-xl bg-red-50 px-3 py-2.5 text-sm text-red-700">{state.error}</p>
       ) : null}
 
-      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={pending}>
-        {pending ? 'Đang đăng nhập…' : 'Đăng nhập'}
+      <Button type="submit" variant="primary" size="lg" className="w-full"
+              disabled={pending || Boolean(state.hardRedirect)}>
+        {pending || state.hardRedirect ? 'Đang đăng nhập…' : 'Đăng nhập'}
       </Button>
 
       <div className="flex items-center justify-between text-sm">

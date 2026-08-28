@@ -8,14 +8,23 @@ import { cn } from '@/lib/utils';
 export function Logo({
   tone = 'dark',
   className,
+  href = '/',
+  prefetch,
 }: {
   tone?: 'dark' | 'light';
   className?: string;
+  href?: string;
+  /**
+   * Tắt prefetch khi logo nằm trên tên miền khu vực. Ở đó `/` được middleware
+   * viết lại sang khu, và bản prefetch lấy lúc chưa đăng nhập sẽ nằm lại trong
+   * bộ nhớ đệm điều hướng của Next rồi hiện nhầm trang sau khi đăng nhập.
+   */
+  prefetch?: false;
 }) {
   const wordmark = tone === 'light' ? 'text-white' : 'text-midnight';
 
   return (
-    <Link href="/" className={cn('group inline-flex items-center gap-2.5', className)} aria-label="DubaiWay — trang chủ">
+    <Link href={href} prefetch={prefetch} className={cn('group inline-flex items-center gap-2.5', className)} aria-label="DubaiWay — trang chủ">
       <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden className="shrink-0">
         <circle cx="17" cy="17" r="16" stroke="#B88A3B" strokeWidth="1.2" opacity="0.5" />
         <path

@@ -16,6 +16,7 @@ import {
   IconPhone,
   IconArrowUpRight,
 } from '@/components/ui/icons';
+import { urlForArea } from '@/config/hosts';
 import { MegaMenu } from './MegaMenu';
 import { MobileMenu } from './MobileMenu';
 import { AllCategoriesButton } from '@/components/categories/AllCategoriesButton';
@@ -79,10 +80,10 @@ export function Header({
             {user ? (
               <>
                 {user.isStaff ? (
-                  <Link href="/admin" className="hover:text-champagne-600">{t.account.adminArea}</Link>
+                  <a href={urlForArea('admin')} className="hover:text-champagne-600">{t.account.adminArea}</a>
                 ) : null}
                 {user.isMerchant ? (
-                  <Link href="/merchant" className="hover:text-champagne-600">{t.account.merchantArea}</Link>
+                  <a href={urlForArea('merchant')} className="hover:text-champagne-600">{t.account.merchantArea}</a>
                 ) : null}
                 <Link href="/tai-khoan" className="font-semibold text-champagne-600 hover:text-midnight">
                   {user.fullName ?? user.email}

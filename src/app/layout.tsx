@@ -6,6 +6,9 @@ import { getLocale } from '@/server/locale';
 import { getDisplayCurrency } from '@/server/currency';
 import { getRepositories } from '@/server/repositories';
 import { groupCategories } from '@/config/category-groups';
+import { headers } from 'next/headers';
+import { areaForHost } from '@/config/hosts';
+import { AreaHeader, AreaFooter } from '@/components/layout/AreaShell';
 import { getSessionUser, isMerchantMember, isPlatformStaff } from '@/server/auth';
 import { getDictionary, textDirection } from '@/i18n';
 import { Footer } from '@/components/layout/Footer';
@@ -79,6 +82,11 @@ export default async function RootLayout({
   // chỉ làm mất nút đó chứ không được làm sập khung trang.
   const categories = await getRepositories().catalog.listCategories(locale).catch(() => []);
   const categoryGroups = groupCategories(categories, locale);
+
+  // Tên miền quyết định khung trang. Khu đối tác và quản trị dùng khung gọn
+  // riêng, không mang menu bán hàng của trang khách vào.
+  const area = areaForHost((await headers()).get('host') ?? '');
+  const isStaffArea = area !== 'customer';
   const t = getDictionary(locale);
 
   return (
@@ -94,23 +102,33 @@ export default async function RootLayout({
         >
           {t.nav.skipToContent}
         </a>
-        <Header
-          locale={locale}
-          currency={currency.code}
-          categoryGroups={categoryGroups}
-          user={user ? {
-            fullName: user.fullName,
-            email: user.email,
-            isMerchant: isMerchantMember(user),
-            isStaff: isPlatformStaff(user),
-          } : null}
-        />
-        <main id="main" className="flex-1 pb-16 lg:pb-0">
+        {isStaffArea ? (
+          <AreaHeader area={area} />
+        ) : (
+          <Header
+            locale={locale}
+            currency={currency.code}
+            categoryGroups={categoryGroups}
+            user={user ? {
+              fullName: user.fullName,
+              email: user.email,
+              isMerchant: isMerchantMember(user),
+              isStaff: isPlatformStaff(user),
+            } : null}
+          />
+        )}
+        <main id="main" className={isStaffArea ? 'flex-1' : 'flex-1 pb-16 lg:pb-0'}>
           {children}
         </main>
-        <Footer />
-        <FloatingWhatsApp />
-        <BottomNav locale={locale} />
+        {isStaffArea ? (
+          <AreaFooter area={area} />
+        ) : (
+          <>
+            <Footer />
+            <FloatingWhatsApp />
+            <BottomNav locale={locale} />
+          </>
+        )}
       </body>
     </html>
   );
