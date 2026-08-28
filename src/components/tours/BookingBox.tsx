@@ -59,17 +59,24 @@ export function BookingBox({ tour }: { tour: Tour }) {
             <Button href={`/yeu-cau-bao-gia?tour=${tour.slug}&type=book`} variant="primary" className="w-full">
               Đặt trực tuyến
             </Button>
-            <button
-              type="button"
+            {/*
+              Nút này trước đây chỉ đổi state rồi hiện "Đã ghi nhận giữ chỗ" mà không ghi
+              ở bất kỳ đâu — khách tưởng đã giữ được chỗ và ngồi chờ. Giờ nó mở WhatsApp
+              kèm nguyên nội dung khách vừa chọn, nên yêu cầu chắc chắn tới đội tư vấn.
+            */}
+            <a
+              href={whatsappLink(waMessage)}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setHeld(true)}
               className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border border-midnight/20 text-sm font-medium text-midnight transition-colors hover:bg-midnight/[0.03]"
             >
               {held ? (
-                <><IconCheck className="h-4 w-4 text-emerald-600" /> Đã ghi nhận giữ chỗ</>
+                <><IconCheck className="h-4 w-4 text-emerald-600" /> Đã chuyển sang WhatsApp</>
               ) : (
-                'Giữ chỗ (chưa thanh toán)'
+                'Hỏi giữ chỗ qua WhatsApp'
               )}
-            </button>
+            </a>
           </>
         )}
         {tour.action !== 'book' && (

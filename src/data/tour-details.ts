@@ -52,11 +52,11 @@ function defaultItinerary(tour: Tour): ItineraryDay[] {
   return days;
 }
 
-const defaultReviews: TourReview[] = [
-  { name: 'Ngọc Anh', location: 'TP.HCM', rating: 5, date: '2026-06-14', quote: 'Lịch trình hợp lý, hướng dẫn viên nhiệt tình. Sẽ giới thiệu bạn bè.' },
-  { name: 'Minh Quân', location: 'Hà Nội', rating: 5, date: '2026-05-30', quote: 'Khách sạn đẹp, ăn uống ổn, mọi thứ đúng như tư vấn ban đầu.' },
-  { name: 'Thanh Hà', location: 'Đà Nẵng', rating: 4, date: '2026-05-12', quote: 'Chuyến đi đáng nhớ. Chỉ tiếc thời gian tự do hơi ít.' },
-];
+/**
+ * Đã gỡ đánh giá mẫu: những người này không có thật.
+ * Đánh giá thật chỉ đến từ khách đã hoàn thành booking.
+ */
+const defaultReviews: TourReview[] = [];
 
 /** Bản viết tay cho các tour tiêu biểu (ưu tiên khi có). */
 const authored: Record<string, Partial<TourDetail>> = {

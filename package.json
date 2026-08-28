@@ -8,25 +8,37 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:verify": "node scripts/verify-schema.mjs",
+    "verify": "npm run type-check && npm run lint && npm run test && npm run db:verify"
   },
   "dependencies": {
+    "@supabase/ssr": "0.5.2",
+    "@supabase/supabase-js": "2.47.10",
     "clsx": "^2.1.1",
     "next": "15.1.6",
+    "qrcode": "1.5.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "tailwind-merge": "^2.6.0"
+    "tailwind-merge": "^2.6.0",
+    "zod": "3.24.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.2.17",
     "@types/node": "^20.17.12",
+    "@types/qrcode": "1.5.5",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
+    "@vitest/coverage-v8": "2.1.8",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "15.1.6",
     "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "2.1.8"
   },
   "engines": {
     "node": ">=18.18.0"

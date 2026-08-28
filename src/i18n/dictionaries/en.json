@@ -1,0 +1,79 @@
+{
+  "common": {
+    "search": "Search",
+    "searchPlaceholder": "What would you like to do in Dubai?",
+    "bookNow": "Book now",
+    "viewDetails": "View details",
+    "from": "From",
+    "perPerson": "per person",
+    "perGroup": "per group",
+    "reviews": "reviews",
+    "loading": "Loading…",
+    "retry": "Try again",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "back": "Back"
+  },
+  "state": {
+    "emptyTitle": "No results yet",
+    "emptyBody": "Try removing a filter or searching for something else.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "We could not load this data. Please try again in a moment.",
+    "successTitle": "Done",
+    "loadingBody": "Fetching the latest availability…"
+  },
+  "service": {
+    "highlights": "Highlights",
+    "included": "What's included",
+    "excluded": "Not included",
+    "itinerary": "Itinerary",
+    "meetingPoint": "Meeting point",
+    "languages": "Languages",
+    "duration": "Duration",
+    "cancellationPolicy": "Cancellation policy",
+    "instantConfirmation": "Instant confirmation",
+    "freeCancellation": "Free cancellation",
+    "pickupAvailable": "Pickup available",
+    "selectPackage": "Choose a package",
+    "selectDate": "Choose a date",
+    "guests": "Guests",
+    "adults": "Adults",
+    "children": "Children",
+    "infants": "Infants",
+    "soldOut": "Sold out",
+    "relatedServices": "You may also like"
+  },
+  "booking": {
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "tax": "VAT",
+    "fee": "Service fee",
+    "total": "Total",
+    "voucher": "Voucher",
+    "voucherCode": "Voucher code",
+    "status": {
+      "draft": "Draft",
+      "pending_payment": "Awaiting payment",
+      "paid": "Paid",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded",
+      "expired": "Expired"
+    }
+  },
+  "referral": {
+    "title": "Referral programme",
+    "yourCode": "Your referral code",
+    "explainer": "You earn 30% of the commission DubaiWay actually receives on each eligible transaction by someone you referred. The programme has a single level.",
+    "balance": "Available balance",
+    "pending": "Pending",
+    "withdraw": "Request withdrawal"
+  },
+  "merchant": {
+    "becomePartner": "Become a partner",
+    "verified": "Verified",
+    "dashboard": "Dashboard"
+  }
+}

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
 import { IconMail, IconCheck } from '@/components/ui/icons';
+import { mailtoUrl } from '@/lib/lead';
 
 export function Newsletter() {
   const [email, setEmail] = useState('');
@@ -23,15 +24,33 @@ export function Newsletter() {
         </p>
 
         {done ? (
-          <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-5 py-3 text-sm font-medium text-emerald-700">
-            <IconCheck className="h-4 w-4" /> Cảm ơn bạn! Chúng tôi sẽ gửi thư sớm.
-          </p>
+          <div className="mt-6">
+            <p className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-5 py-3 text-sm font-medium text-emerald-700">
+              <IconCheck className="h-4 w-4" /> Đã mở email đăng ký với địa chỉ của bạn
+            </p>
+            <p className="mt-2 text-sm text-ink-muted">
+              Nếu ứng dụng email không tự mở,{' '}
+              <a
+                href={mailtoUrl('Đăng ký nhận bản tin DubaiWay', `Xin chào DubaiWay, tôi muốn đăng ký nhận bản tin.\n\n• Email: ${email}`)}
+                className="text-royal underline underline-offset-2"
+              >
+                bấm vào đây để gửi
+              </a>.
+            </p>
+          </div>
         ) : (
           <form
             className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row"
             onSubmit={(e) => {
               e.preventDefault();
-              if (email.trim()) setDone(true);
+              const value = email.trim();
+              if (!value) return;
+              setDone(true);
+              // Gửi thật qua email thay vì chỉ hiện lời cảm ơn rồi bỏ đi.
+              window.location.href = mailtoUrl(
+                'Đăng ký nhận bản tin DubaiWay',
+                `Xin chào DubaiWay, tôi muốn đăng ký nhận bản tin.\n\n• Email: ${value}`,
+              );
             }}
           >
             <label className="flex-1">

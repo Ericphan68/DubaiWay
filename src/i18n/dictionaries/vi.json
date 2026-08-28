@@ -1,0 +1,79 @@
+{
+  "common": {
+    "search": "Tìm kiếm",
+    "searchPlaceholder": "Bạn muốn trải nghiệm gì ở Dubai?",
+    "bookNow": "Đặt ngay",
+    "viewDetails": "Xem chi tiết",
+    "from": "Từ",
+    "perPerson": "mỗi khách",
+    "perGroup": "mỗi nhóm",
+    "reviews": "đánh giá",
+    "loading": "Đang tải…",
+    "retry": "Thử lại",
+    "cancel": "Huỷ",
+    "confirm": "Xác nhận",
+    "save": "Lưu",
+    "back": "Quay lại"
+  },
+  "state": {
+    "emptyTitle": "Chưa có kết quả nào",
+    "emptyBody": "Thử bỏ bớt bộ lọc hoặc đổi từ khoá tìm kiếm.",
+    "errorTitle": "Đã xảy ra lỗi",
+    "errorBody": "Chúng tôi không tải được dữ liệu. Vui lòng thử lại sau ít phút.",
+    "successTitle": "Thành công",
+    "loadingBody": "Đang lấy dữ liệu mới nhất…"
+  },
+  "service": {
+    "highlights": "Điểm nổi bật",
+    "included": "Giá đã bao gồm",
+    "excluded": "Không bao gồm",
+    "itinerary": "Lịch trình",
+    "meetingPoint": "Điểm tập trung",
+    "languages": "Ngôn ngữ phục vụ",
+    "duration": "Thời lượng",
+    "cancellationPolicy": "Chính sách huỷ",
+    "instantConfirmation": "Xác nhận tức thì",
+    "freeCancellation": "Huỷ miễn phí",
+    "pickupAvailable": "Có đón khách",
+    "selectPackage": "Chọn gói dịch vụ",
+    "selectDate": "Chọn ngày",
+    "guests": "Số khách",
+    "adults": "Người lớn",
+    "children": "Trẻ em",
+    "infants": "Em bé",
+    "soldOut": "Hết chỗ",
+    "relatedServices": "Dịch vụ liên quan"
+  },
+  "booking": {
+    "subtotal": "Tạm tính",
+    "discount": "Giảm giá",
+    "tax": "Thuế VAT",
+    "fee": "Phí dịch vụ",
+    "total": "Tổng cộng",
+    "voucher": "Voucher",
+    "voucherCode": "Mã voucher",
+    "status": {
+      "draft": "Nháp",
+      "pending_payment": "Chờ thanh toán",
+      "paid": "Đã thanh toán",
+      "confirmed": "Đã xác nhận",
+      "completed": "Đã hoàn thành",
+      "cancelled": "Đã huỷ",
+      "refunded": "Đã hoàn tiền",
+      "expired": "Đã hết hạn"
+    }
+  },
+  "referral": {
+    "title": "Chương trình giới thiệu",
+    "yourCode": "Mã giới thiệu của bạn",
+    "explainer": "Bạn nhận 30% hoa hồng mà DubaiWay thực nhận từ mỗi giao dịch hợp lệ của người bạn giới thiệu. Chương trình chỉ có một tầng.",
+    "balance": "Số dư có thể rút",
+    "pending": "Đang chờ",
+    "withdraw": "Yêu cầu rút tiền"
+  },
+  "merchant": {
+    "becomePartner": "Trở thành đối tác",
+    "verified": "Đã xác minh",
+    "dashboard": "Bảng điều khiển"
+  }
+}

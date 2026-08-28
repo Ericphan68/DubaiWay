@@ -1,56 +1,24 @@
 import type { Review } from '@/types';
 
-export const reviews: Review[] = [
-  {
-    name: 'Chị Mai Hương',
-    role: 'Khách đoàn gia đình',
-    location: 'TP. Hồ Chí Minh',
-    rating: 5,
-    quote:
-      'Tour Dubai của gia đình tôi được lo từ visa đến đón sân bay. Hướng dẫn viên tiếng Việt rất tận tâm, lịch trình không bị dồn ép.',
-    product: 'Dubai – Abu Dhabi 6N5Đ',
-  },
-  {
-    name: 'MS. Trần Quốc Việt',
-    role: 'Trưởng đoàn hội thánh',
-    location: 'Hà Nội',
-    rating: 5,
-    quote:
-      'Đoàn 32 người đi Đất Thánh được sắp xếp chu đáo, có giờ tĩnh nguyện mỗi ngày. DubaiWay hiểu rõ nhu cầu của đoàn hành hương.',
-    product: 'Israel – Jordan 9N8Đ',
-  },
-  {
-    name: 'Anh David Nguyễn',
-    role: 'Khách Việt tại Dubai',
-    location: 'Dubai, UAE',
-    rating: 5,
-    quote:
-      'Tôi hay đặt city tour và desert safari cho bạn bè sang chơi. Đặt online nhanh, xe đón đúng giờ, giá minh bạch.',
-    product: 'Dubai City Tour riêng',
-  },
-  {
-    name: 'Công ty TNHH Đại Phát',
-    role: 'Khách doanh nghiệp',
-    location: 'TP. Hồ Chí Minh',
-    rating: 5,
-    quote:
-      'Gala kỷ niệm 15 năm tại Dubai cho 120 khách được DubaiWay Events lo trọn gói. Sân khấu, AV và hậu cần đều chuyên nghiệp.',
-    product: 'Gala Dinner tại Dubai',
-  },
-  {
-    name: 'Chị Thu Trang',
-    role: 'Cặp đôi hưởng tuần trăng mật',
-    location: 'Đà Nẵng',
-    rating: 5,
-    quote:
-      'Santorini đúng như mơ. Khách sạn hướng biển, đội tư vấn phản hồi qua WhatsApp cực nhanh mỗi khi tôi hỏi.',
-    product: 'Hy Lạp: Athens – Santorini',
-  },
-];
+/**
+ * ĐÃ GỠ TOÀN BỘ ĐÁNH GIÁ MẪU.
+ *
+ * Trước đây file này chứa 5 đánh giá với tên người, địa phương và nội dung cụ thể —
+ * nhưng những người đó không có thật. Đăng đánh giá bịa trên website thương mại là
+ * đánh lừa khách hàng và có rủi ro pháp lý.
+ *
+ * Đánh giá thật đến từ bảng `reviews` trong database, và chỉ khách có booking ở
+ * trạng thái `completed` mới viết được (ràng buộc trong RLS policy).
+ */
+export const reviews: Review[] = [];
 
+/**
+ * Chỉ nêu những điều kiểm chứng được từ cách nền tảng vận hành.
+ * Không dùng số lượng khách hay điểm hài lòng khi chưa có dữ liệu thật.
+ */
 export const trustStats = [
-  { value: '12.000+', label: 'Khách hàng đã đồng hành' },
-  { value: '40+', label: 'Điểm đến trên toàn cầu' },
-  { value: '350+', label: 'Đoàn hành hương & sự kiện' },
-  { value: '4.9/5', label: 'Điểm hài lòng trung bình' },
+  { value: '10%', label: 'Hoa hồng nền tảng, công khai minh bạch' },
+  { value: '100%', label: 'Đối tác được xác minh giấy tờ trước khi lên sàn' },
+  { value: '1 lần', label: 'Voucher chỉ dùng được một lần, chống gian lận' },
+  { value: 'AED', label: 'Niêm yết giá bằng tiền địa phương, không phí ẩn' },
 ];

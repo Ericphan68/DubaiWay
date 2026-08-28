@@ -16,12 +16,19 @@ import { WhyDubaiWay } from '@/components/home/WhyDubaiWay';
 import { Testimonials } from '@/components/home/Testimonials';
 import { ConsultCTA } from '@/components/home/ConsultCTA';
 import { Newsletter } from '@/components/home/Newsletter';
+import { FeaturedCategories } from '@/components/home/FeaturedCategories';
+import { FeaturedServices } from '@/components/home/FeaturedServices';
+import { MarketplaceCTA } from '@/components/home/MarketplaceCTA';
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <>
       {/* 1 · Hero thương hiệu + 2 · Thanh tìm kiếm đa dịch vụ */}
       <Hero />
+      {/* 2b · Danh mục nổi bật — dữ liệu thật từ sàn */}
+      <FeaturedCategories />
+      {/* 2c · Dịch vụ nổi bật — dữ liệu thật từ sàn */}
+      <FeaturedServices />
       {/* 3 · Chọn nơi khởi hành */}
       <ChooseDeparture />
       {/* 4 · Vé máy bay */}
@@ -55,6 +62,8 @@ export default function HomePage() {
       {/* 18 · WhatsApp & tư vấn */}
       <ConsultCTA />
       {/* 19 · Newsletter */}
+      {/* Kêu gọi đối tác & chương trình giới thiệu */}
+      <MarketplaceCTA />
       <Newsletter />
       {/* 20 · Footer — global trong layout */}
     </>

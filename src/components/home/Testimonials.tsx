@@ -5,6 +5,10 @@ import { Stars } from '@/components/ui/Stars';
 import { IconQuote } from '@/components/ui/icons';
 
 export function Testimonials() {
+  // Chưa có đánh giá thật thì KHÔNG hiện gì cả.
+  // Thà thiếu một khối trên trang chủ còn hơn bịa lời khen của người không có thật.
+  if (reviews.length === 0) return null;
+
   return (
     <Section background="mist">
       <SectionHeader

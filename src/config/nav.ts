@@ -75,9 +75,9 @@ export const mainNav: NavItem[] = [
         children: [
           { label: 'Khách sạn', href: '/khach-san' },
           { label: 'Khách sạn cho đoàn & sự kiện', href: '/khach-san#groups' },
-          { label: 'Airport Transfer', href: '/dich-vu#transfer' },
-          { label: 'Thuê xe & Chauffeur', href: '/dich-vu#chauffeur' },
-          { label: 'Bảo hiểm du lịch', href: '/dich-vu#insurance' },
+          { label: 'Đưa đón sân bay', href: '/danh-muc/airport-transfer' },
+          { label: 'Thuê xe', href: '/danh-muc/car-rental' },
+          { label: 'Bảo hiểm du lịch', href: '/danh-muc/travel-insurance' },
         ],
       },
     ],
@@ -123,6 +123,7 @@ export const mainNav: NavItem[] = [
         'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=900&q=80',
     },
   },
+  { label: 'Khám phá', href: '/danh-muc' },
   { label: 'Cẩm nang', href: '/cam-nang' },
   { label: 'Về DubaiWay', href: '/ve-dubaiway' },
   { label: 'Liên hệ', href: '/lien-he' },
@@ -132,7 +133,7 @@ export const mainNav: NavItem[] = [
 export const bottomNav = [
   { label: 'Trang chủ', href: '/', icon: 'home' as const },
   { label: 'Tìm kiếm', href: '/tim-kiem', icon: 'search' as const },
-  { label: 'Tour', href: '/du-lich', icon: 'compass' as const },
+  { label: 'Khám phá', href: '/danh-muc', icon: 'compass' as const },
   { label: 'Visa', href: '/visa', icon: 'passport' as const },
   { label: 'WhatsApp', href: '#whatsapp', icon: 'whatsapp' as const },
 ];
@@ -155,17 +156,29 @@ export const footerNav: NavGroup[] = [
       { label: 'Khách sạn', href: '/khach-san' },
       { label: 'Visa', href: '/visa' },
       { label: 'DubaiWay Events', href: '/events' },
-      { label: 'Dịch vụ bổ trợ', href: '/dich-vu' },
+      { label: 'Tất cả dịch vụ', href: '/dich-vu' },
     ],
   },
   {
     heading: 'DubaiWay',
     children: [
       { label: 'Về chúng tôi', href: '/ve-dubaiway' },
+      { label: 'Trở thành đối tác', href: '/tro-thanh-doi-tac' },
+      { label: 'Giới thiệu bạn bè', href: '/gioi-thieu-ban-be' },
+      { label: 'Trung tâm trợ giúp', href: '/tro-giup' },
       { label: 'Cẩm nang du lịch', href: '/cam-nang' },
-      { label: 'Yêu cầu báo giá', href: '/yeu-cau-bao-gia' },
       { label: 'Liên hệ', href: '/lien-he' },
-      { label: 'Điều khoản & Bảo mật', href: '/dieu-khoan' },
+    ],
+  },
+  {
+    heading: 'Pháp lý',
+    children: [
+      { label: 'Điều khoản sử dụng', href: '/dieu-khoan' },
+      { label: 'Chính sách bảo mật', href: '/chinh-sach-bao-mat' },
+      { label: 'Chính sách cookie', href: '/chinh-sach-cookie' },
+      { label: 'Huỷ & hoàn tiền', href: '/chinh-sach-huy-hoan-tien' },
+      { label: 'Điều khoản đối tác', href: '/dieu-khoan-doi-tac' },
+      { label: 'Điều khoản giới thiệu', href: '/dieu-khoan-gioi-thieu' },
     ],
   },
 ];

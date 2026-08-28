@@ -1,40 +1,39 @@
 'use client';
 
-import { useState } from 'react';
 import { visaCountries, visaPurposes } from '@/data/visas';
-import { Button } from '@/components/ui/Button';
-import { IconCheck } from '@/components/ui/icons';
+import { LeadForm } from '@/components/shared/LeadForm';
+
+/** Thứ tự trường quyết định thứ tự dòng trong tin nhắn gửi đi. */
+const VISA_FIELDS = [
+  { name: 'name', label: 'Họ và tên' },
+  { name: 'nationality', label: 'Quốc tịch' },
+  { name: 'residence', label: 'Đang cư trú tại' },
+  { name: 'destination', label: 'Quốc gia muốn đến' },
+  { name: 'purpose', label: 'Mục đích' },
+  { name: 'date', label: 'Ngày dự kiến đi' },
+  { name: 'guests', label: 'Số người' },
+  { name: 'refused', label: 'Từng bị từ chối visa' },
+  { name: 'phone', label: 'WhatsApp / SĐT' },
+  { name: 'email', label: 'Email' },
+  { name: 'note', label: 'Ghi chú thêm' },
+] as const;
 
 const inputCls = 'h-11 w-full rounded-xl border border-mist bg-ivory-100 px-3 text-sm outline-none focus:border-royal';
 
 export function VisaConsultForm({ defaultCountry }: { defaultCountry?: string }) {
-  const [done, setDone] = useState(false);
 
-  if (done) {
-    return (
-      <div className="flex flex-col items-center rounded-2xl border border-mist bg-ivory-100 p-8 text-center">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-          <IconCheck className="h-6 w-6" />
-        </span>
-        <p className="mt-3 font-display text-lg font-medium text-midnight">Đã nhận yêu cầu tư vấn</p>
-        <p className="mt-1 text-sm text-ink-muted">
-          Chuyên viên visa của DubaiWay sẽ liên hệ để đánh giá hồ sơ và hướng dẫn bước tiếp theo.
-        </p>
-      </div>
-    );
-  }
 
   return (
-    <form
+    <LeadForm
+      title="được tư vấn hồ sơ visa"
+      subject="Tư vấn visa — DubaiWay"
+      fields={VISA_FIELDS}
+      submitLabel="Gửi yêu cầu tư vấn visa"
       className="grid gap-3 rounded-2xl border border-mist bg-ivory-100 p-6 sm:grid-cols-2"
-      onSubmit={(e) => {
-        e.preventDefault();
-        setDone(true);
-      }}
     >
       <label className="sm:col-span-2">
         <span className="mb-1 block text-xs font-semibold text-ink-muted">Họ và tên</span>
-        <input required className={inputCls} placeholder="Nguyễn Văn A" />
+        <input name="name" required className={inputCls} placeholder="Nguyễn Văn A" />
       </label>
       <label>
         <span className="mb-1 block text-xs font-semibold text-ink-muted">Quốc tịch</span>
@@ -63,11 +62,11 @@ export function VisaConsultForm({ defaultCountry }: { defaultCountry?: string })
       </label>
       <label>
         <span className="mb-1 block text-xs font-semibold text-ink-muted">Ngày dự kiến đi</span>
-        <input type="date" className={inputCls} />
+        <input name="date" type="date" className={inputCls} />
       </label>
       <label>
         <span className="mb-1 block text-xs font-semibold text-ink-muted">Số người</span>
-        <input type="number" min={1} defaultValue={1} className={inputCls} />
+        <input name="guests" type="number" min={1} defaultValue={1} className={inputCls} />
       </label>
       <label className="sm:col-span-2">
         <span className="mb-1 block text-xs font-semibold text-ink-muted">Từng bị từ chối visa chưa?</span>
@@ -78,21 +77,16 @@ export function VisaConsultForm({ defaultCountry }: { defaultCountry?: string })
       </label>
       <label>
         <span className="mb-1 block text-xs font-semibold text-ink-muted">WhatsApp / SĐT</span>
-        <input required className={inputCls} placeholder="+84…" />
+        <input name="phone" required className={inputCls} placeholder="+84…" />
       </label>
       <label>
         <span className="mb-1 block text-xs font-semibold text-ink-muted">Email</span>
-        <input type="email" className={inputCls} placeholder="ban@email.com" />
+        <input name="email" type="email" className={inputCls} placeholder="ban@email.com" />
       </label>
       <label className="sm:col-span-2">
         <span className="mb-1 block text-xs font-semibold text-ink-muted">Ghi chú thêm</span>
-        <textarea rows={3} className="w-full rounded-xl border border-mist bg-ivory-100 p-3 text-sm outline-none focus:border-royal" placeholder="Thông tin bổ sung về hồ sơ, lịch trình…" />
+        <textarea name="note" rows={3} className="w-full rounded-xl border border-mist bg-ivory-100 p-3 text-sm outline-none focus:border-royal" placeholder="Thông tin bổ sung về hồ sơ, lịch trình…" />
       </label>
-      <div className="sm:col-span-2">
-        <Button type="submit" variant="primary" size="lg" className="w-full sm:w-auto">
-          Gửi yêu cầu tư vấn hồ sơ
-        </Button>
-      </div>
-    </form>
+    </LeadForm>
   );
 }
