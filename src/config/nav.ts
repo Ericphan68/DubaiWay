@@ -134,13 +134,16 @@ export const mainNav: NavItem[] = [
   { label: 'Liên hệ', labelKey: 'contact', href: '/lien-he' },
 ];
 
-/** Điều hướng đáy cho mobile. */
+/**
+ * Điều hướng đáy cho mobile.
+ * Bỏ "Trang chủ" theo yêu cầu — logo ở header đã dẫn về trang chủ.
+ */
 export const bottomNav = [
-  { label: 'Trang chủ', href: '/', icon: 'home' as const },
-  { label: 'Tìm kiếm', href: '/tim-kiem', icon: 'search' as const },
-  { label: 'Khám phá', href: '/danh-muc', icon: 'compass' as const },
-  { label: 'Visa', href: '/visa', icon: 'passport' as const },
-  { label: 'WhatsApp', href: '#whatsapp', icon: 'whatsapp' as const },
+  { label: 'Khám phá', labelKey: 'explore' as const, href: '/danh-muc', icon: 'compass' as const },
+  { label: 'Tìm kiếm', labelKey: 'search' as const, href: '/tim-kiem', icon: 'search' as const },
+  { label: 'Visa', labelKey: 'visa' as const, href: '/visa', icon: 'passport' as const },
+  { label: 'Tài khoản', labelKey: 'account' as const, href: '/tai-khoan', icon: 'user' as const },
+  { label: 'WhatsApp', labelKey: 'whatsapp' as const, href: '#whatsapp', icon: 'whatsapp' as const },
 ];
 
 export const footerNav: NavGroup[] = [

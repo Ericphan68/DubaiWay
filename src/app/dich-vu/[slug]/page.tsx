@@ -10,6 +10,7 @@ import { getSessionUser } from '@/server/auth';
 import { isFavorite } from '@/server/services/customer-store';
 import { getRepositories } from '@/server/repositories';
 import { getLocale } from '@/server/locale';
+import { getDisplayCurrency } from '@/server/currency';
 import { siteConfig } from '@/config/site';
 
 interface Props { params: Promise<{ slug: string }> }
@@ -43,6 +44,7 @@ function availabilityRange(): { from: string; to: string } {
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
   const locale = await getLocale();
+  const currency = await getDisplayCurrency();
   const repo = getRepositories();
 
   const service = await repo.catalog.getServiceBySlug(slug, locale).catch(() => null);
@@ -311,7 +313,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         <Section background="white">
           <h2 className="font-display text-2xl font-medium text-midnight">Dịch vụ liên quan</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {related.map((s) => <ServiceCard key={s.id} service={s} />)}
+            {related.map((s) => <ServiceCard key={s.id} service={s} locale={locale} currency={currency} />)}
           </div>
         </Section>
       ) : null}

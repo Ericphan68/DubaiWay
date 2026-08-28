@@ -111,6 +111,7 @@ export const IconClock = (p: IconProps) => (
 
 export const iconMap = {
   home: IconHome,
+  user: IconUser,
   search: IconSearch,
   compass: IconCompass,
   passport: IconPassport,

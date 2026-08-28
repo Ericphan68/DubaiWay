@@ -6,15 +6,17 @@ import { bottomNav } from '@/config/nav';
 import { iconMap } from '@/components/ui/icons';
 import { whatsappLink, whatsappMessages } from '@/lib/whatsapp';
 import { cn } from '@/lib/utils';
+import { getDictionary, type Locale } from '@/i18n';
 
 /** Điều hướng đáy cố định — chỉ hiện trên mobile. */
-export function BottomNav() {
+export function BottomNav({ locale }: { locale: Locale }) {
   const pathname = usePathname();
+  const t = getDictionary(locale);
 
   return (
     <nav
       className="fixed inset-x-0 bottom-0 z-40 border-t border-mist bg-ivory-100/95 backdrop-blur-md lg:hidden"
-      aria-label="Điều hướng nhanh"
+      aria-label={t.nav.quickNav}
     >
       <ul className="grid grid-cols-5">
         {bottomNav.map((item) => {
@@ -32,7 +34,7 @@ export function BottomNav() {
                 )}
               />
               <span className={cn(active && !isWhatsapp ? 'text-royal' : 'text-ink-muted')}>
-                {item.label}
+                {t.nav[item.labelKey]}
               </span>
             </span>
           );

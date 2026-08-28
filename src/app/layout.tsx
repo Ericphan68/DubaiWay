@@ -3,8 +3,9 @@ import { Fraunces, Be_Vietnam_Pro } from 'next/font/google';
 import { siteConfig } from '@/config/site';
 import { Header } from '@/components/layout/Header';
 import { getLocale } from '@/server/locale';
+import { getDisplayCurrency } from '@/server/currency';
 import { getSessionUser, isMerchantMember, isPlatformStaff } from '@/server/auth';
-import { textDirection } from '@/i18n';
+import { getDictionary, textDirection } from '@/i18n';
 import { Footer } from '@/components/layout/Footer';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { FloatingWhatsApp } from '@/components/layout/FloatingWhatsApp';
@@ -70,7 +71,9 @@ export default async function RootLayout({
   // Ngôn ngữ và phiên đọc ở máy chủ rồi truyền xuống Header,
   // để menu hiện đúng trạng thái đăng nhập ngay từ lần render đầu.
   const locale = await getLocale();
+  const currency = await getDisplayCurrency();
   const user = await getSessionUser();
+  const t = getDictionary(locale);
 
   return (
     <html
@@ -83,10 +86,11 @@ export default async function RootLayout({
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-royal focus:px-4 focus:py-2 focus:text-sm focus:text-white"
         >
-          Bỏ qua tới nội dung
+          {t.nav.skipToContent}
         </a>
         <Header
           locale={locale}
+          currency={currency.code}
           user={user ? {
             fullName: user.fullName,
             email: user.email,
@@ -99,7 +103,7 @@ export default async function RootLayout({
         </main>
         <Footer />
         <FloatingWhatsApp />
-        <BottomNav />
+        <BottomNav locale={locale} />
       </body>
     </html>
   );

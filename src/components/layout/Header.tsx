@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { mainNav, type NavItem } from '@/config/nav';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
-import { LocaleSwitcher } from './LocaleSwitcher';
+import { LocalePicker } from './LocalePicker';
 import { getDictionary, type Locale } from '@/i18n';
 import { Logo } from '@/components/ui/Logo';
 import { Button } from '@/components/ui/Button';
@@ -26,7 +26,13 @@ export interface HeaderUser {
   readonly isStaff: boolean;
 }
 
-export function Header({ locale, user }: { locale: Locale; user: HeaderUser | null }) {
+export function Header({
+  locale, currency, user,
+}: {
+  locale: Locale;
+  currency: string;
+  user: HeaderUser | null;
+}) {
   const t = getDictionary(locale);
   /** Nhãn menu theo ngôn ngữ; thiếu bản dịch thì giữ nhãn tiếng Việt. */
   const navLabel = (item: NavItem) => (item.labelKey ? t.nav[item.labelKey] : item.label);
@@ -65,7 +71,7 @@ export function Header({ locale, user }: { locale: Locale; user: HeaderUser | nu
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <LocaleSwitcher current={locale} />
+            <LocalePicker currentLanguage={locale} currentCurrency={currency} />
 
             {user ? (
               <>
@@ -167,6 +173,7 @@ export function Header({ locale, user }: { locale: Locale; user: HeaderUser | nu
         open={mobileOpen}
         onClose={() => setMobileOpen(false)}
         locale={locale}
+        currency={currency}
         user={user}
       />
     </header>

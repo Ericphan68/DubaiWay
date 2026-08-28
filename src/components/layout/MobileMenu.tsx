@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { mainNav } from '@/config/nav';
 import { siteConfig } from '@/config/site';
-import { LocaleSwitcher } from './LocaleSwitcher';
+import { LocalePicker } from './LocalePicker';
 import { getDictionary, type Locale } from '@/i18n';
 import type { HeaderUser } from './Header';
 import { cn } from '@/lib/utils';
@@ -23,11 +23,13 @@ export function MobileMenu({
   open,
   onClose,
   locale,
+  currency,
   user,
 }: {
   open: boolean;
   onClose: () => void;
   locale: Locale;
+  currency: string;
   user: HeaderUser | null;
 }) {
   const t = getDictionary(locale);
@@ -172,7 +174,7 @@ export function MobileMenu({
 
           <div className="flex items-center justify-between rounded-full border border-white/15 px-3 py-2">
             <span className="text-xs uppercase tracking-wide text-white/60">{t.account.language}</span>
-            <LocaleSwitcher current={locale} tone="dark" />
+            <LocalePicker currentLanguage={locale} currentCurrency={currency} tone="dark" />
           </div>
 
           <Button href="/tro-thanh-doi-tac" variant="gold" className="w-full" onClick={onClose}>

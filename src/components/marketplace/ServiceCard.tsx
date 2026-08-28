@@ -1,18 +1,22 @@
 import Link from 'next/link';
-import { formatMoney } from '@/core/money';
+import { formatDisplayPrice } from './Price';
+import { DEFAULT_DISPLAY_CURRENCY, getCurrencyOption, type CurrencyOption } from '@/config/locales';
 import type { ServiceSummary } from '@/server/repositories/types';
 import { cn } from '@/lib/utils';
+import { getDictionary, INTL_LOCALES, type Locale } from '@/i18n';
+import { getLocale } from '@/server/locale';
+import { getDisplayCurrency } from '@/server/currency';
 
-/** Định dạng thời lượng cho người đọc: 360 phút → "6 giờ". */
-export function formatDuration(minutes: number | null): string | null {
+/** Định dạng thời lượng cho người đọc: 360 phút → "6 giờ" / "6 hours". */
+export function formatDuration(minutes: number | null, locale: Locale = 'vi'): string | null {
   if (!minutes) return null;
-  if (minutes < 60) return `${minutes} phút`;
+  const u = locale === 'en'
+    ? { min: 'min', hour: 'hours', day: 'days' }
+    : { min: 'phút', hour: 'giờ', day: 'ngày' };
+  if (minutes < 60) return `${minutes} ${u.min}`;
   const hours = minutes / 60;
-  if (hours >= 24) {
-    const days = Math.round(hours / 24);
-    return `${days} ngày`;
-  }
-  return Number.isInteger(hours) ? `${hours} giờ` : `${hours.toFixed(1)} giờ`;
+  if (hours >= 24) return `${Math.round(hours / 24)} ${u.day}`;
+  return `${Number.isInteger(hours) ? hours : hours.toFixed(1)} ${u.hour}`;
 }
 
 function Stars({ value }: { value: number }) {
@@ -26,8 +30,19 @@ function Stars({ value }: { value: number }) {
   );
 }
 
-export function ServiceCard({ service, className }: { service: ServiceSummary; className?: string }) {
-  const duration = formatDuration(service.durationMinutes);
+export function ServiceCard({
+  service, locale = 'vi', currency, className,
+}: {
+  service: ServiceSummary;
+  locale?: Locale;
+  /** Tiền tệ hiển thị. Không truyền thì dùng tiền quyết toán mặc định. */
+  currency?: CurrencyOption;
+  className?: string;
+}) {
+  const cur = currency ?? (getCurrencyOption(DEFAULT_DISPLAY_CURRENCY) as CurrencyOption);
+  const t = getDictionary(locale);
+  const intl = INTL_LOCALES[locale];
+  const duration = formatDuration(service.durationMinutes, locale);
 
   return (
     <article className={cn('group overflow-hidden rounded-2xl border border-mist bg-ivory-100 transition-shadow duration-300 ease-dubaiway hover:shadow-lg', className)}>
@@ -48,7 +63,7 @@ export function ServiceCard({ service, className }: { service: ServiceSummary; c
           )}
           {service.isFeatured ? (
             <span className="absolute left-3 top-3 rounded-full bg-champagne px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-wide text-white">
-              Nổi bật
+              {t.common.featured}
             </span>
           ) : null}
         </div>
@@ -66,37 +81,37 @@ export function ServiceCard({ service, className }: { service: ServiceSummary; c
           {service.ratingCount > 0 ? (
             <p className="mt-2 flex items-center gap-1.5 text-sm text-ink-muted">
               <Stars value={service.ratingAvg} />
-              <span>({service.ratingCount.toLocaleString('vi-VN')} đánh giá)</span>
+              <span>({service.ratingCount.toLocaleString(intl)} {t.common.reviews})</span>
             </p>
           ) : (
-            <p className="mt-2 text-sm text-ink-soft">Chưa có đánh giá</p>
+            <p className="mt-2 text-sm text-ink-soft">{t.common.noReviews}</p>
           )}
 
           <div className="mt-2.5 flex flex-wrap gap-1.5">
             {service.instantConfirmation ? (
               <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[0.68rem] font-medium text-emerald-700">
-                Xác nhận tức thì
+                {t.service.instantConfirmation}
               </span>
             ) : null}
             {service.freeCancellation ? (
               <span className="rounded-full bg-royal/[0.07] px-2 py-0.5 text-[0.68rem] font-medium text-royal">
-                Huỷ miễn phí
+                {t.service.freeCancellation}
               </span>
             ) : null}
             {service.pickupAvailable ? (
               <span className="rounded-full bg-champagne-200/50 px-2 py-0.5 text-[0.68rem] font-medium text-champagne-600">
-                Có đón khách
+                {t.service.pickupAvailable}
               </span>
             ) : null}
           </div>
 
           {service.priceFrom ? (
             <p className="mt-3 border-t border-mist pt-3">
-              <span className="text-xs text-ink-soft">Từ </span>
+              <span className="text-xs text-ink-soft">{t.common.from} </span>
               <span className="font-display text-lg font-semibold text-midnight">
-                {formatMoney(service.priceFrom, 'vi-VN')}
+                {formatDisplayPrice(service.priceFrom, cur, locale).text}
               </span>
-              <span className="text-xs text-ink-soft"> / khách</span>
+              <span className="text-xs text-ink-soft"> / {t.common.perPerson}</span>
             </p>
           ) : null}
         </div>
@@ -105,10 +120,24 @@ export function ServiceCard({ service, className }: { service: ServiceSummary; c
   );
 }
 
-export function ServiceGrid({ services }: { services: readonly ServiceSummary[] }) {
+/**
+ * Lưới dịch vụ. Là server component nên tự đọc ngôn ngữ + tiền tệ từ cookie,
+ * các trang gọi nó không phải truyền thủ công. Vẫn cho phép truyền đè khi cần.
+ */
+export async function ServiceGrid({
+  services, locale, currency,
+}: {
+  services: readonly ServiceSummary[];
+  locale?: Locale;
+  currency?: CurrencyOption;
+}) {
+  const loc = locale ?? (await getLocale());
+  const cur = currency ?? (await getDisplayCurrency());
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {services.map((s) => <ServiceCard key={s.id} service={s} />)}
+      {services.map((s) => (
+        <ServiceCard key={s.id} service={s} locale={loc} currency={cur} />
+      ))}
     </div>
   );
 }
