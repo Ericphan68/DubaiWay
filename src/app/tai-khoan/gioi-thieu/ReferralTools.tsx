@@ -41,7 +41,7 @@ export function WithdrawForm({ availableMajor }: { availableMajor: number }) {
     <form action={action} className="mt-4 flex flex-wrap items-end gap-3">
       <div className="min-w-[160px] flex-1">
         <label htmlFor="amount" className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted">
-          Số tiền muốn rút (AED)
+          Số tiền muốn rút (USD)
         </label>
         <input
           id="amount" name="amount" type="number" min={100} step="0.01" max={availableMajor}

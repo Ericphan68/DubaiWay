@@ -24,17 +24,20 @@ export default function ReferralTermsPage() {
       </PolicySection>
 
       <PolicySection title="2. Công thức và ví dụ">
-        <p>Thưởng = giá trị đơn hàng hợp lệ × 10% (hoa hồng nền tảng) × 30% (phần chia cho người giới thiệu).</p>
+        <p>Thưởng = hoa hồng DubaiWay thực nhận từ đơn đó × 30%.</p>
+        <p>
+          Hoa hồng nền tảng thay đổi theo dịch vụ và theo hợp đồng với từng đối tác, nên số thưởng mỗi
+          đơn một khác. Tỷ lệ áp dụng được ghi lại tại thời điểm đặt và không đổi về sau, kể cả khi
+          DubaiWay điều chỉnh biểu phí.
+        </p>
         <div className="rounded-xl bg-ivory-200 p-4 font-mono text-sm">
-          <p className="text-ink-muted">Đơn hàng 1.000 AED:</p>
-          <p className="mt-2 text-midnight">Đối tác nhận<span className="float-right">900,00 AED</span></p>
-          <p className="text-midnight">Hoa hồng DubaiWay<span className="float-right">100,00 AED</span></p>
-          <p className="text-champagne-600">Người giới thiệu nhận<span className="float-right">30,00 AED</span></p>
-          <p className="border-t border-mist pt-1 text-midnight">DubaiWay thực giữ<span className="float-right">70,00 AED</span></p>
+          <p className="text-ink-muted">Ví dụ, một đơn có hoa hồng nền tảng 100 USD:</p>
+          <p className="mt-2 text-champagne-600">Người giới thiệu nhận<span className="float-right">30,00 USD</span></p>
+          <p className="border-t border-mist pt-1 text-midnight">DubaiWay thực giữ<span className="float-right">70,00 USD</span></p>
         </div>
         <p className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          <strong>Lưu ý quan trọng:</strong> 30% được tính trên <em>hoa hồng</em>, không phải trên giá trị đơn hàng.
-          Với đơn 1.000 AED, bạn nhận 30 AED — không phải 300 AED.
+          <strong>Lưu ý quan trọng:</strong> 30% được tính trên <em>hoa hồng</em>, không phải trên giá trị
+          đơn hàng. Số tiền bạn thực nhận từ từng đơn hiện đầy đủ trong mục Giới thiệu bạn bè ở tài khoản.
         </p>
       </PolicySection>
 
@@ -58,7 +61,7 @@ export default function ReferralTermsPage() {
           <li>Không phát sinh hoàn tiền toàn phần hoặc một phần</li>
           <li>Không có dấu hiệu gian lận đang được xem xét</li>
         </ul>
-        <p>Số tiền rút tối thiểu mỗi lần là 100 AED.</p>
+        <p>Số tiền rút tối thiểu mỗi lần là 100 USD.</p>
       </PolicySection>
 
       <PolicySection title="5. Nếu đơn hàng bị hoàn tiền">

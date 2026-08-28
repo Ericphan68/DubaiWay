@@ -63,7 +63,7 @@ export interface ServiceRecord {
   readonly categorySlug: string;
   status: ServiceStatus;
   readonly priceFromMinor: number;
-  readonly currency: 'AED';
+  readonly currency: 'USD';
   readonly submittedAt: string | null;
   readonly createdAt: string;
 }
@@ -328,7 +328,7 @@ export function listServices(merchantId?: string): ServiceRecord[] {
     categorySlug: s.categorySlug,
     status: s.status,
     priceFromMinor: s.packages[0]?.priceAdult.amount ?? 0,
-    currency: 'AED' as const,
+    currency: 'USD' as const,
     submittedAt: s.updatedAt,
     createdAt: s.createdAt,
   }));

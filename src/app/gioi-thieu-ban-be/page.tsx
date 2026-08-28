@@ -30,15 +30,14 @@ export default async function ReferralPublicPage() {
               Ví dụ cụ thể
             </p>
             <div className="mt-4 space-y-2 font-mono text-sm">
-              <Line label="Khách đặt dịch vụ" value="1.000,00 AED" />
-              <Line label="Đối tác cung cấp dịch vụ nhận" value="900,00 AED" />
-              <Line label="Hoa hồng DubaiWay" value="100,00 AED" />
-              <Line label="Bạn nhận (30% của hoa hồng)" value="30,00 AED" highlight />
-              <Line label="DubaiWay thực giữ" value="70,00 AED" />
+              <Line label="Hoa hồng DubaiWay nhận từ đơn đó" value="100,00 USD" />
+              <Line label="Bạn nhận (30% của hoa hồng)" value="30,00 USD" highlight />
+              <Line label="DubaiWay thực giữ" value="70,00 USD" />
             </div>
             <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
               <strong>Nói rõ để bạn không hiểu nhầm:</strong> 30% tính trên <em>hoa hồng</em>, không phải
-              trên giá trị đơn hàng. Đơn 1.000 AED thì bạn nhận 30 AED, không phải 300 AED.
+              trên giá trị đơn hàng. Hoa hồng mỗi đơn một khác, tuỳ dịch vụ và hợp đồng với đối tác;
+              số bạn thực nhận hiện đầy đủ trong mục Giới thiệu bạn bè ở tài khoản của bạn.
             </p>
           </div>
 

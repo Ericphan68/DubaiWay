@@ -55,18 +55,24 @@ Booking → completed
 Mời khách đánh giá  ← chỉ booking completed mới viết được
 ```
 
-## 4.4 Tiền chảy đi đâu — ví dụ đơn 1.000 AED
+## 4.4 Tiền chảy đi đâu — ví dụ đơn 1.000 USD
 
 ```
-Khách trả                                    1.000,00 AED
-  ├─▶ Merchant                                 900,00 AED   (90%)
-  └─▶ Hoa hồng DubaiWay                        100,00 AED   (10%)
-        ├─▶ Người giới thiệu                    30,00 AED   (30% CỦA HOA HỒNG)
-        └─▶ DubaiWay thực giữ                   70,00 AED
+Khách trả                                    1.000,00 USD
+  ├─▶ Merchant                                 900,00 USD   (90%)
+  └─▶ Hoa hồng DubaiWay                        100,00 USD   (10%)
+        ├─▶ Người giới thiệu                    30,00 USD   (30% CỦA HOA HỒNG)
+        └─▶ DubaiWay thực giữ                   70,00 USD
 ```
 
 **Công thức:** `thưởng = giá trị đơn hợp lệ × 10% × 30%`
-30% tính trên **hoa hồng**, không phải trên giá trị đơn hàng. 30% của đơn hàng sẽ là 300 AED — sai gấp mười lần.
+30% tính trên **hoa hồng**, không phải trên giá trị đơn hàng. 30% của đơn hàng sẽ là 300 USD — sai gấp mười lần.
+
+> **Mức hoa hồng không công khai.** Con số 10% ở trên chỉ dùng để minh hoạ cách
+> dòng tiền chảy trong tài liệu nội bộ. Trên các trang ai cũng xem được, DubaiWay
+> chỉ nói "chỉ nhận hoa hồng khi bán được"; đối tác biết mức áp dụng cho mình sau
+> khi đăng ký và vào Khu đối tác, hoặc hỏi nhân viên. Test
+> `src/app/__tests__/commission-privacy.test.ts` canh ràng buộc này.
 
 ## 4.5 Vòng đời thưởng giới thiệu
 

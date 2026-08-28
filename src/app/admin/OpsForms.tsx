@@ -105,15 +105,15 @@ export function CouponForm({ categories }: { categories: readonly { slug: string
           <input name="percent" type="number" min={0} max={100} step="0.01" className={inputCls} placeholder="10" />
         </label>
         <label>
-          <span className="mb-1 block text-xs font-semibold text-ink-muted">Giảm (AED)</span>
+          <span className="mb-1 block text-xs font-semibold text-ink-muted">Giảm (USD)</span>
           <input name="amountMajor" type="number" min={0} step="0.01" className={inputCls} placeholder="50" />
         </label>
         <label>
-          <span className="mb-1 block text-xs font-semibold text-ink-muted">Giảm tối đa (AED)</span>
+          <span className="mb-1 block text-xs font-semibold text-ink-muted">Giảm tối đa (USD)</span>
           <input name="maxDiscountMajor" type="number" min={0} step="0.01" className={inputCls} placeholder="100" />
         </label>
         <label>
-          <span className="mb-1 block text-xs font-semibold text-ink-muted">Đơn tối thiểu (AED)</span>
+          <span className="mb-1 block text-xs font-semibold text-ink-muted">Đơn tối thiểu (USD)</span>
           <input name="minOrderMajor" type="number" min={0} step="0.01" defaultValue="0" className={inputCls} />
         </label>
         <label>

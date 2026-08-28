@@ -79,7 +79,7 @@ function Card({
           <h3 className="font-medium text-midnight">{service.title}</h3>
           <p className="mt-0.5 text-xs text-ink-soft">
             {merchant?.displayName ?? '—'} · {service.categorySlug} · từ{' '}
-            {formatMoney(fromMinorUnits(service.priceFromMinor, 'AED'), 'vi-VN')}
+            {formatMoney(fromMinorUnits(service.priceFromMinor, 'USD'), 'vi-VN')}
           </p>
         </div>
         <span className="rounded-full bg-mist-200 px-2.5 py-0.5 text-xs font-medium text-ink-muted">

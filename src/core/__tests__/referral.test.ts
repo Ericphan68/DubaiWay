@@ -50,14 +50,14 @@ describe('Giới thiệu CHỈ MỘT TẦNG', () => {
     }
   });
 
-  it('đơn của C 1.000 AED: B nhận 30 AED, tổng chi thưởng đúng 30 AED', () => {
+  it('đơn của C 1.000 USD: B nhận 30 USD, tổng chi thưởng đúng 30 USD', () => {
     const fin = computeBookingFinancials({
-      currency: 'AED',
-      lines: [{ label: 'x', unitPrice: fromMajorUnits(1000, 'AED'), quantity: 1 }],
+      currency: 'USD',
+      lines: [{ label: 'x', unitPrice: fromMajorUnits(1000, 'USD'), quantity: 1 }],
       hasReferrer: nguoiDuocThuong('C').length === 1,
     });
-    expect(fin.referralReward.amount).toBe(3000); // 30,00 AED
-    // Nếu lỡ thành nhiều tầng, tổng chi sẽ là 60 AED — phải không bao giờ xảy ra
+    expect(fin.referralReward.amount).toBe(3000); // 30,00 USD
+    // Nếu lỡ thành nhiều tầng, tổng chi sẽ là 60 USD — phải không bao giờ xảy ra
     const tongChiThuong = nguoiDuocThuong('C').length * fin.referralReward.amount;
     expect(tongChiThuong).toBe(3000);
   });

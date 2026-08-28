@@ -8,7 +8,7 @@ import { listCancellations } from '@/server/services/dispute-store';
 
 export const metadata: Metadata = { title: 'Doanh thu & đối soát', robots: { index: false, follow: false } };
 
-const aed = (m: number) => formatMoney(fromMinorUnits(m, 'AED'), 'vi-VN');
+const usd = (m: number) => formatMoney(fromMinorUnits(m, 'USD'), 'vi-VN');
 
 export default async function MerchantRevenuePage() {
   const user = await getSessionUser();
@@ -16,7 +16,7 @@ export default async function MerchantRevenuePage() {
   if (!merchant) return null;
 
   const bookings = listBookingsForMerchant(merchant.id);
-  const totals = merchantTotals(merchant.id, 'AED');
+  const totals = merchantTotals(merchant.id, 'USD');
 
   // Tiền chỉ được giải ngân sau khi dịch vụ hoàn thành và hết hạn khiếu nại.
   const now = Date.now();
@@ -64,16 +64,16 @@ export default async function MerchantRevenuePage() {
       </p>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Doanh thu gộp" value={aed(totals.grossSales)} />
-        <Stat label="Hoa hồng DubaiWay" value={aed(totals.commission)} />
-        <Stat label="Có thể nhận" value={aed(availableMinor)} highlight />
-        <Stat label="Đang chờ đối soát" value={aed(pendingMinor)} />
+        <Stat label="Doanh thu gộp" value={usd(totals.grossSales)} />
+        <Stat label="Hoa hồng DubaiWay" value={usd(totals.commission)} />
+        <Stat label="Có thể nhận" value={usd(availableMinor)} highlight />
+        <Stat label="Đang chờ đối soát" value={usd(pendingMinor)} />
       </div>
 
       <p className="mt-3 text-xs text-ink-soft">
-        Kiểm tra: bạn nhận {aed(totals.netRevenue)} + hoa hồng {aed(totals.commission)} = tổng khách trả{' '}
-        {aed(totals.grossSales)}.
-        {refundedMinor > 0 ? ` Đã hoàn lại khách ${aed(refundedMinor)} từ ${cancellations.length} đơn huỷ.` : ''}
+        Kiểm tra: bạn nhận {usd(totals.netRevenue)} + hoa hồng {usd(totals.commission)} = tổng khách trả{' '}
+        {usd(totals.grossSales)}.
+        {refundedMinor > 0 ? ` Đã hoàn lại khách ${usd(refundedMinor)} từ ${cancellations.length} đơn huỷ.` : ''}
       </p>
 
       <section className="mt-10">
@@ -91,7 +91,7 @@ export default async function MerchantRevenuePage() {
                   {months.map(([m, v]) => (
                     <tr key={m}>
                       <Td>{m.split('-').reverse().join('/')}</Td>
-                      <Td className="text-right font-medium text-midnight">{aed(v)}</Td>
+                      <Td className="text-right font-medium text-midnight">{usd(v)}</Td>
                     </tr>
                   ))}
                 </tbody>
@@ -114,7 +114,7 @@ export default async function MerchantRevenuePage() {
                     <span className="block text-sm font-medium text-midnight">{s.title}</span>
                     <span className="text-xs text-ink-soft">{s.count} đơn</span>
                   </span>
-                  <span className="font-medium text-midnight">{aed(s.revenue)}</span>
+                  <span className="font-medium text-midnight">{usd(s.revenue)}</span>
                 </li>
               ))}
             </ul>

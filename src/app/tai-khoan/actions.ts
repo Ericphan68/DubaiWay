@@ -104,7 +104,7 @@ export async function cancelBookingAction(_prev: AccountState, formData: FormDat
     return {
       error: null,
       notice: rec.refundAmountMinor > 0
-        ? `Đã huỷ đơn. Bạn được hoàn ${(rec.refundAmountMinor / 100).toLocaleString('vi-VN')} AED (${rec.refundRateBps / 100}%). Tiền về tài khoản trong 5–10 ngày làm việc.`
+        ? `Đã huỷ đơn. Bạn được hoàn ${(rec.refundAmountMinor / 100).toLocaleString('vi-VN')} USD (${rec.refundRateBps / 100}%). Tiền về tài khoản trong 5–10 ngày làm việc.`
         : 'Đã huỷ đơn. Theo chính sách của dịch vụ, đơn này không được hoàn tiền.',
     };
   } catch (err) {

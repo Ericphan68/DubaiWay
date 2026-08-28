@@ -7,7 +7,7 @@ create table public.booking_drafts (
   id          uuid primary key default gen_random_uuid(),
   user_id     uuid references public.users(id) on delete cascade,
   session_key text,                                  -- khách chưa đăng nhập
-  currency    char(3) not null default 'AED',
+  currency    char(3) not null default 'USD',
   payload     jsonb not null default '{}'::jsonb,
   expires_at  timestamptz not null default (now() + interval '24 hours'),
   created_at  timestamptz not null default now(),

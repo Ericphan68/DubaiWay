@@ -12,7 +12,7 @@ export default async function MerchantDashboard() {
   const merchant = user ? getMerchantForUser(user.id) : null;
   if (!merchant) return <EmptyState title="Chưa có hồ sơ đối tác" action={{ label: 'Đăng ký đối tác', href: '/tro-thanh-doi-tac' }} />;
 
-  const totals = merchantTotals(merchant.id, 'AED');
+  const totals = merchantTotals(merchant.id, 'USD');
   const bookings = listBookingsForMerchant(merchant.id);
   const services = listServices(merchant.id);
   const pendingRedeem = bookings.filter((b) => b.voucher.status === 'confirmed').length;
@@ -22,9 +22,9 @@ export default async function MerchantDashboard() {
       <h1 className="font-display text-2xl font-medium text-midnight">Tổng quan</h1>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Doanh thu gộp" value={formatMoney(fromMinorUnits(totals.grossSales, 'AED'), 'vi-VN')} />
-        <Stat label="Bạn thực nhận" value={formatMoney(fromMinorUnits(totals.netRevenue, 'AED'), 'vi-VN')} highlight />
-        <Stat label="Hoa hồng DubaiWay" value={formatMoney(fromMinorUnits(totals.commission, 'AED'), 'vi-VN')} />
+        <Stat label="Doanh thu gộp" value={formatMoney(fromMinorUnits(totals.grossSales, 'USD'), 'vi-VN')} />
+        <Stat label="Bạn thực nhận" value={formatMoney(fromMinorUnits(totals.netRevenue, 'USD'), 'vi-VN')} highlight />
+        <Stat label="Hoa hồng DubaiWay" value={formatMoney(fromMinorUnits(totals.commission, 'USD'), 'vi-VN')} />
         <Stat label="Đơn hàng" value={String(totals.bookingCount)} />
       </div>
 

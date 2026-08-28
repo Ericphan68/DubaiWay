@@ -24,7 +24,7 @@ const desertRose: MerchantSummary = {
   ratingCount: 214,
 };
 
-const aed = (v: number) => fromMajorUnits(v, 'AED');
+const usd = (v: number) => fromMajorUnits(v, 'USD');
 
 export const MEMORY_CATEGORIES = [
   { id: 'd1', slug: 'day-tours',         vi: 'Tour trong ngày',        en: 'Day Tours' },
@@ -63,7 +63,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
     categorySlug: 'desert-safari',
     city: 'Dubai', country: 'AE',
     coverImageUrl: null,
-    priceFrom: aed(150), durationMinutes: 360,
+    priceFrom: usd(41), durationMinutes: 360,
     languages: ['en', 'ar', 'vi'],
     instantConfirmation: true, freeCancellation: true, pickupAvailable: true,
     ratingAvg: 4.8, ratingCount: 214, bookingCount: 1840, isFeatured: true,
@@ -78,10 +78,10 @@ export const MEMORY_SERVICES: MemoryService[] = [
     media: [], itinerary: [],
     packages: [
       { id: 'p1', code: 'standard', name: 'Tiêu chuẩn', description: 'Xe ghép tối đa 6 khách',
-        priceAdult: aed(150), priceChild: aed(95), priceGroup: null, groupSize: null,
+        priceAdult: usd(41), priceChild: usd(26), priceGroup: null, groupSize: null,
         taxRateBps: 500, minGuests: 1, maxGuests: 40 },
       { id: 'p2', code: 'vip', name: 'VIP', description: 'Xe riêng, khu ngồi VIP',
-        priceAdult: aed(290), priceChild: aed(190), priceGroup: null, groupSize: null,
+        priceAdult: usd(79), priceChild: usd(52), priceGroup: null, groupSize: null,
         taxRateBps: 500, minGuests: 1, maxGuests: 20 },
     ],
     policies: {
@@ -96,7 +96,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
         description: 'Xe 4x4 đón bạn tại khách sạn vào đầu giờ chiều, chạy khoảng 45 phút tới khu bảo tồn sa mạc Lehbab. Chương trình gồm 20 phút lái xe cồn cát, dừng chụp ảnh hoàng hôn, cưỡi lạc đà ngắn, vẽ henna và bữa tối BBQ buffet có món chay.',
         highlights: ['Lái xe cồn cát 20 phút với tài xế có chứng chỉ', 'Ngắm hoàng hôn giữa cồn cát đỏ', 'Bữa tối BBQ buffet có món chay và halal', 'Múa Tanoura và trình diễn lửa'],
         included: ['Đón và trả tại khách sạn', 'Nước uống không giới hạn', 'Bữa tối BBQ buffet', 'Cưỡi lạc đà', 'Vẽ henna'],
-        excluded: ['Đồ uống có cồn', 'Quad bike (phụ phí 150 AED)', 'Tiền tip cho tài xế'],
+        excluded: ['Đồ uống có cồn', 'Quad bike (phụ phí 150 USD)', 'Tiền tip cho tài xế'],
       },
       en: {
         title: 'Evening Desert Safari with BBQ Dinner',
@@ -104,7 +104,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
         description: 'A 4x4 collects you from your hotel in the early afternoon for the 45-minute drive to the Lehbab desert conservation area. The programme includes 20 minutes of dune bashing, a sunset photo stop, a short camel ride, henna painting and a BBQ buffet dinner with vegetarian options.',
         highlights: ['20 minutes of dune bashing with a certified driver', 'Sunset over the red dunes', 'BBQ buffet with vegetarian and halal options', 'Tanoura dance and fire show'],
         included: ['Hotel pickup and drop-off', 'Unlimited soft drinks', 'BBQ buffet dinner', 'Camel ride', 'Henna painting'],
-        excluded: ['Alcoholic beverages', 'Quad bike (150 AED supplement)', 'Driver gratuities'],
+        excluded: ['Alcoholic beverages', 'Quad bike (150 USD supplement)', 'Driver gratuities'],
       },
     },
   },
@@ -114,7 +114,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
     categorySlug: 'attraction-tickets',
     city: 'Dubai', country: 'AE',
     coverImageUrl: null,
-    priceFrom: aed(179), durationMinutes: 90,
+    priceFrom: usd(49), durationMinutes: 90,
     languages: ['en', 'ar', 'vi'],
     instantConfirmation: true, freeCancellation: false, pickupAvailable: false,
     ratingAvg: 4.7, ratingCount: 3120, bookingCount: 9400, isFeatured: true,
@@ -128,10 +128,10 @@ export const MEMORY_SERVICES: MemoryService[] = [
     media: [], itinerary: [],
     packages: [
       { id: 'p3', code: 'standard', name: 'Giờ thường', description: 'Khung giờ ban ngày',
-        priceAdult: aed(179), priceChild: aed(149), priceGroup: null, groupSize: null,
+        priceAdult: usd(49), priceChild: usd(41), priceGroup: null, groupSize: null,
         taxRateBps: 500, minGuests: 1, maxGuests: 10 },
       { id: 'p4', code: 'sunset', name: 'Giờ hoàng hôn', description: 'Khung giờ đẹp nhất',
-        priceAdult: aed(259), priceChild: aed(219), priceGroup: null, groupSize: null,
+        priceAdult: usd(71), priceChild: usd(60), priceGroup: null, groupSize: null,
         taxRateBps: 500, minGuests: 1, maxGuests: 10 },
     ],
     policies: {
@@ -163,7 +163,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
     categorySlug: 'yacht-cruise',
     city: 'Dubai', country: 'AE',
     coverImageUrl: null,
-    priceFrom: aed(450), durationMinutes: 120,
+    priceFrom: usd(123), durationMinutes: 120,
     languages: ['en', 'ar'],
     instantConfirmation: false, freeCancellation: true, pickupAvailable: false,
     ratingAvg: 4.9, ratingCount: 86, bookingCount: 310, isFeatured: true,
@@ -177,7 +177,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
     media: [], itinerary: [],
     packages: [
       { id: 'p5', code: 'charter2h', name: 'Thuê nguyên thuyền 2 giờ', description: 'Trọn gói tối đa 12 khách',
-        priceAdult: aed(0), priceChild: null, priceGroup: aed(1450), groupSize: 12,
+        priceAdult: usd(0), priceChild: null, priceGroup: usd(395), groupSize: 12,
         taxRateBps: 500, minGuests: 2, maxGuests: 12 },
     ],
     policies: {
@@ -210,7 +210,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
     categorySlug: 'airport-transfer',
     city: 'Dubai', country: 'AE',
     coverImageUrl: null,
-    priceFrom: aed(120), durationMinutes: 60,
+    priceFrom: usd(33), durationMinutes: 60,
     languages: ['en', 'ar', 'vi'],
     instantConfirmation: true, freeCancellation: true, pickupAvailable: true,
     ratingAvg: 4.9, ratingCount: 640, bookingCount: 4100, isFeatured: false,
@@ -224,10 +224,10 @@ export const MEMORY_SERVICES: MemoryService[] = [
     media: [], itinerary: [],
     packages: [
       { id: 'p6', code: 'sedan', name: 'Xe 4 chỗ', description: 'Lexus ES hoặc tương đương',
-        priceAdult: aed(0), priceChild: null, priceGroup: aed(120), groupSize: 3,
+        priceAdult: usd(0), priceChild: null, priceGroup: usd(33), groupSize: 3,
         taxRateBps: 500, minGuests: 1, maxGuests: 3 },
       { id: 'p7', code: 'van', name: 'Xe 7 chỗ', description: 'Toyota Previa hoặc tương đương',
-        priceAdult: aed(0), priceChild: null, priceGroup: aed(190), groupSize: 6,
+        priceAdult: usd(0), priceChild: null, priceGroup: usd(52), groupSize: 6,
         taxRateBps: 500, minGuests: 1, maxGuests: 6 },
     ],
     policies: {
@@ -260,7 +260,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
     categorySlug: 'day-tours',
     city: 'Dubai', country: 'AE',
     coverImageUrl: null,
-    priceFrom: aed(280), durationMinutes: 600,
+    priceFrom: usd(76), durationMinutes: 600,
     languages: ['en', 'ar', 'vi'],
     instantConfirmation: false, freeCancellation: true, pickupAvailable: true,
     ratingAvg: 4.6, ratingCount: 452, bookingCount: 2300, isFeatured: true,
@@ -275,7 +275,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
     media: [], itinerary: [],
     packages: [
       { id: 'p8', code: 'join', name: 'Tour ghép', description: 'Xe chung, khởi hành hằng ngày',
-        priceAdult: aed(280), priceChild: aed(190), priceGroup: null, groupSize: null,
+        priceAdult: usd(76), priceChild: usd(52), priceGroup: null, groupSize: null,
         taxRateBps: 500, minGuests: 2, maxGuests: 25 },
     ],
     policies: {
@@ -308,7 +308,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
     categorySlug: 'dining-vouchers',
     city: 'Dubai', country: 'AE',
     coverImageUrl: null,
-    priceFrom: aed(390), durationMinutes: 120,
+    priceFrom: usd(106), durationMinutes: 120,
     languages: ['en'],
     instantConfirmation: true, freeCancellation: false, pickupAvailable: false,
     ratingAvg: 4.8, ratingCount: 128, bookingCount: 420, isFeatured: false,
@@ -323,7 +323,7 @@ export const MEMORY_SERVICES: MemoryService[] = [
     media: [], itinerary: [],
     packages: [
       { id: 'p9', code: 'set3course', name: 'Set 3 món cho 2 người', description: 'Khai vị, món chính, tráng miệng',
-        priceAdult: aed(0), priceChild: null, priceGroup: aed(390), groupSize: 2,
+        priceAdult: usd(0), priceChild: null, priceGroup: usd(106), groupSize: 2,
         taxRateBps: 500, minGuests: 1, maxGuests: 8 },
     ],
     policies: {

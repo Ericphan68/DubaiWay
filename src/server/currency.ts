@@ -2,7 +2,7 @@
  * Tiền tệ hiển thị do người dùng chọn.
  *
  * QUAN TRỌNG: đây chỉ là tiền tệ HIỂN THỊ. Mọi tính toán, ghi sổ và thu tiền
- * vẫn bằng AED (SETTLEMENT_CURRENCY). Nếu để tiền hiển thị lọt vào phần tính
+ * vẫn bằng USD (SETTLEMENT_CURRENCY). Nếu để tiền hiển thị lọt vào phần tính
  * toán, sai số quy đổi sẽ làm lệch hoa hồng và đối soát.
  */
 import { cookies } from 'next/headers';

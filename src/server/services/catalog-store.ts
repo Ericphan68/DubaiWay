@@ -155,7 +155,7 @@ function seed(): void {
     packages: [{
       id: 'p10', code: 'standard', name: 'Tiêu chuẩn',
       description: 'Bay 1 giờ, ăn sáng tại trại sa mạc',
-      priceAdult: fromMajorUnits(1095, 'AED'), priceChild: fromMajorUnits(895, 'AED'),
+      priceAdult: fromMajorUnits(298, 'USD'), priceChild: fromMajorUnits(244, 'USD'),
       priceGroup: null, groupSize: null, taxRateBps: 500, minGuests: 1, maxGuests: 20,
     }],
     policies: {

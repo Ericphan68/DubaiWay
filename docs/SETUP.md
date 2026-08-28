@@ -86,7 +86,7 @@ Khi có tài khoản:
 
 Hiện tại, nếu đặt `STRIPE_SECRET_KEY` mà chưa có adapter thì hệ thống **báo lỗi rõ ràng** thay vì âm thầm dùng sandbox — để không có đơn hàng thật nào đi qua cổng giả lập.
 
-Stripe hỗ trợ UAE và AED. Nếu cần phương án nội địa, hai lựa chọn phổ biến là Network International và Telr; cả hai đều lắp vào cùng interface `PaymentGateway` mà không đổi tầng gọi.
+Tiền quyết toán của sàn là USD (`PLATFORM_CURRENCY` trong `src/core/money.ts`). Stripe hỗ trợ USD và AED. Nếu cần phương án nội địa, hai lựa chọn phổ biến là Network International và Telr; cả hai đều lắp vào cùng interface `PaymentGateway` mà không đổi tầng gọi.
 
 ## Biến môi trường cần cung cấp
 

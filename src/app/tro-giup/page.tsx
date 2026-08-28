@@ -50,7 +50,7 @@ const FAQ = [
   },
   {
     q: 'Tôi muốn bán dịch vụ trên DubaiWay',
-    a: 'Xem trang Trở thành đối tác. Không có phí niêm yết hay phí duy trì — DubaiWay chỉ nhận 10% hoa hồng khi bạn bán được.',
+    a: 'Xem trang Trở thành đối tác. Không có phí niêm yết hay phí duy trì — DubaiWay chỉ nhận hoa hồng khi bạn bán được. Mức hoa hồng cụ thể được nêu trong hợp đồng đối tác: sau khi đăng ký bạn xem trong Khu đối tác, hoặc hỏi nhân viên DubaiWay trước.',
   },
 ];
 

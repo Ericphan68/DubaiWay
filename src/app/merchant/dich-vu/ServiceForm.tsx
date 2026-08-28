@@ -82,11 +82,11 @@ export function ServiceForm({
         </div>
       </Block>
 
-      <Block title="Giá và sức chứa" note="Giá nhập theo AED. Thuế VAT tính thêm ở bước thanh toán.">
+      <Block title="Giá và sức chứa" note="Giá nhập theo USD. Thuế VAT tính thêm ở bước thanh toán.">
         <div className="grid gap-4 sm:grid-cols-3">
-          <Field label="Giá người lớn (AED)" name="priceAdult" type="number" required
+          <Field label="Giá người lớn (USD)" name="priceAdult" type="number" required
                  defaultValue={v ? String(v.priceAdult) : ''} min={1} step="0.01" placeholder="150" />
-          <Field label="Giá trẻ em (AED)" name="priceChild" type="number"
+          <Field label="Giá trẻ em (USD)" name="priceChild" type="number"
                  defaultValue={v?.priceChild != null ? String(v.priceChild) : ''} min={0} step="0.01"
                  placeholder="Để trống nếu không nhận trẻ em" />
           <Field label="Thuế VAT (%)" name="taxRatePercent" type="number" required

@@ -4,12 +4,12 @@ import {
   CouponError, __resetCoupons, applyCoupon, listCoupons, redeemCoupon, setCouponActive, upsertCoupon,
 } from '../coupon-store';
 
-const aed = (v: number) => fromMajorUnits(v, 'AED');
+const usd = (v: number) => fromMajorUnits(v, 'USD');
 const USER = 'user-1';
 
 const ctx = (over: Partial<Parameters<typeof applyCoupon>[1]> = {}) => ({
   userId: USER,
-  subtotal: aed(1000),
+  subtotal: usd(1000),
   categorySlug: 'desert-safari',
   merchantId: 'merchant-1',
   ...over,
@@ -18,25 +18,25 @@ const ctx = (over: Partial<Parameters<typeof applyCoupon>[1]> = {}) => ({
 beforeEach(() => { __resetCoupons(); });
 
 describe('Mã giảm theo phần trăm', () => {
-  it('DUBAI10 giảm 10% nhưng tối đa 100 AED', () => {
-    const r = applyCoupon('DUBAI10', ctx({ subtotal: aed(500) }));
-    expect(r.discount).toEqual(aed(50));
+  it('DUBAI10 giảm 10% nhưng tối đa 100 USD', () => {
+    const r = applyCoupon('DUBAI10', ctx({ subtotal: usd(500) }));
+    expect(r.discount).toEqual(usd(50));
   });
 
   it('chạm trần giảm tối đa', () => {
-    const r = applyCoupon('DUBAI10', ctx({ subtotal: aed(5000) }));
-    expect(r.discount).toEqual(aed(100)); // 10% của 5000 = 500 nhưng trần là 100
+    const r = applyCoupon('DUBAI10', ctx({ subtotal: usd(5000) }));
+    expect(r.discount).toEqual(usd(100)); // 10% của 5000 = 500 nhưng trần là 100
   });
 
   it('không phân biệt hoa thường khi nhập mã', () => {
-    expect(applyCoupon('dubai10', ctx()).discount).toEqual(aed(100));
-    expect(applyCoupon('  DuBaI10 ', ctx()).discount).toEqual(aed(100));
+    expect(applyCoupon('dubai10', ctx()).discount).toEqual(usd(100));
+    expect(applyCoupon('  DuBaI10 ', ctx()).discount).toEqual(usd(100));
   });
 });
 
 describe('Mã giảm số tiền cố định', () => {
-  it('WELCOME50 giảm đúng 50 AED', () => {
-    expect(applyCoupon('WELCOME50', ctx()).discount).toEqual(aed(50));
+  it('WELCOME50 giảm đúng 50 USD', () => {
+    expect(applyCoupon('WELCOME50', ctx()).discount).toEqual(usd(50));
   });
 
   it('không giảm quá giá trị đơn hàng', () => {
@@ -44,8 +44,8 @@ describe('Mã giảm số tiền cố định', () => {
       code: 'BIG', kind: 'fixed', amountMajor: 5000, minOrderMajor: 0,
       fundedBy: 'platform', usageLimitPerUser: 5, isActive: true,
     });
-    const r = applyCoupon('BIG', ctx({ subtotal: aed(300) }));
-    expect(r.discount).toEqual(aed(300));
+    const r = applyCoupon('BIG', ctx({ subtotal: usd(300) }));
+    expect(r.discount).toEqual(usd(300));
   });
 });
 
@@ -55,8 +55,8 @@ describe('Điều kiện áp dụng', () => {
   });
 
   it('đơn dưới mức tối thiểu bị từ chối, nêu rõ mức cần đạt', () => {
-    expect(() => applyCoupon('WELCOME50', ctx({ subtotal: aed(100) })))
-      .toThrow(/từ 300 AED trở lên/);
+    expect(() => applyCoupon('WELCOME50', ctx({ subtotal: usd(100) })))
+      .toThrow(/từ 300 USD trở lên/);
   });
 
   it('mã theo danh mục không dùng cho danh mục khác', () => {
@@ -66,7 +66,7 @@ describe('Điều kiện áp dụng', () => {
 
   it('mã theo danh mục dùng đúng danh mục thì được', () => {
     expect(applyCoupon('SAFARI15', ctx({ categorySlug: 'desert-safari' })).discount)
-      .toEqual(aed(150));
+      .toEqual(usd(150));
   });
 
   it('mã đã tắt thì không dùng được', () => {

@@ -19,12 +19,15 @@ export default function MerchantTermsPage() {
       </PolicySection>
 
       <PolicySection title="2. Hoa hồng nền tảng">
-        <p>DubaiWay nhận <strong className="text-midnight">10%</strong> giá trị đơn hàng hợp lệ, tính trên tiền hàng sau giảm giá và chưa gồm thuế thu hộ.</p>
-        <div className="rounded-xl bg-ivory-200 p-4 font-mono text-sm">
-          <p className="text-ink-muted">Đơn hàng 1.000 AED:</p>
-          <p className="mt-2 text-midnight">Bạn nhận<span className="float-right">900,00 AED</span></p>
-          <p className="text-midnight">Hoa hồng DubaiWay<span className="float-right">100,00 AED</span></p>
-        </div>
+        <p>
+          DubaiWay nhận hoa hồng trên giá trị đơn hàng hợp lệ, tính trên tiền hàng sau giảm giá và
+          chưa gồm thuế thu hộ. Không có phí niêm yết, phí duy trì hay khoản thu nào khác.
+        </p>
+        <p className="rounded-xl border border-mist bg-ivory-200 px-4 py-3">
+          <strong className="text-midnight">Mức hoa hồng cụ thể</strong> được nêu trong hợp đồng đối
+          tác. Sau khi đăng ký, bạn xem mức áp dụng cho tài khoản của mình trong Khu đối tác, ở mục
+          Doanh thu &amp; đối soát. Bạn cũng có thể hỏi trực tiếp nhân viên DubaiWay trước khi đăng ký.
+        </p>
         <p>Tỷ lệ áp dụng cho từng đơn được ghi lại tại thời điểm đặt. Thay đổi tỷ lệ về sau không làm thay đổi các đơn đã phát sinh.</p>
       </PolicySection>
 

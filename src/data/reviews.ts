@@ -20,5 +20,5 @@ export const trustStats = [
   { value: '10%', label: 'Hoa hồng nền tảng, công khai minh bạch' },
   { value: '100%', label: 'Đối tác được xác minh giấy tờ trước khi lên sàn' },
   { value: '1 lần', label: 'Voucher chỉ dùng được một lần, chống gian lận' },
-  { value: 'AED', label: 'Niêm yết giá bằng tiền địa phương, không phí ẩn' },
+  { value: 'USD', label: 'Niêm yết giá bằng tiền địa phương, không phí ẩn' },
 ];

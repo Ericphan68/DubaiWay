@@ -74,8 +74,8 @@ insert into public.platform_settings (key, value, description) values
   ('commission.base',               '"subtotal_after_discount"'::jsonb, 'Cơ sở tính hoa hồng'),
   ('booking.dispute_window_hours',  '72'::jsonb,   'Thời hạn khiếu nại mặc định sau khi dùng dịch vụ'),
   ('booking.draft_ttl_minutes',     '30'::jsonb,   'Thời gian giữ chỗ cho đơn nháp trước khi nhả ra'),
-  ('withdrawal.min_amount_minor',   '10000'::jsonb,'Số tiền rút tối thiểu (100,00 AED)'),
-  ('platform.default_currency',     '"AED"'::jsonb,'Tiền tệ mặc định'),
+  ('withdrawal.min_amount_minor',   '2500'::jsonb, 'Số tiền rút tối thiểu (25,00 USD)'),
+  ('platform.default_currency',     '"USD"'::jsonb,'Tiền tệ mặc định'),
   ('platform.supported_locales',    '["vi","en"]'::jsonb, 'Ngôn ngữ đang bật. Thêm "ar" khi sẵn sàng RTL.'),
   ('platform.default_locale',       '"vi"'::jsonb, 'Ngôn ngữ mặc định')
 on conflict (key) do nothing;

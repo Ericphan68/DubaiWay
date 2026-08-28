@@ -6,7 +6,7 @@ import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
   title: 'Trở thành đối tác',
-  description: 'Đăng bán dịch vụ du lịch của bạn trên DubaiWay. Hoa hồng 10%, thanh toán minh bạch, không phí niêm yết.',
+  description: 'Đăng bán dịch vụ du lịch của bạn trên DubaiWay. Không phí niêm yết, không phí duy trì, chỉ tính hoa hồng khi có đơn.',
   alternates: { canonical: `${siteConfig.url}/tro-thanh-doi-tac` },
 };
 
@@ -37,7 +37,7 @@ export default function BecomePartnerPage() {
           />
 
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
-            <Card title="10% hoa hồng" body="Tính trên tiền hàng sau giảm giá, chưa gồm thuế thu hộ. Không có khoản nào khác." />
+            <Card title="Chỉ tính khi có đơn" body="Không phí niêm yết, không phí duy trì. Mức hoa hồng cụ thể xem trong Khu đối tác sau khi đăng ký, hoặc hỏi nhân viên DubaiWay." />
             <Card title="Không phí niêm yết" body="Đăng bao nhiêu dịch vụ cũng được. Chỉ trả khi bán được." />
             <Card title="Đối soát rõ ràng" body="Mỗi đơn hiển thị đủ: khách trả bao nhiêu, hoa hồng bao nhiêu, bạn nhận bao nhiêu." />
           </div>

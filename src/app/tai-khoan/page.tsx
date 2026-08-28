@@ -28,7 +28,7 @@ export default async function AccountHomePage() {
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <Stat label="Đơn hàng" value={String(bookings.length)} />
         <Stat label="Sắp sử dụng" value={String(upcoming.length)} />
-        <Stat label="Đã chi tiêu" value={formatMoney(fromMinorUnits(spent, 'AED'), 'vi-VN')} />
+        <Stat label="Đã chi tiêu" value={formatMoney(fromMinorUnits(spent, 'USD'), 'vi-VN')} />
       </div>
 
       <h2 className="mt-10 font-display text-xl font-medium text-midnight">Đơn hàng gần đây</h2>

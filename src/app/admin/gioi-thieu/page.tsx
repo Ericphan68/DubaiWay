@@ -9,7 +9,7 @@ export default async function AdminReferralPage() {
   const rewards = listAllRewards();
   const total = rewards.reduce((s, r) => s + r.amountMinor, 0);
   const commissionBase = rewards.reduce((s, r) => s + r.commissionMinor, 0);
-  const aed = (m: number) => formatMoney(fromMinorUnits(m, 'AED'), 'vi-VN');
+  const usd = (m: number) => formatMoney(fromMinorUnits(m, 'USD'), 'vi-VN');
 
   return (
     <>
@@ -27,8 +27,8 @@ export default async function AdminReferralPage() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <Stat label="Số lượt thưởng" value={String(rewards.length)} />
-        <Stat label="Hoa hồng liên quan" value={aed(commissionBase)} />
-        <Stat label="Tổng thưởng đã ghi" value={aed(total)} />
+        <Stat label="Hoa hồng liên quan" value={usd(commissionBase)} />
+        <Stat label="Tổng thưởng đã ghi" value={usd(total)} />
       </div>
 
       <h2 className="mt-8 font-display text-lg font-medium text-midnight">Danh sách thưởng</h2>
@@ -51,9 +51,9 @@ export default async function AdminReferralPage() {
                     <Td className="font-mono text-xs">{r.bookingReference}</Td>
                     <Td className="font-mono text-xs">{r.referrerUserId.slice(0, 12)}…</Td>
                     <Td className="font-mono text-xs">{r.referredUserId.slice(0, 12)}…</Td>
-                    <Td className="text-right">{aed(r.commissionMinor)}</Td>
+                    <Td className="text-right">{usd(r.commissionMinor)}</Td>
                     <Td className="text-right">{r.shareBps / 100}%</Td>
-                    <Td className="text-right font-medium text-midnight">{aed(r.amountMinor)}</Td>
+                    <Td className="text-right font-medium text-midnight">{usd(r.amountMinor)}</Td>
                     <Td>{r.status}</Td>
                   </tr>
                 ))}

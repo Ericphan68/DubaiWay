@@ -57,7 +57,7 @@ create table public.profiles (
   country       char(2),
   postal_code   text,
   locale        text not null default 'vi' check (locale in ('vi','en','ar')),
-  currency      char(3) not null default 'AED',
+  currency      char(3) not null default 'USD',
   marketing_opt_in boolean not null default false,
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
@@ -212,7 +212,7 @@ create table public.merchant_bank_accounts (
   account_number_last4 text,        -- chỉ lưu 4 số cuối để hiển thị
   account_number_encrypted text,    -- mã hoá ở tầng ứng dụng
   swift_bic         text,
-  currency          char(3) not null default 'AED',
+  currency          char(3) not null default 'USD',
   is_default        boolean not null default true,
   verified_at       timestamptz,
   created_at        timestamptz not null default now(),

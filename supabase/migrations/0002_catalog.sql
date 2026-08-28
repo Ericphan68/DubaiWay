@@ -58,7 +58,7 @@ create table public.services (
 
   -- Giá hiển thị "từ" — cache để lọc/sắp xếp nhanh, nguồn thật nằm ở service_packages.
   price_from_minor      bigint check (price_from_minor >= 0),
-  currency              char(3) not null default 'AED',
+  currency              char(3) not null default 'USD',
 
   -- Thống kê đánh giá — cập nhật bằng trigger, không tự nhập.
   rating_avg_x100       integer not null default 0 check (rating_avg_x100 between 0 and 500),
@@ -133,7 +133,7 @@ create table public.service_packages (
   -- Giá trọn gói cho cả nhóm (nếu bán theo nhóm thay vì theo đầu người).
   price_group_minor     bigint check (price_group_minor >= 0),
   group_size            integer check (group_size is null or group_size > 0),
-  currency              char(3) not null default 'AED',
+  currency              char(3) not null default 'USD',
   -- Thuế/phí tính thêm cho khách, dạng bps trên tiền hàng.
   tax_rate_bps          integer not null default 0 check (tax_rate_bps between 0 and 10000),
   fee_fixed_minor       bigint not null default 0 check (fee_fixed_minor >= 0),

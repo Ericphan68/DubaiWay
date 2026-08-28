@@ -9,7 +9,7 @@ import {
 
 const MERCHANT = 'e0000000-0000-4000-8000-000000000001';
 const OTHER = 'merchant-khac';
-const aed = (v: number) => fromMajorUnits(v, 'AED');
+const usd = (v: number) => fromMajorUnits(v, 'USD');
 
 const draft = (over: Partial<Parameters<typeof createServiceDraft>[0]> = {}) =>
   createServiceDraft({
@@ -26,7 +26,7 @@ const draft = (over: Partial<Parameters<typeof createServiceDraft>[0]> = {}) =>
     durationMinutes: 120,
     languages: ['en', 'vi'],
     minGuests: 1, maxGuests: 60,
-    priceAdult: aed(180), priceChild: aed(120),
+    priceAdult: usd(180), priceChild: usd(120),
     taxRateBps: 500,
     instantConfirmation: true, freeCancellation: true, pickupAvailable: false,
     bookingCutoffHours: 12,
@@ -86,7 +86,7 @@ describe('Đối tác tạo dịch vụ', () => {
   });
 
   it('từ chối giá 0 hoặc âm', () => {
-    expect(() => draft({ priceAdult: aed(0) })).toThrow(/lớn hơn 0/);
+    expect(() => draft({ priceAdult: usd(0) })).toThrow(/lớn hơn 0/);
   });
 
   it('từ chối số khách tối đa nhỏ hơn tối thiểu', () => {
@@ -102,9 +102,9 @@ describe('Đối tác tạo dịch vụ', () => {
 describe('Đối tác sửa dịch vụ', () => {
   it('sửa được nội dung của mình', () => {
     const s = draft();
-    const sau = updateService(s.id, MERCHANT, { titleVi: 'Tên mới', priceAdult: aed(200) });
+    const sau = updateService(s.id, MERCHANT, { titleVi: 'Tên mới', priceAdult: usd(200) });
     expect(sau.i18n.vi.title).toBe('Tên mới');
-    expect(sau.packages[0].priceAdult).toEqual(aed(200));
+    expect(sau.packages[0].priceAdult).toEqual(usd(200));
   });
 
   it('KHÔNG sửa được dịch vụ của đối tác khác', () => {

@@ -14,7 +14,7 @@ export function MarketplaceCTA() {
             Bán dịch vụ của bạn cho khách quốc tế
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-white/70">
-            Không phí niêm yết, không phí duy trì. DubaiWay nhận 10% hoa hồng khi bạn bán được —
+            Không phí niêm yết, không phí duy trì. DubaiWay chỉ nhận hoa hồng khi bạn bán được —
             và bạn thấy rõ từng đồng trên bảng đối soát.
           </p>
           <Button href="/tro-thanh-doi-tac" variant="gold" size="lg" className="mt-6">
@@ -31,7 +31,7 @@ export function MarketplaceCTA() {
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-ink-muted">
             Bạn nhận 30% phần hoa hồng DubaiWay thực nhận từ mỗi giao dịch hợp lệ của người bạn
-            giới thiệu. Đơn 1.000 AED thì bạn được 30 AED. Chương trình một tầng, không phải đa cấp.
+            giới thiệu. Đơn 1.000 USD thì bạn được 30 USD. Chương trình một tầng, không phải đa cấp.
           </p>
           <Button href="/gioi-thieu-ban-be" variant="primary" size="lg" className="mt-6">
             Tìm hiểu chương trình

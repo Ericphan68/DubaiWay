@@ -44,15 +44,14 @@ export default function AboutPage() {
 
             <Block title="Tiền của bạn đi đâu">
               <p>
-                DubaiWay nhận <strong className="text-midnight">10% giá trị đơn hàng hợp lệ</strong>,
-                phần còn lại thuộc về đối tác cung cấp dịch vụ. Tỷ lệ này công khai, không thay đổi theo
-                từng khách, và được ghi lại trên từng đơn hàng.
+                Phần lớn số tiền bạn trả thuộc về đối tác cung cấp dịch vụ. DubaiWay giữ lại một phần
+                hoa hồng để vận hành nền tảng, thẩm định đối tác và xử lý khiếu nại.
               </p>
-              <div className="mt-4 rounded-xl bg-ivory-200 p-4 font-mono text-sm">
-                <p className="text-ink-muted">Đơn hàng 1.000 AED:</p>
-                <p className="mt-2 text-midnight">Đối tác nhận<span className="float-right">900,00 AED</span></p>
-                <p className="text-midnight">DubaiWay nhận<span className="float-right">100,00 AED</span></p>
-              </div>
+              <p className="mt-3">
+                Giá bạn thấy là giá cuối. DubaiWay <strong className="text-midnight">không cộng thêm
+                phụ phí nào lên giá của đối tác</strong> — hoa hồng nằm trong giá đó, không tính thêm
+                vào hoá đơn của bạn.
+              </p>
             </Block>
 
             <Block title="Giá minh bạch">

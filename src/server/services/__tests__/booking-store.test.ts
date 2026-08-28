@@ -7,14 +7,14 @@ import {
   verifyVoucherPayload,
 } from '../booking-store';
 
-const aed = (v: number) => fromMajorUnits(v, 'AED');
+const usd = (v: number) => fromMajorUnits(v, 'USD');
 const MERCHANT = 'merchant-1';
 const OTHER_MERCHANT = 'merchant-2';
 
 const financials = (total: number, hasReferrer = false) =>
   computeBookingFinancials({
-    currency: 'AED',
-    lines: [{ label: 'Người lớn', unitPrice: aed(total), quantity: 1 }],
+    currency: 'USD',
+    lines: [{ label: 'Người lớn', unitPrice: usd(total), quantity: 1 }],
     hasReferrer,
   });
 
@@ -59,10 +59,10 @@ describe('Tạo đơn', () => {
 
   it('lưu đủ ảnh chụp tài chính', () => {
     const b = makeBooking({ total: 1000, hasReferrer: true });
-    expect(b.financials.platformCommission).toEqual(aed(100));
-    expect(b.financials.merchantRevenue).toEqual(aed(900));
-    expect(b.financials.referralReward).toEqual(aed(30));
-    expect(b.financials.platformNetRevenue).toEqual(aed(70));
+    expect(b.financials.platformCommission).toEqual(usd(100));
+    expect(b.financials.merchantRevenue).toEqual(usd(900));
+    expect(b.financials.referralReward).toEqual(usd(30));
+    expect(b.financials.platformNetRevenue).toEqual(usd(70));
   });
 });
 
@@ -179,9 +179,9 @@ describe('Tổng hợp doanh thu', () => {
     markPaid(paid.reference, 'pi_1');
     makeBooking({ total: 5000 }); // vẫn chờ thanh toán, không được tính
 
-    const t = merchantTotals(MERCHANT, 'AED');
+    const t = merchantTotals(MERCHANT, 'USD');
     expect(t.bookingCount).toBe(1);
-    expect(t.grossSales).toBe(100000);   // 1.000,00 AED
+    expect(t.grossSales).toBe(100000);   // 1.000,00 USD
     expect(t.commission).toBe(10000);    // 100,00
     expect(t.netRevenue).toBe(90000);    // 900,00
   });
@@ -191,8 +191,8 @@ describe('Tổng hợp doanh thu', () => {
     const b = makeBooking({ total: 2000, merchantId: OTHER_MERCHANT });
     markPaid(a.reference, 'p1');
     markPaid(b.reference, 'p2');
-    expect(merchantTotals(MERCHANT, 'AED').grossSales).toBe(100000);
-    expect(merchantTotals(OTHER_MERCHANT, 'AED').grossSales).toBe(200000);
+    expect(merchantTotals(MERCHANT, 'USD').grossSales).toBe(100000);
+    expect(merchantTotals(OTHER_MERCHANT, 'USD').grossSales).toBe(200000);
     expect(listBookingsForMerchant(MERCHANT)).toHaveLength(1);
   });
 

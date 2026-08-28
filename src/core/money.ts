@@ -1,6 +1,6 @@
 /**
  * Money primitives — TOÀN BỘ tiền trong hệ thống dùng SỐ NGUYÊN theo đơn vị nhỏ nhất
- * (minor units: fils với AED, cent với USD, đồng với VND).
+ * (minor units: cent với USD, fils với AED, đồng với VND).
  *
  * Lý do: số thực (float) làm sai lệch phép cộng/nhân tiền. 0.1 + 0.2 !== 0.3.
  * Mọi giá trị tài chính lưu DB bằng BIGINT + mã tiền tệ, không bao giờ dùng NUMERIC/FLOAT.
@@ -9,6 +9,18 @@
 /** Mã tiền tệ ISO-4217 hệ thống hỗ trợ. Mở rộng bằng cách thêm vào đây + CURRENCY_MINOR_UNITS. */
 export const SUPPORTED_CURRENCIES = ['AED', 'USD', 'VND', 'EUR'] as const;
 export type CurrencyCode = (typeof SUPPORTED_CURRENCIES)[number];
+
+/**
+ * Tiền tệ quyết toán của sàn: đô la Mỹ.
+ *
+ * Đây là NGUỒN SỰ THẬT DUY NHẤT. Mọi giá niêm yết, hoa hồng, thưởng giới thiệu,
+ * ví và sổ cái đều tính bằng USD. Khách có thể xem giá bằng tiền khác nhưng đó
+ * chỉ là quy đổi hiển thị — xem `src/config/locales.ts`.
+ *
+ * Đổi tiền quyết toán KHÔNG phải chỉ sửa hằng số này: dữ liệu tài chính đã ghi
+ * vẫn mang mã tiền cũ, nên phải có bước chuyển đổi dữ liệu kèm theo.
+ */
+export const PLATFORM_CURRENCY: CurrencyCode = 'USD';
 
 /** Số chữ số thập phân của từng loại tiền (exponent theo ISO-4217). */
 export const CURRENCY_MINOR_UNITS: Record<CurrencyCode, number> = {
@@ -20,7 +32,7 @@ export const CURRENCY_MINOR_UNITS: Record<CurrencyCode, number> = {
 
 /** Một khoản tiền. `amount` LUÔN là số nguyên theo đơn vị nhỏ nhất. */
 export interface Money {
-  /** Số nguyên, đơn vị nhỏ nhất. VD 1.000,50 AED => 100050 */
+  /** Số nguyên, đơn vị nhỏ nhất. VD 1.000,50 USD => 100050 */
   readonly amount: number;
   readonly currency: CurrencyCode;
 }
@@ -164,7 +176,7 @@ export function fromMinorUnits(amount: number | string, currency: CurrencyCode):
   return money(typeof amount === 'string' ? Number.parseInt(amount, 10) : amount, currency);
 }
 
-/** Tạo tiền từ đơn vị lớn (VD 1000.5 AED) — chỉ dùng ở seed/nhập liệu, không dùng trong tính toán. */
+/** Tạo tiền từ đơn vị lớn (VD 1000.5 USD) — chỉ dùng ở seed/nhập liệu, không dùng trong tính toán. */
 export function fromMajorUnits(value: number, currency: CurrencyCode): Money {
   const exponent = CURRENCY_MINOR_UNITS[currency];
   return money(roundHalfUp(value * 10 ** exponent), currency);

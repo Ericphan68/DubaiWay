@@ -203,7 +203,7 @@ const referral: ReferralRepository = {
   async getCodeForUser() { return null; },
   async getDirectReferrer() { return null; },
   async getWalletBalance(): Promise<Money | null> {
-    return fromMajorUnits(0, 'AED' as CurrencyCode);
+    return fromMajorUnits(0, 'USD' as CurrencyCode);
   },
 };
 

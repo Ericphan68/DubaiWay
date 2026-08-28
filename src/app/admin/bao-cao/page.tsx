@@ -10,7 +10,7 @@ import { listRedemptions } from '@/server/services/coupon-store';
 
 export const metadata: Metadata = { title: 'Báo cáo — Quản trị', robots: { index: false, follow: false } };
 
-const aed = (m: number) => formatMoney(fromMinorUnits(m, 'AED'), 'vi-VN');
+const usd = (m: number) => formatMoney(fromMinorUnits(m, 'USD'), 'vi-VN');
 
 export default async function AdminReportsPage() {
   const t = platformTotals();
@@ -65,13 +65,13 @@ export default async function AdminReportsPage() {
 
       <Section title="Tài chính">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Stat label="Tổng giá trị giao dịch" value={aed(t.gmv)} />
-          <Stat label="Hoa hồng nền tảng" value={aed(t.commission)} />
-          <Stat label="Doanh thu đối tác" value={aed(t.merchantRevenue)} />
-          <Stat label="Thưởng giới thiệu" value={aed(t.referralPaid)} />
-          <Stat label="Doanh thu ròng" value={aed(t.netRevenue)} highlight />
+          <Stat label="Tổng giá trị giao dịch" value={usd(t.gmv)} />
+          <Stat label="Hoa hồng nền tảng" value={usd(t.commission)} />
+          <Stat label="Doanh thu đối tác" value={usd(t.merchantRevenue)} />
+          <Stat label="Thưởng giới thiệu" value={usd(t.referralPaid)} />
+          <Stat label="Doanh thu ròng" value={usd(t.netRevenue)} highlight />
           <Stat label="Đã hoàn cho khách"
-                value={aed(cancellations.reduce((s, c) => s + c.refundAmountMinor, 0))} />
+                value={usd(cancellations.reduce((s, c) => s + c.refundAmountMinor, 0))} />
         </div>
       </Section>
 
@@ -83,9 +83,9 @@ export default async function AdminReportsPage() {
                  rows={months.map(([m, v]) => [
                    m.split('-').reverse().join('/'),
                    String(v.count),
-                   aed(v.gmv),
-                   aed(v.commission),
-                   aed(v.net),
+                   usd(v.gmv),
+                   usd(v.commission),
+                   usd(v.net),
                  ])} />
         )}
       </Section>
@@ -95,15 +95,15 @@ export default async function AdminReportsPage() {
           <EmptyState title="Chưa có dữ liệu" />
         ) : (
           <Table head={['Đối tác', 'Đơn', 'GMV']}
-                 rows={topMerchants.map((m) => [m.name, String(m.count), aed(m.gmv)])} />
+                 rows={topMerchants.map((m) => [m.name, String(m.count), usd(m.gmv)])} />
         )}
       </Section>
 
       <Section title="Hiệu quả chương trình giới thiệu">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Stat label="Đơn có người giới thiệu" value={String(referredBookings.length)} />
-          <Stat label="GMV từ giới thiệu" value={aed(referralGmv)} />
-          <Stat label="Chi phí thưởng" value={aed(referralCost)} />
+          <Stat label="GMV từ giới thiệu" value={usd(referralGmv)} />
+          <Stat label="Chi phí thưởng" value={usd(referralCost)} />
           <Stat
             label="Tỷ lệ chi/GMV"
             value={referralGmv > 0 ? `${Math.round((referralCost / referralGmv) * 1000) / 10}%` : '—'}

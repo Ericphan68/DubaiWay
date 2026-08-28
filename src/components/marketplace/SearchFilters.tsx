@@ -18,10 +18,10 @@ export interface FilterOptions {
 }
 
 const PRICE_BUCKETS = [
-  { label: 'Dưới 200 AED', min: 0, max: 20000 },
-  { label: '200 – 500 AED', min: 20000, max: 50000 },
-  { label: '500 – 1.000 AED', min: 50000, max: 100000 },
-  { label: 'Trên 1.000 AED', min: 100000, max: undefined },
+  { label: 'Dưới 50 USD', min: 0, max: 5000 },
+  { label: '50 – 150 USD', min: 5000, max: 15000 },
+  { label: '150 – 300 USD', min: 15000, max: 30000 },
+  { label: 'Trên 300 USD', min: 30000, max: undefined },
 ];
 
 const SORTS = [

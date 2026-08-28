@@ -56,7 +56,7 @@ export default async function MerchantServicesPage() {
                   <span className="min-w-0">
                     <span className="block font-medium text-midnight">{s.title}</span>
                     <span className="mt-0.5 block text-xs text-ink-soft">
-                      {s.categorySlug} · từ {formatMoney(fromMinorUnits(s.priceFromMinor, 'AED'), 'vi-VN')}
+                      {s.categorySlug} · từ {formatMoney(fromMinorUnits(s.priceFromMinor, 'USD'), 'vi-VN')}
                     </span>
                   </span>
                   <span className="flex items-center gap-3">

@@ -13,7 +13,7 @@ export default async function AdminDashboard() {
   const rewards = listAllRewards();
   const withdrawals = listAllWithdrawals();
 
-  const aed = (minor: number) => formatMoney(fromMinorUnits(minor, 'AED'), 'vi-VN');
+  const usd = (minor: number) => formatMoney(fromMinorUnits(minor, 'USD'), 'vi-VN');
   const pendingMerchants = merchants.filter(
     (m) => m.status === 'submitted' || m.status === 'under_review',
   ).length;
@@ -27,18 +27,18 @@ export default async function AdminDashboard() {
 
       <h2 className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-soft">Tài chính</h2>
       <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Stat label="Tổng giá trị giao dịch" value={aed(t.gmv)} />
-        <Stat label="Hoa hồng nền tảng" value={aed(t.commission)} />
-        <Stat label="Doanh thu đối tác" value={aed(t.merchantRevenue)} />
-        <Stat label="Thưởng giới thiệu đã ghi" value={aed(t.referralPaid)} />
-        <Stat label="Doanh thu ròng DubaiWay" value={aed(t.netRevenue)} highlight />
+        <Stat label="Tổng giá trị giao dịch" value={usd(t.gmv)} />
+        <Stat label="Hoa hồng nền tảng" value={usd(t.commission)} />
+        <Stat label="Doanh thu đối tác" value={usd(t.merchantRevenue)} />
+        <Stat label="Thưởng giới thiệu đã ghi" value={usd(t.referralPaid)} />
+        <Stat label="Doanh thu ròng DubaiWay" value={usd(t.netRevenue)} highlight />
         <Stat label="Đơn huỷ / hoàn tiền" value={String(t.cancelledCount)} />
       </div>
 
       <p className="mt-3 text-xs text-ink-soft">
         Kiểm tra sổ sách: doanh thu đối tác + hoa hồng = tổng giao dịch
-        ({aed(t.merchantRevenue)} + {aed(t.commission)} = {aed(t.merchantRevenue + t.commission)}).
-        Thưởng + ròng = hoa hồng ({aed(t.referralPaid)} + {aed(t.netRevenue)} = {aed(t.referralPaid + t.netRevenue)}).
+        ({usd(t.merchantRevenue)} + {usd(t.commission)} = {usd(t.merchantRevenue + t.commission)}).
+        Thưởng + ròng = hoa hồng ({usd(t.referralPaid)} + {usd(t.netRevenue)} = {usd(t.referralPaid + t.netRevenue)}).
       </p>
 
       <h2 className="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-soft">Cần xử lý</h2>

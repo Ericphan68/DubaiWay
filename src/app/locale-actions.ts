@@ -31,7 +31,7 @@ export async function setLocaleAction(formData: FormData): Promise<void> {
 /**
  * Đổi tiền tệ HIỂN THỊ.
  *
- * Không ảnh hưởng số tiền thực thu — đơn hàng vẫn tính và thu bằng AED.
+ * Không ảnh hưởng số tiền thực thu — đơn hàng vẫn tính và thu bằng USD.
  */
 export async function setCurrencyAction(formData: FormData): Promise<void> {
   const value = String(formData.get('currency') ?? '');

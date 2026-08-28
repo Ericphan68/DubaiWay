@@ -21,7 +21,7 @@ export async function requestWithdrawalAction(
   if (!Number.isFinite(major) || major <= 0) {
     return { error: 'Số tiền không hợp lệ.', notice: null };
   }
-  // Người dùng nhập theo AED; hệ thống làm việc bằng fils.
+  // Người dùng nhập theo USD; hệ thống làm việc bằng fils.
   const amountMinor = Math.round(major * 100);
 
   try {
@@ -29,7 +29,7 @@ export async function requestWithdrawalAction(
     revalidatePath('/tai-khoan/gioi-thieu');
     return {
       error: null,
-      notice: `Đã gửi yêu cầu rút ${(req.amountMinor / 100).toLocaleString('vi-VN')} AED. Bộ phận tài chính sẽ xử lý trong 3–5 ngày làm việc.`,
+      notice: `Đã gửi yêu cầu rút ${(req.amountMinor / 100).toLocaleString('vi-VN')} USD. Bộ phận tài chính sẽ xử lý trong 3–5 ngày làm việc.`,
     };
   } catch (err) {
     return {

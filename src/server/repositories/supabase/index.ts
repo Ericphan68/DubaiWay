@@ -70,7 +70,7 @@ function mapSummary(r: Row): ServiceSummary {
     priceFrom:
       r.price_from_minor === null || r.price_from_minor === undefined
         ? null
-        : fromMinorUnits(r.price_from_minor, (r.currency ?? 'AED') as CurrencyCode),
+        : fromMinorUnits(r.price_from_minor, (r.currency ?? 'USD') as CurrencyCode),
     durationMinutes: r.duration_minutes ?? null,
     languages: r.languages ?? [],
     instantConfirmation: Boolean(r.instant_confirmation),
@@ -200,7 +200,7 @@ const catalog: CatalogRepository = {
         .filter((p: Row) => p.is_active)
         .map((p: Row) => {
           const ptr = (p.tr ?? []).find((x: Row) => x.locale === locale) ?? (p.tr ?? [])[0];
-          const cur = (p.currency ?? 'AED') as CurrencyCode;
+          const cur = (p.currency ?? 'USD') as CurrencyCode;
           return {
             id: p.id,
             code: p.code,

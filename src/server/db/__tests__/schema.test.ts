@@ -41,14 +41,14 @@ describe('Sổ sách booking phải cân ngay ở database', () => {
         commission_base_minor, commission_rate_bps, platform_commission_minor, merchant_revenue_minor,
         referrer_user_id, referral_share_bps, referral_reward_minor, platform_net_minor
       ) values (
-        '${v.reference}', '${USER_B}', '${MERCHANT}', 'AED',
+        '${v.reference}', '${USER_B}', '${MERCHANT}', 'USD',
         ${v.subtotal}, ${v.discount}, ${v.tax}, ${v.fee}, ${v.total},
         ${v.base}, ${v.rate}, ${v.commission}, ${v.merchant},
         ${v.referrer}, ${v.share}, ${v.reward}, ${v.net}
       )`);
   };
 
-  it('đơn đúng chuẩn 1.000 AED được chấp nhận', async () => {
+  it('đơn đúng chuẩn 1.000 USD được chấp nhận', async () => {
     await expect(chenBooking()).resolves.toBeDefined();
   });
 
@@ -78,7 +78,7 @@ describe('Sổ sách booking phải cân ngay ở database', () => {
     ).rejects.toThrow(/booking_no_self_referral/);
   });
 
-  it('đơn có referral hợp lệ: 1.000 AED → 100 hoa hồng, 30 thưởng, 70 giữ lại', async () => {
+  it('đơn có referral hợp lệ: 1.000 USD → 100 hoa hồng, 30 thưởng, 70 giữ lại', async () => {
     await expect(
       chenBooking({ referrer: `'${USER_A}'`, share: 3000, reward: 3000, net: 7000 }),
     ).resolves.toBeDefined();
@@ -131,11 +131,11 @@ describe('Giới thiệu chỉ một tầng — chặn ở database', () => {
     const bookingId = b.rows[0].id;
     await db.exec(`insert into public.referral_rewards
       (booking_id, referrer_user_id, referred_user_id, commission_minor, share_bps, amount_minor, currency)
-      values ('${bookingId}','${USER_A}','${USER_B}',10000,3000,3000,'AED')`);
+      values ('${bookingId}','${USER_A}','${USER_B}',10000,3000,3000,'USD')`);
     await expect(
       db.exec(`insert into public.referral_rewards
         (booking_id, referrer_user_id, referred_user_id, commission_minor, share_bps, amount_minor, currency)
-        values ('${bookingId}','${USER_A}','${USER_B}',10000,3000,3000,'AED')`),
+        values ('${bookingId}','${USER_A}','${USER_B}',10000,3000,3000,'USD')`),
     ).rejects.toThrow(/duplicate key|referral_rewards_booking_id_key/);
   });
 });
@@ -264,7 +264,7 @@ describe('Dữ liệu tài chính bất biến', () => {
     const b = await db.query<{ id: string }>(`select id from public.bookings limit 1`);
     await db.exec(`insert into public.ledger_entries
       (entry_group, account, direction, amount_minor, currency, booking_id, source_type)
-      values (gen_random_uuid(), 'platform_commission', 'credit', 10000, 'AED', '${b.rows[0].id}', 'booking')`);
+      values (gen_random_uuid(), 'platform_commission', 'credit', 10000, 'USD', '${b.rows[0].id}', 'booking')`);
     await expect(
       db.exec(`update public.ledger_entries set amount_minor = 1 where account = 'platform_commission'`),
     ).rejects.toThrow(/chỉ được phép THÊM/);
@@ -298,10 +298,10 @@ describe('Chống trùng lặp thanh toán và webhook', () => {
     const b = await db.query<{ id: string }>(`select id from public.bookings limit 1`);
     const key = 'idem-key-abc-123';
     await db.exec(`insert into public.payments (booking_id, amount_minor, currency, idempotency_key)
-                   values ('${b.rows[0].id}', 100000, 'AED', '${key}')`);
+                   values ('${b.rows[0].id}', 100000, 'USD', '${key}')`);
     await expect(
       db.exec(`insert into public.payments (booking_id, amount_minor, currency, idempotency_key)
-               values ('${b.rows[0].id}', 100000, 'AED', '${key}')`),
+               values ('${b.rows[0].id}', 100000, 'USD', '${key}')`),
     ).rejects.toThrow(/duplicate key|idempotency_key/);
   });
 

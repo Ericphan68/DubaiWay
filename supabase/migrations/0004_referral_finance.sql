@@ -67,7 +67,7 @@ create table public.wallets (
   owner_type        text not null check (owner_type in ('user','merchant')),
   user_id           uuid references public.users(id) on delete cascade,
   merchant_id       uuid references public.merchants(id) on delete cascade,
-  currency          char(3) not null default 'AED',
+  currency          char(3) not null default 'USD',
   balance_available_minor bigint not null default 0,
   balance_pending_minor   bigint not null default 0,
   created_at        timestamptz not null default now(),

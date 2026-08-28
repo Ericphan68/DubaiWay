@@ -12,7 +12,7 @@ beforeEach(() => { __resetReferral(); });
 const reward = (ref: string, referrer: string, referred: string, amount: number) =>
   recordReward({
     bookingReference: ref, referrerUserId: referrer, referredUserId: referred,
-    commissionMinor: amount * 10 / 3, shareBps: 3000, amountMinor: amount, currency: 'AED',
+    commissionMinor: amount * 10 / 3, shareBps: 3000, amountMinor: amount, currency: 'USD',
   });
 
 describe('Mã giới thiệu', () => {

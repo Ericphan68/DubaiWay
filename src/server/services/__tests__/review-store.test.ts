@@ -22,8 +22,8 @@ const makeBooking = () => createBooking({
   adults: 2, children: 0, infants: 0,
   travelers: [{ fullName: 'Khách A', type: 'adult', isLead: true }],
   financials: computeBookingFinancials({
-    currency: 'AED',
-    lines: [{ label: 'Người lớn', unitPrice: fromMajorUnits(150, 'AED'), quantity: 2 }],
+    currency: 'USD',
+    lines: [{ label: 'Người lớn', unitPrice: fromMajorUnits(150, 'USD'), quantity: 2 }],
   }),
   referrerUserId: null, disputeWindowHours: 72,
 });

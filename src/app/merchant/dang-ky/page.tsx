@@ -20,7 +20,7 @@ export default async function MerchantRegisterPage() {
         <SectionHeader
           eyebrow="Đăng ký đối tác"
           title="Tạo hồ sơ bán dịch vụ trên DubaiWay"
-          description="Điền thông tin, đính kèm giấy tờ pháp lý. Đội thẩm định xét duyệt trong 1–2 ngày làm việc. Không phí niêm yết, DubaiWay chỉ nhận 10% hoa hồng khi bạn bán được."
+          description="Điền thông tin, đính kèm giấy tờ pháp lý. Đội thẩm định xét duyệt trong 1–2 ngày làm việc. Không phí niêm yết, không phí duy trì — DubaiWay chỉ nhận hoa hồng khi bạn bán được. Mức hoa hồng áp dụng cho tài khoản của bạn hiện trong Khu đối tác sau khi hồ sơ được duyệt."
         />
         <div className="mt-8">
           <OnboardForm />

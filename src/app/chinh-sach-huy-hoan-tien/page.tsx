@@ -30,13 +30,13 @@ export default function CancellationPage() {
               <tr>
                 <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-ink-soft">Thời điểm huỷ</th>
                 <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-ink-soft">Mức hoàn</th>
-                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-ink-soft">Đơn 315 AED</th>
+                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-ink-soft">Đơn 315 USD</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-mist bg-ivory-100">
-              <tr><td className="px-4 py-3">Trước 24 giờ trở lên</td><td className="px-4 py-3">100%</td><td className="px-4 py-3">315,00 AED</td></tr>
-              <tr><td className="px-4 py-3">Từ 4 đến dưới 24 giờ</td><td className="px-4 py-3">50%</td><td className="px-4 py-3">157,50 AED</td></tr>
-              <tr><td className="px-4 py-3">Dưới 4 giờ hoặc không đến</td><td className="px-4 py-3">0%</td><td className="px-4 py-3">0,00 AED</td></tr>
+              <tr><td className="px-4 py-3">Trước 24 giờ trở lên</td><td className="px-4 py-3">100%</td><td className="px-4 py-3">315,00 USD</td></tr>
+              <tr><td className="px-4 py-3">Từ 4 đến dưới 24 giờ</td><td className="px-4 py-3">50%</td><td className="px-4 py-3">157,50 USD</td></tr>
+              <tr><td className="px-4 py-3">Dưới 4 giờ hoặc không đến</td><td className="px-4 py-3">0%</td><td className="px-4 py-3">0,00 USD</td></tr>
             </tbody>
           </table>
         </div>

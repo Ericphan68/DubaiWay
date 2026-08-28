@@ -136,7 +136,7 @@ export interface WalletSummary {
   readonly lifetime: Money;
 }
 
-export function walletSummary(userId: string, currency: CurrencyCode = 'AED'): WalletSummary {
+export function walletSummary(userId: string, currency: CurrencyCode = 'USD'): WalletSummary {
   const mine = listRewards(userId);
   const sum = (pred: (r: ReferralReward) => boolean) =>
     mine.filter(pred).reduce((s, r) => s + r.amountMinor, 0);
@@ -157,12 +157,12 @@ export class WithdrawalError extends Error {
 }
 
 /** Số tiền rút tối thiểu — khớp platform_settings.withdrawal.min_amount_minor */
-export const MIN_WITHDRAWAL_MINOR = 10_000; // 100,00 AED
+export const MIN_WITHDRAWAL_MINOR = 2_500; // 25,00 USD
 
 export function requestWithdrawal(
   userId: string,
   amountMinor: number,
-  currency: CurrencyCode = 'AED',
+  currency: CurrencyCode = 'USD',
   method = 'bank_transfer',
 ): WithdrawalRequest {
   const available = walletSummary(userId, currency).available.amount;

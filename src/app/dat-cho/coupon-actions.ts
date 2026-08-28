@@ -42,14 +42,14 @@ export async function checkCouponAction(
   try {
     const applied = applyCoupon(code, {
       userId: user?.id ?? null,
-      subtotal: { amount: subtotalMinor, currency: 'AED' },
+      subtotal: { amount: subtotalMinor, currency: 'USD' },
       categorySlug: service.categorySlug,
       merchantId: service.merchant.id,
     });
     return {
       error: null,
       code: applied.coupon.code,
-      discountLabel: `− ${(applied.discount.amount / 100).toLocaleString('vi-VN')} AED`,
+      discountLabel: `− ${(applied.discount.amount / 100).toLocaleString('vi-VN')} USD`,
     };
   } catch (err) {
     return {

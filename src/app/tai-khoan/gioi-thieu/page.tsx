@@ -47,11 +47,11 @@ export default async function ReferralPage() {
           mỗi giao dịch hợp lệ của người bạn giới thiệu.
         </p>
         <div className="mt-3 rounded-xl bg-ivory-100 p-4 font-mono text-sm">
-          <p className="text-ink-muted">Ví dụ đơn hàng 1.000 AED:</p>
-          <p className="mt-2 text-midnight">Đối tác nhận<span className="float-right">900,00 AED</span></p>
-          <p className="text-midnight">Hoa hồng DubaiWay<span className="float-right">100,00 AED</span></p>
+          <p className="text-ink-muted">Ví dụ đơn hàng 1.000 USD:</p>
+          <p className="mt-2 text-midnight">Đối tác nhận<span className="float-right">900,00 USD</span></p>
+          <p className="text-midnight">Hoa hồng DubaiWay<span className="float-right">100,00 USD</span></p>
           <p className="mt-1 border-t border-mist pt-1 font-semibold text-champagne-600">
-            Bạn nhận<span className="float-right">30,00 AED</span>
+            Bạn nhận<span className="float-right">30,00 USD</span>
           </p>
         </div>
         <p className="mt-3 text-xs text-ink-soft">
@@ -89,7 +89,7 @@ export default async function ReferralPage() {
         ) : (
           <p className="mt-3 text-sm text-ink-soft">
             Thưởng chuyển sang “rút được” sau khi người bạn giới thiệu đã dùng dịch vụ và hết thời hạn
-            khiếu nại. Số tiền rút tối thiểu là 100 AED.
+            khiếu nại. Số tiền rút tối thiểu là 100 USD.
           </p>
         )}
       </section>
@@ -118,9 +118,9 @@ export default async function ReferralPage() {
                     return (
                       <tr key={r.id}>
                         <Td className="font-mono">{r.bookingReference}</Td>
-                        <Td>{(r.commissionMinor / 100).toLocaleString('vi-VN')} AED</Td>
+                        <Td>{(r.commissionMinor / 100).toLocaleString('vi-VN')} USD</Td>
                         <Td className="font-medium text-midnight">
-                          {(r.amountMinor / 100).toLocaleString('vi-VN')} AED
+                          {(r.amountMinor / 100).toLocaleString('vi-VN')} USD
                           <span className="ml-1 text-xs text-ink-soft">({r.shareBps / 100}%)</span>
                         </Td>
                         <Td>
@@ -148,7 +148,7 @@ export default async function ReferralPage() {
                   {new Date(w.createdAt).toLocaleDateString('vi-VN')} · {w.method === 'bank_transfer' ? 'Chuyển khoản ngân hàng' : w.method}
                 </span>
                 <span className="font-medium text-midnight">
-                  {(w.amountMinor / 100).toLocaleString('vi-VN')} AED
+                  {(w.amountMinor / 100).toLocaleString('vi-VN')} USD
                   <span className="ml-2 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800">
                     {w.status === 'requested' ? 'Đang chờ duyệt' : w.status}
                   </span>

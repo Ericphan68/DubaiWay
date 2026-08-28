@@ -108,7 +108,7 @@ describe('Dữ liệu mẫu chứng minh GIỚI THIỆU MỘT TẦNG', () => {
     expect(r.rows).toHaveLength(0);
   });
 
-  it('đơn safari 300 AED: hoa hồng 30, Linh nhận 9, DubaiWay giữ 21', async () => {
+  it('đơn safari 300 USD: hoa hồng 30, Linh nhận 9, DubaiWay giữ 21', async () => {
     const r = await db.query<{
       customer_total_minor: number; platform_commission_minor: number;
       merchant_revenue_minor: number; referral_reward_minor: number; platform_net_minor: number;
@@ -116,10 +116,10 @@ describe('Dữ liệu mẫu chứng minh GIỚI THIỆU MỘT TẦNG', () => {
                referral_reward_minor, platform_net_minor
           from public.bookings where reference = 'DW-7K2M4P'`);
     const b = r.rows[0];
-    expect(b.platform_commission_minor).toBe(3000);  // 30,00 AED = 10% của 300
-    expect(b.merchant_revenue_minor).toBe(27000);    // 270,00 AED
-    expect(b.referral_reward_minor).toBe(900);       // 9,00 AED = 30% của 30
-    expect(b.platform_net_minor).toBe(2100);         // 21,00 AED
+    expect(b.platform_commission_minor).toBe(3000);  // 30,00 USD = 10% của 300
+    expect(b.merchant_revenue_minor).toBe(27000);    // 270,00 USD
+    expect(b.referral_reward_minor).toBe(900);       // 9,00 USD = 30% của 30
+    expect(b.platform_net_minor).toBe(2100);         // 21,00 USD
     expect(b.referral_reward_minor + b.platform_net_minor).toBe(b.platform_commission_minor);
   });
 

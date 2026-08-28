@@ -22,7 +22,7 @@ export interface CancellationRecord {
   readonly commissionReversalMinor: number;
   readonly merchantReversalMinor: number;
   readonly referralReversalMinor: number;
-  readonly currency: 'AED';
+  readonly currency: 'USD';
   readonly createdAt: string;
 }
 
@@ -132,7 +132,7 @@ export function cancelWithRefund(input: {
     commissionReversalMinor: adj.commissionReversal.amount,
     merchantReversalMinor: adj.merchantRevenueReversal.amount,
     referralReversalMinor: adj.referralRewardReversal.amount,
-    currency: 'AED',
+    currency: 'USD',
     createdAt: new Date().toISOString(),
   };
   state.cancellations.push(record);
@@ -149,7 +149,7 @@ export function getCancellation(reference: string): CancellationRecord | null {
 
 export function refundedAmount(reference: string): Money {
   const c = getCancellation(reference);
-  return fromMinorUnits(c?.refundAmountMinor ?? 0, 'AED');
+  return fromMinorUnits(c?.refundAmountMinor ?? 0, 'USD');
 }
 
 // ─── KHIẾU NẠI ──────────────────────────────────────────────────────────────

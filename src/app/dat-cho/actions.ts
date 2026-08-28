@@ -19,7 +19,7 @@ import { CouponError, applyCoupon, redeemCoupon } from '@/server/services/coupon
  *
  * QUAN TRỌNG: máy chủ TỰ TÍNH LẠI toàn bộ số tiền từ gói dịch vụ trong database.
  * Không con số nào gửi lên từ trình duyệt được dùng để tính tiền — nếu tin,
- * người dùng chỉ cần sửa vài byte là mua tour 1.000 AED với giá 1 AED.
+ * người dùng chỉ cần sửa vài byte là mua tour 1.000 USD với giá 1 USD.
  */
 const schema = z.object({
   slug: z.string().min(1),
@@ -76,7 +76,7 @@ export async function submitBooking(
         : pkg.priceAdult.amount * input.adults + (pkg.priceChild?.amount ?? 0) * input.children;
       const applied = applyCoupon(input.couponCode, {
         userId: user?.id ?? null,
-        subtotal: { amount: lines, currency: 'AED' },
+        subtotal: { amount: lines, currency: 'USD' },
         categorySlug: service.categorySlug,
         merchantId: service.merchant.id,
       });

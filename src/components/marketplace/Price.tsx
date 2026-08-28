@@ -8,8 +8,8 @@ import { INTL_LOCALES, type Locale } from '@/i18n';
 /**
  * Hiển thị giá theo tiền tệ người dùng chọn.
  *
- * NGUYÊN TẮC: chỉ đổi phần HIỂN THỊ. Số tiền gốc luôn là AED và mọi tính toán
- * (hoa hồng, thưởng, đối soát) vẫn dùng AED. Khi hiển thị bằng tiền khác,
+ * NGUYÊN TẮC: chỉ đổi phần HIỂN THỊ. Số tiền gốc luôn là USD và mọi tính toán
+ * (hoa hồng, thưởng, đối soát) vẫn dùng USD. Khi hiển thị bằng tiền khác,
  * thêm dấu ≈ để khách hiểu đây là quy đổi tham khảo, không phải số thu thật.
  */
 export function formatDisplayPrice(

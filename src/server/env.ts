@@ -27,7 +27,7 @@ const schema = z.object({
 
   NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
   NEXT_PUBLIC_DEFAULT_LOCALE: z.enum(['vi', 'en']).default('vi'),
-  NEXT_PUBLIC_DEFAULT_CURRENCY: z.string().length(3).default('AED'),
+  NEXT_PUBLIC_DEFAULT_CURRENCY: z.string().length(3).default('USD'),
 });
 
 const parsed = schema.safeParse(process.env);

@@ -22,7 +22,7 @@ export default async function AdminCouponsPage() {
       <h1 className="font-display text-2xl font-medium text-midnight">Mã khuyến mãi</h1>
       <p className="mt-1 text-sm text-ink-muted">
         {coupons.length} mã · {redemptions.length} lượt sử dụng · đã giảm{' '}
-        {formatMoney(fromMinorUnits(totalDiscount, 'AED'), 'vi-VN')}
+        {formatMoney(fromMinorUnits(totalDiscount, 'USD'), 'vi-VN')}
       </p>
 
       {!canManage ? (
@@ -51,16 +51,16 @@ export default async function AdminCouponsPage() {
                     <Td>
                       {c.kind === 'percent'
                         ? `${(c.percentBps ?? 0) / 100}%`
-                        : formatMoney(fromMinorUnits(c.amountMinor ?? 0, 'AED'), 'vi-VN')}
+                        : formatMoney(fromMinorUnits(c.amountMinor ?? 0, 'USD'), 'vi-VN')}
                       {c.maxDiscountMinor !== null ? (
                         <span className="block text-xs text-ink-soft">
-                          tối đa {formatMoney(fromMinorUnits(c.maxDiscountMinor, 'AED'), 'vi-VN')}
+                          tối đa {formatMoney(fromMinorUnits(c.maxDiscountMinor, 'USD'), 'vi-VN')}
                         </span>
                       ) : null}
                     </Td>
                     <Td className="text-xs">
                       {c.minOrderMinor > 0
-                        ? `Đơn từ ${formatMoney(fromMinorUnits(c.minOrderMinor, 'AED'), 'vi-VN')}`
+                        ? `Đơn từ ${formatMoney(fromMinorUnits(c.minOrderMinor, 'USD'), 'vi-VN')}`
                         : 'Không điều kiện'}
                       {c.categorySlug ? <span className="block">Chỉ {c.categorySlug}</span> : null}
                     </Td>
@@ -109,7 +109,7 @@ export default async function AdminCouponsPage() {
                   <span className="ml-2 text-ink-soft">đơn {r.bookingReference}</span>
                 </span>
                 <span className="text-ink-muted">
-                  − {formatMoney(fromMinorUnits(r.discountMinor, 'AED'), 'vi-VN')}
+                  − {formatMoney(fromMinorUnits(r.discountMinor, 'USD'), 'vi-VN')}
                   <span className="ml-2 text-xs text-ink-soft">
                     {new Date(r.createdAt).toLocaleDateString('vi-VN')}
                   </span>

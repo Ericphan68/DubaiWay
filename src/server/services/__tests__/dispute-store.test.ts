@@ -12,7 +12,7 @@ import {
 const MERCHANT = 'merchant-1';
 const USER = 'user-1';
 const OTHER = 'user-2';
-const aed = (v: number) => fromMajorUnits(v, 'AED');
+const usd = (v: number) => fromMajorUnits(v, 'USD');
 
 /** Bậc hoàn: trước 24h hoàn 100%, trước 4h hoàn 50%, sau đó không hoàn. */
 const TIERS = [
@@ -36,8 +36,8 @@ const makeBooking = (opts: { daysAhead?: number; hasReferrer?: boolean } = {}) =
     adults: 2, children: 0, infants: 0,
     travelers: [{ fullName: 'Khách A', type: 'adult', isLead: true }],
     financials: computeBookingFinancials({
-      currency: 'AED',
-      lines: [{ label: 'Người lớn', unitPrice: aed(500), quantity: 2 }],
+      currency: 'USD',
+      lines: [{ label: 'Người lớn', unitPrice: usd(500), quantity: 2 }],
       hasReferrer: opts.hasReferrer ?? false,
     }),
     referrerUserId: opts.hasReferrer ? 'referrer-1' : null,
@@ -51,7 +51,7 @@ describe('Xem trước tiền hoàn trước khi huỷ', () => {
     const b = makeBooking({ daysAhead: 10 });
     const p = previewCancellation(b.reference, TIERS);
     expect(p.refundRateBps).toBe(10000);
-    expect(p.refundAmount).toEqual(aed(1000));
+    expect(p.refundAmount).toEqual(usd(1000));
     expect(p.canCancel).toBe(true);
   });
 
@@ -62,7 +62,7 @@ describe('Xem trước tiền hoàn trước khi huỷ', () => {
     const now = new Date(start.getTime() - 6 * 3_600_000);
     const p = previewCancellation(b.reference, TIERS, now);
     expect(p.refundRateBps).toBe(5000);
-    expect(p.refundAmount).toEqual(aed(500));
+    expect(p.refundAmount).toEqual(usd(500));
   });
 
   it('huỷ quá sát (còn 1 giờ) → không hoàn', () => {
@@ -103,7 +103,7 @@ describe('Huỷ đơn và thu hồi tiền', () => {
       reason: 'Đổi lịch bay', tiers: TIERS,
     });
 
-    expect(rec.refundAmountMinor).toBe(100000);           // 1.000,00 AED
+    expect(rec.refundAmountMinor).toBe(100000);           // 1.000,00 USD
     expect(rec.commissionReversalMinor).toBe(-10000);     // −100,00
     expect(rec.merchantReversalMinor).toBe(-90000);       // −900,00
     expect(rec.referralReversalMinor).toBe(-3000);        // −30,00
@@ -247,7 +247,7 @@ describe('Xử lý khiếu nại', () => {
   it('luồng open → under_review → resolved', () => {
     const d = setup();
     setDisputeStatus(d.id, 'under_review');
-    const done = setDisputeStatus(d.id, 'resolved', 'Đối tác hoàn 200 AED cho khách');
+    const done = setDisputeStatus(d.id, 'resolved', 'Đối tác hoàn 200 USD cho khách');
     expect(done.status).toBe('resolved');
     expect(done.resolvedAt).toBeTruthy();
   });

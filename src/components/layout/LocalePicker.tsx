@@ -73,8 +73,8 @@ export function LocalePicker({
     moreCur: isVi ? 'Tiền tệ khác' : 'More currencies',
     soon: isVi ? 'sắp có' : 'coming soon',
     note: isVi
-      ? 'Giá quy đổi chỉ để tham khảo. Mọi đơn hàng vẫn được tính và thu bằng AED.'
-      : 'Converted prices are indicative. All bookings are charged in AED.',
+      ? 'Giá quy đổi chỉ để tham khảo. Mọi đơn hàng vẫn được tính và thu bằng USD.'
+      : 'Converted prices are indicative. All bookings are charged in USD.',
     openLabel: isVi ? 'Chọn ngôn ngữ và tiền tệ' : 'Choose language and currency',
   };
 

@@ -18,7 +18,7 @@ export interface Coupon {
   readonly percentBps: number | null;
   /** Với loại fixed: số tiền giảm, đơn vị nhỏ nhất. */
   readonly amountMinor: number | null;
-  readonly currency: 'AED';
+  readonly currency: 'USD';
   readonly minOrderMinor: number;
   readonly maxDiscountMinor: number | null;
   /** Ai chịu chi phí giảm giá — ảnh hưởng cách chia tiền với đối tác. */
@@ -62,7 +62,7 @@ function seed(): void {
   const in90 = new Date(now.getTime() + 90 * 86_400_000).toISOString();
   const ago10 = new Date(now.getTime() - 10 * 86_400_000).toISOString();
 
-  const base = { currency: 'AED' as const, isActive: true, usedCount: 0, createdAt: now.toISOString() };
+  const base = { currency: 'USD' as const, isActive: true, usedCount: 0, createdAt: now.toISOString() };
 
   state.coupons.set('DUBAI10', {
     id: randomUUID(), code: 'DUBAI10', kind: 'percent',
@@ -137,7 +137,7 @@ export function applyCoupon(code: string, ctx: CouponContext): AppliedCoupon {
   }
   if (ctx.subtotal.amount < c.minOrderMinor) {
     throw new CouponError(
-      `Mã này áp dụng cho đơn từ ${(c.minOrderMinor / 100).toLocaleString('vi-VN')} AED trở lên`,
+      `Mã này áp dụng cho đơn từ ${(c.minOrderMinor / 100).toLocaleString('vi-VN')} USD trở lên`,
     );
   }
 
@@ -145,14 +145,14 @@ export function applyCoupon(code: string, ctx: CouponContext): AppliedCoupon {
   if (c.kind === 'percent') {
     discount = applyRateBps(ctx.subtotal, c.percentBps ?? 0);
     if (c.maxDiscountMinor !== null && discount.amount > c.maxDiscountMinor) {
-      discount = fromMinorUnits(c.maxDiscountMinor, 'AED');
+      discount = fromMinorUnits(c.maxDiscountMinor, 'USD');
     }
   } else {
-    discount = fromMinorUnits(c.amountMinor ?? 0, 'AED');
+    discount = fromMinorUnits(c.amountMinor ?? 0, 'USD');
   }
 
   // Không bao giờ giảm quá giá trị đơn hàng.
-  if (discount.amount > ctx.subtotal.amount) discount = money(ctx.subtotal.amount, 'AED');
+  if (discount.amount > ctx.subtotal.amount) discount = money(ctx.subtotal.amount, 'USD');
 
   return { coupon: c, discount };
 }
@@ -214,7 +214,7 @@ export function upsertCoupon(input: {
     kind: input.kind,
     percentBps: input.kind === 'percent' ? Math.round((input.percent ?? 0) * 100) : null,
     amountMinor: input.kind === 'fixed' ? Math.round((input.amountMajor ?? 0) * 100) : null,
-    currency: 'AED',
+    currency: 'USD',
     minOrderMinor: Math.round(input.minOrderMajor * 100),
     maxDiscountMinor: input.maxDiscountMajor ? Math.round(input.maxDiscountMajor * 100) : null,
     fundedBy: input.fundedBy,
