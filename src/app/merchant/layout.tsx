@@ -10,17 +10,21 @@ import { StatusChip } from '@/components/marketplace/StatusBadges';
 const NAV = [
   { href: '/merchant', label: 'Tổng quan' },
   { href: '/merchant/dich-vu', label: 'Dịch vụ' },
+  { href: '/merchant/lich', label: 'Lịch & tồn kho' },
   { href: '/merchant/don-hang', label: 'Đơn hàng' },
   { href: '/merchant/quet-ma', label: 'Quét voucher' },
+  { href: '/merchant/danh-gia', label: 'Đánh giá' },
+  { href: '/merchant/doanh-thu', label: 'Doanh thu' },
+  { href: '/merchant/ho-so', label: 'Hồ sơ đối tác' },
 ];
 
 export default async function MerchantLayout({ children }: { children: ReactNode }) {
   const user = await getSessionUser();
   if (!user) redirect('/dang-nhap?next=/merchant');
-  // Chặn ở máy chủ. Không đủ vai trò thì không vào được, không phải chỉ ẩn menu.
-  if (!isMerchantMember(user)) redirect('/tro-thanh-doi-tac');
-
+  // Người đã có hồ sơ đối tác hoặc có vai trò merchant đều vào được.
+  // Người chưa có gì thì đẩy sang trang đăng ký thay vì chặn cụt.
   const merchant = getMerchantForUser(user.id);
+  if (!merchant && !isMerchantMember(user)) redirect('/merchant/dang-ky');
 
   return (
     <Section>

@@ -5,6 +5,9 @@ import { Section } from '@/components/ui/Section';
 import { BookingPanel } from '@/components/marketplace/BookingPanel';
 import { ServiceCard, formatDuration } from '@/components/marketplace/ServiceCard';
 import { ServiceReviews } from '@/components/marketplace/ServiceReviews';
+import { FavoriteButton } from '@/app/tai-khoan/AccountForms';
+import { getSessionUser } from '@/server/auth';
+import { isFavorite } from '@/server/services/customer-store';
 import { getRepositories } from '@/server/repositories';
 import { getLocale } from '@/server/locale';
 import { siteConfig } from '@/config/site';
@@ -44,6 +47,9 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   const service = await repo.catalog.getServiceBySlug(slug, locale).catch(() => null);
   if (!service) notFound();
+
+  const user = await getSessionUser();
+  const favorited = user ? isFavorite(user.id, service.slug) : false;
 
   const { from, to } = availabilityRange();
   const [availability, related] = await Promise.all([
@@ -276,6 +282,27 @@ export default async function ServiceDetailPage({ params }: Props) {
           {/* Hộp đặt dịch vụ — dính khi cuộn trên desktop */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <BookingPanel service={service} availability={availability} />
+
+            {/* Lưu yêu thích và chia sẻ */}
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              {user ? (
+                <FavoriteButton slug={service.slug} isFavorite={favorited} />
+              ) : (
+                <Link
+                  href={`/dang-nhap?next=/dich-vu/${service.slug}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-mist px-4 py-2 text-sm text-ink-muted transition-colors hover:border-champagne hover:text-champagne-600"
+                >
+                  <span aria-hidden>♡</span> Đăng nhập để lưu
+                </Link>
+              )}
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`${service.title} — ${siteConfig.url}/dich-vu/${service.slug}`)}`}
+                target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-mist px-4 py-2 text-sm text-ink-muted transition-colors hover:border-champagne hover:text-champagne-600"
+              >
+                Chia sẻ
+              </a>
+            </div>
           </aside>
         </div>
       </Section>

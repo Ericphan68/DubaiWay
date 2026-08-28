@@ -9,8 +9,12 @@ const NAV = [
   { href: '/tai-khoan', label: 'Tổng quan' },
   { href: '/tai-khoan/don-hang', label: 'Đơn hàng' },
   { href: '/tai-khoan/voucher', label: 'Voucher' },
+  { href: '/tai-khoan/yeu-thich', label: 'Yêu thích' },
   { href: '/tai-khoan/danh-gia', label: 'Đánh giá' },
+  { href: '/tai-khoan/khieu-nai', label: 'Khiếu nại' },
   { href: '/tai-khoan/gioi-thieu', label: 'Giới thiệu bạn bè' },
+  { href: '/tai-khoan/thong-bao', label: 'Thông báo' },
+  { href: '/tai-khoan/nguoi-di-cung', label: 'Người đi cùng' },
   { href: '/tai-khoan/ho-so', label: 'Hồ sơ' },
 ];
 

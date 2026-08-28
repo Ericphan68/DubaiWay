@@ -3,6 +3,7 @@ import {
   MerchantReviewError, __resetMerchants, getMerchant, listHistory, listMerchants,
   listServices, transitionMerchant, transitionService,
 } from '../merchant-store';
+import { __resetCatalog } from '../catalog-store';
 
 const APPROVED = 'e0000000-0000-4000-8000-000000000001';
 const PENDING  = 'e0000000-0000-4000-8000-000000000002';
@@ -10,7 +11,8 @@ const REVIEWER = 'a0000000-0000-4000-8000-000000000003';
 const SERVICE_ACTIVE  = 'f0000000-0000-4000-8000-000000000001';
 const SERVICE_PENDING = 'f0000000-0000-4000-8000-000000000007';
 
-beforeEach(() => { __resetMerchants(); });
+// Dịch vụ nằm ở catalog-store nên phải reset cả hai kho.
+beforeEach(() => { __resetMerchants(); __resetCatalog(); });
 
 describe('Dữ liệu khởi tạo', () => {
   it('có merchant doanh nghiệp đã duyệt và cá nhân chờ duyệt', () => {

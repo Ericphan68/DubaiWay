@@ -1,16 +1,37 @@
 import type { Metadata } from 'next';
+import { Fragment } from 'react';
 import Link from 'next/link';
 import { formatMoney } from '@/core/money';
 import { EmptyState } from '@/components/states';
 import { getSessionUser } from '@/server/auth';
 import { listBookingsForUser } from '@/server/services/booking-store';
 import { StatusBadge } from '@/components/marketplace/StatusBadges';
+import { formatMoney as fmt } from '@/core/money';
+import { getServiceBySlug } from '@/server/services/catalog-store';
+import { previewCancellation } from '@/server/services/dispute-store';
+import { CancelBookingForm } from '../AccountForms';
 
 export const metadata: Metadata = { title: 'Đơn hàng của tôi', robots: { index: false, follow: false } };
 
 export default async function MyBookingsPage() {
   const user = await getSessionUser();
   const bookings = user ? listBookingsForUser(user.id) : [];
+
+  // Tính trước số tiền hoàn cho từng đơn để khách thấy rõ trước khi bấm huỷ.
+  const cancelInfo = new Map<string, { refundLabel: string; canCancel: boolean; blockReason: string | null }>();
+  for (const b of bookings) {
+    const tiers = getServiceBySlug(b.serviceSlug)?.policies?.cancellationTiers ?? [];
+    try {
+      const p = previewCancellation(b.reference, tiers);
+      cancelInfo.set(b.reference, {
+        refundLabel: fmt(p.refundAmount, 'vi-VN') + ` (${p.refundRateBps / 100}%)`,
+        canCancel: p.canCancel,
+        blockReason: p.reason,
+      });
+    } catch {
+      cancelInfo.set(b.reference, { refundLabel: '—', canCancel: false, blockReason: 'Không tính được mức hoàn.' });
+    }
+  }
 
   return (
     <>
@@ -35,7 +56,9 @@ export default async function MyBookingsPage() {
               </thead>
               <tbody className="divide-y divide-mist bg-ivory-100">
                 {bookings.map((b) => (
-                  <tr key={b.reference}>
+                  // Mỗi đơn chiếm hai hàng: một hàng dữ liệu, một hàng thao tác huỷ.
+                  <Fragment key={b.reference}>
+                  <tr>
                     <Td>
                       <Link href={`/dat-cho/thanh-cong/${b.reference}`}
                             className="font-mono text-royal hover:underline">
@@ -52,6 +75,18 @@ export default async function MyBookingsPage() {
                       {formatMoney(b.financials.customerTotal, 'vi-VN')}
                     </Td>
                   </tr>
+                  <tr>
+                    <td className="px-4 pb-4 pt-0" />
+                    <td colSpan={4} className="px-4 pb-4 pt-0">
+                      <CancelBookingForm
+                        reference={b.reference}
+                        refundLabel={cancelInfo.get(b.reference)?.refundLabel ?? '—'}
+                        canCancel={cancelInfo.get(b.reference)?.canCancel ?? false}
+                        blockReason={cancelInfo.get(b.reference)?.blockReason ?? null}
+                      />
+                    </td>
+                  </tr>
+                  </Fragment>
                 ))}
               </tbody>
             </table>

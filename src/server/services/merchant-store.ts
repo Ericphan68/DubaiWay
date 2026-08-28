@@ -8,6 +8,10 @@ import { randomUUID } from 'node:crypto';
 import {
   type MerchantStatus, type ServiceStatus, canPublishService, merchantState, serviceState,
 } from '@/core/state-machines';
+import {
+  getService as catalogGetService, listServices as catalogListServices,
+  setServiceStatus as catalogSetStatus,
+} from './catalog-store';
 
 export interface MerchantDocument {
   readonly id: string;
@@ -64,9 +68,12 @@ export interface ServiceRecord {
   readonly createdAt: string;
 }
 
+/**
+ * Dịch vụ KHÔNG lưu ở đây. Nguồn sự thật duy nhất là catalog-store — cùng kho mà
+ * trang công khai đọc. Nếu giữ hai bản, đối tác sẽ thấy một đằng khách thấy một nẻo.
+ */
 interface MerchantState {
   merchants: Map<string, MerchantRecord>;
-  services: Map<string, ServiceRecord>;
   history: ReviewHistoryEntry[];
   seeded: boolean;
 }
@@ -74,7 +81,6 @@ interface MerchantState {
 const g = globalThis as unknown as { __dubaiwayMerchants?: MerchantState };
 const state: MerchantState = (g.__dubaiwayMerchants ??= {
   merchants: new Map(),
-  services: new Map(),
   history: [],
   seeded: false,
 });
@@ -141,25 +147,6 @@ function seed(): void {
     createdAt: now,
   });
 
-  const services: Array<[string, string, string, string, number, ServiceStatus]> = [
-    ['f0000000-0000-4000-8000-000000000001', 'evening-desert-safari-bbq',      'Safari sa mạc buổi chiều kèm tiệc BBQ', 'desert-safari',      15000, 'active'],
-    ['f0000000-0000-4000-8000-000000000002', 'burj-khalifa-124-125-floor',     'Vé Burj Khalifa tầng 124 & 125',       'attraction-tickets', 17900, 'active'],
-    ['f0000000-0000-4000-8000-000000000003', 'dubai-marina-luxury-yacht',      'Thuê du thuyền riêng Dubai Marina',     'yacht-cruise',       45000, 'active'],
-    ['f0000000-0000-4000-8000-000000000004', 'dxb-airport-transfer-private',   'Đưa đón sân bay Dubai (DXB)',           'airport-transfer',   12000, 'active'],
-    ['f0000000-0000-4000-8000-000000000005', 'abu-dhabi-full-day-tour',        'Tour Abu Dhabi trọn ngày',              'day-tours',          28000, 'active'],
-    ['f0000000-0000-4000-8000-000000000006', 'pierchic-seafood-dinner-voucher','Voucher hải sản Pierchic',              'dining-vouchers',    39000, 'active'],
-    // Một dịch vụ đang chờ duyệt để thử luồng xét duyệt
-    ['f0000000-0000-4000-8000-000000000007', 'hot-air-balloon-sunrise',        'Khinh khí cầu ngắm bình minh sa mạc',   'day-tours',          109500, 'under_review'],
-  ];
-
-  for (const [id, slug, title, categorySlug, price, status] of services) {
-    state.services.set(id, {
-      id, merchantId: 'e0000000-0000-4000-8000-000000000001',
-      slug, title, categorySlug, status,
-      priceFromMinor: price, currency: 'AED',
-      submittedAt: now, createdAt: now,
-    });
-  }
 }
 
 function logHistory(entry: Omit<ReviewHistoryEntry, 'id' | 'at'>): void {
@@ -179,6 +166,118 @@ export function getMerchant(id: string): MerchantRecord | null {
 export function getMerchantForUser(userId: string): MerchantRecord | null {
   seed();
   return [...state.merchants.values()].find((m) => m.ownerUserId === userId) ?? null;
+}
+
+export interface MerchantRegistrationInput {
+  readonly kind: 'business' | 'individual';
+  readonly ownerUserId: string;
+  readonly displayName: string;
+  readonly legalName?: string;
+  readonly registrationNumber?: string;
+  readonly taxNumber?: string;
+  readonly individualFullName?: string;
+  readonly nationality?: string;
+  readonly contactEmail: string;
+  readonly contactPhone: string;
+  readonly city: string;
+  readonly country: string;
+  readonly description: string;
+  readonly documentNames: readonly string[];
+}
+
+function slugify(input: string): string {
+  return input
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+    .toLowerCase().trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 50);
+}
+
+/**
+ * Tạo hồ sơ đối tác ở trạng thái `draft`.
+ * Một tài khoản chỉ gắn với một đối tác — tránh trường hợp một người mở nhiều
+ * gian hàng để lách quy trình thẩm định.
+ */
+export function registerMerchant(input: MerchantRegistrationInput): MerchantRecord {
+  seed();
+  if (getMerchantForUser(input.ownerUserId)) {
+    throw new MerchantReviewError('Tài khoản của bạn đã gắn với một hồ sơ đối tác');
+  }
+  if (input.kind === 'business' && !input.legalName?.trim()) {
+    throw new MerchantReviewError('Doanh nghiệp bắt buộc có tên pháp lý');
+  }
+  if (input.kind === 'individual' && !input.individualFullName?.trim()) {
+    throw new MerchantReviewError('Cá nhân bắt buộc có họ tên đầy đủ');
+  }
+  if (input.description.trim().length < 30) {
+    throw new MerchantReviewError('Mô tả cần ít nhất 30 ký tự để đội thẩm định hiểu bạn làm gì');
+  }
+
+  const slug = slugify(input.displayName) || `doi-tac-${Date.now()}`;
+  let unique = slug;
+  let n = 2;
+  while ([...state.merchants.values()].some((m) => m.slug === unique)) {
+    unique = `${slug}-${n}`; n += 1;
+  }
+
+  const now = new Date().toISOString();
+  const record: MerchantRecord = {
+    id: randomUUID(),
+    kind: input.kind,
+    status: 'draft',
+    slug: unique,
+    displayName: input.displayName.trim(),
+    legalName: input.legalName?.trim() ?? null,
+    registrationNumber: input.registrationNumber?.trim() ?? null,
+    taxNumber: input.taxNumber?.trim() ?? null,
+    individualFullName: input.individualFullName?.trim() ?? null,
+    nationality: input.nationality?.trim().toUpperCase().slice(0, 2) ?? null,
+    contactEmail: input.contactEmail.trim(),
+    contactPhone: input.contactPhone.trim(),
+    city: input.city.trim(),
+    country: input.country.trim().toUpperCase().slice(0, 2),
+    description: input.description.trim(),
+    ownerUserId: input.ownerUserId,
+    // Chỉ lưu TÊN file, không lưu nội dung. Bản production đưa file vào kho riêng tư.
+    documents: input.documentNames.map((fileName) => ({
+      id: randomUUID(),
+      docType: fileName.split('.')[0] || 'document',
+      fileName,
+      status: 'pending' as const,
+    })),
+    submittedAt: null,
+    approvedAt: null,
+    rejectionReason: null,
+    createdAt: now,
+  };
+  state.merchants.set(record.id, record);
+  logHistory({
+    targetType: 'merchant', targetId: record.id,
+    fromStatus: null, toStatus: 'draft',
+    reviewerId: input.ownerUserId, reason: 'Đối tác tạo hồ sơ',
+  });
+  return record;
+}
+
+/** Đối tác nộp hồ sơ cho DubaiWay thẩm định. */
+export function submitMerchantForReview(merchantId: string, ownerUserId: string): MerchantRecord {
+  seed();
+  const m = state.merchants.get(merchantId);
+  if (!m) throw new MerchantReviewError('Không tìm thấy hồ sơ');
+  if (m.ownerUserId !== ownerUserId) throw new MerchantReviewError('Hồ sơ này không thuộc tài khoản của bạn');
+  if (m.documents.length === 0) {
+    throw new MerchantReviewError('Cần đính kèm ít nhất một giấy tờ trước khi nộp');
+  }
+  merchantState.assert(m.status, 'submitted');
+  m.status = 'submitted';
+  (m as { submittedAt: string | null }).submittedAt = new Date().toISOString();
+  logHistory({
+    targetType: 'merchant', targetId: merchantId,
+    fromStatus: 'draft', toStatus: 'submitted',
+    reviewerId: ownerUserId, reason: 'Đối tác nộp hồ sơ',
+  });
+  return m;
 }
 
 export class MerchantReviewError extends Error {
@@ -206,9 +305,9 @@ export function transitionMerchant(
 
   // Merchant bị đình chỉ hoặc từ chối thì mọi dịch vụ của họ dừng công khai.
   if (to === 'suspended' || to === 'rejected') {
-    for (const s of state.services.values()) {
-      if (s.merchantId === merchantId && s.status === 'active') {
-        s.status = 'inactive';
+    for (const s of catalogListServices({ merchantId })) {
+      if (s.status === 'active') {
+        catalogSetStatus(s.id, 'inactive');
         logHistory({
           targetType: 'service', targetId: s.id, fromStatus: 'active', toStatus: 'inactive',
           reviewerId, reason: `Merchant chuyển sang ${to}`,
@@ -221,9 +320,18 @@ export function transitionMerchant(
 
 export function listServices(merchantId?: string): ServiceRecord[] {
   seed();
-  const all = [...state.services.values()];
-  return (merchantId ? all.filter((s) => s.merchantId === merchantId) : all)
-    .sort((a, b) => a.title.localeCompare(b.title));
+  return catalogListServices(merchantId ? { merchantId } : undefined).map((s) => ({
+    id: s.id,
+    merchantId: s.merchantId,
+    slug: s.slug,
+    title: s.i18n.vi.title,
+    categorySlug: s.categorySlug,
+    status: s.status,
+    priceFromMinor: s.packages[0]?.priceAdult.amount ?? 0,
+    currency: 'AED' as const,
+    submittedAt: s.updatedAt,
+    createdAt: s.createdAt,
+  }));
 }
 
 export function transitionService(
@@ -233,10 +341,10 @@ export function transitionService(
   reason?: string,
 ): ServiceRecord {
   seed();
-  const s = state.services.get(serviceId);
+  const s = catalogGetService(serviceId);
   if (!s) throw new MerchantReviewError('Không tìm thấy dịch vụ');
 
-  // Không cho bật dịch vụ khi merchant chưa được duyệt.
+  // Không cho bật dịch vụ khi hồ sơ đối tác chưa được duyệt.
   if (to === 'active') {
     const m = state.merchants.get(s.merchantId);
     if (!m || !canPublishService(m.status, 'active')) {
@@ -248,9 +356,10 @@ export function transitionService(
 
   serviceState.assert(s.status, to);
   const from = s.status;
-  s.status = to;
+  catalogSetStatus(serviceId, to);
   logHistory({ targetType: 'service', targetId: serviceId, fromStatus: from, toStatus: to, reviewerId, reason: reason ?? null });
-  return s;
+
+  return listServices().find((x) => x.id === serviceId) as ServiceRecord;
 }
 
 export function listHistory(targetId?: string): ReviewHistoryEntry[] {
@@ -263,7 +372,6 @@ export function listHistory(targetId?: string): ReviewHistoryEntry[] {
 /** Chỉ dùng trong test. */
 export function __resetMerchants(): void {
   state.merchants.clear();
-  state.services.clear();
   state.history.length = 0;
   state.seeded = false;
 }

@@ -9,9 +9,17 @@ const NAV = [
   { href: '/admin', label: 'Tổng quan' },
   { href: '/admin/merchant', label: 'Duyệt đối tác' },
   { href: '/admin/dich-vu', label: 'Duyệt dịch vụ' },
+  { href: '/admin/danh-muc', label: 'Danh mục' },
   { href: '/admin/don-hang', label: 'Đơn hàng' },
+  { href: '/admin/khuyen-mai', label: 'Khuyến mãi' },
+  { href: '/admin/danh-gia', label: 'Đánh giá' },
+  { href: '/admin/khieu-nai', label: 'Khiếu nại' },
   { href: '/admin/gioi-thieu', label: 'Giới thiệu' },
   { href: '/admin/rut-tien', label: 'Rút tiền' },
+  { href: '/admin/bao-cao', label: 'Báo cáo' },
+  { href: '/admin/noi-dung', label: 'Nội dung' },
+  { href: '/admin/nhan-vien', label: 'Nhân viên' },
+  { href: '/admin/nhat-ky', label: 'Nhật ký' },
 ];
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {

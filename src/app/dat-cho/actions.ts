@@ -11,6 +11,8 @@ import { getPaymentGateway } from '@/server/adapters/payment';
 import { getDirectReferrer, recordReward } from '@/server/services/referral-store';
 import { getMerchant } from '@/server/services/merchant-store';
 import { sendBookingConfirmation, sendMerchantNewBooking } from '@/server/services/notification-service';
+import { pushNotification } from '@/server/services/customer-store';
+import { CouponError, applyCoupon, redeemCoupon } from '@/server/services/coupon-store';
 
 /**
  * Nhận đơn đặt dịch vụ.
@@ -29,6 +31,7 @@ const schema = z.object({
   email: z.string().trim().email('Email không hợp lệ'),
   phone: z.string().trim().min(6, 'Số điện thoại không hợp lệ'),
   note: z.string().trim().max(1000).optional(),
+  couponCode: z.string().trim().max(20).optional(),
 });
 
 export interface BookingActionState {
@@ -63,11 +66,33 @@ export async function submitBooking(
   const user = await getSessionUser();
   const referrerUserId = user ? getDirectReferrer(user.id) : null;
 
+  // Giảm giá tính lại từ MÃ, không nhận số tiền giảm gửi lên từ trình duyệt.
+  let discount;
+  let appliedCoupon: { id: string; code: string } | null = null;
+  if (input.couponCode) {
+    try {
+      const lines = pkg.priceGroup && pkg.priceGroup.amount > 0
+        ? pkg.priceGroup.amount * Math.max(1, Math.ceil((input.adults + input.children) / (pkg.groupSize ?? 1)))
+        : pkg.priceAdult.amount * input.adults + (pkg.priceChild?.amount ?? 0) * input.children;
+      const applied = applyCoupon(input.couponCode, {
+        userId: user?.id ?? null,
+        subtotal: { amount: lines, currency: 'AED' },
+        categorySlug: service.categorySlug,
+        merchantId: service.merchant.id,
+      });
+      discount = applied.discount;
+      appliedCoupon = { id: applied.coupon.id, code: applied.coupon.code };
+    } catch (err) {
+      return { error: err instanceof CouponError ? err.message : 'Mã khuyến mãi không dùng được.' };
+    }
+  }
+
   let quote;
   try {
     quote = createQuote({
       pkg,
       guests: { adults: input.adults, children: input.children, infants: 0 },
+      discount,
       hasReferrer: referrerUserId !== null,
     });
   } catch (err) {
@@ -123,6 +148,28 @@ export async function submitBooking(
       if (merchantEmail) await sendMerchantNewBooking(booking, merchantEmail);
     } catch (notifyError) {
       console.error('Không gửi được thông báo cho đơn', booking.reference, notifyError);
+    }
+
+    // Ghi nhận đã dùng mã khuyến mãi.
+    if (appliedCoupon) {
+      redeemCoupon({
+        couponId: appliedCoupon.id,
+        code: appliedCoupon.code,
+        userId: user?.id ?? null,
+        bookingReference: booking.reference,
+        discountMinor: quote.financials.discountTotal.amount,
+      });
+    }
+
+    // Thông báo trong tài khoản để khách thấy ngay khi đăng nhập.
+    if (user) {
+      pushNotification({
+        userId: user.id,
+        template: 'booking.confirmed',
+        title: `Đơn ${booking.reference} đã được xác nhận`,
+        body: `${booking.serviceTitle} — ${booking.serviceDate}. Voucher đã sẵn sàng.`,
+        linkUrl: `/dat-cho/thanh-cong/${booking.reference}`,
+      });
     }
 
     // Ghi nhận thưởng giới thiệu ở trạng thái `pending`.

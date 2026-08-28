@@ -7,6 +7,8 @@ import { ArticleCard } from '@/components/cards/ArticleCard';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
+import { Section } from '@/components/ui/Section';
+import { listPosts } from '@/server/services/content-store';
 
 export const metadata: Metadata = {
   title: 'Cẩm nang du lịch DubaiWay',
@@ -21,6 +23,8 @@ export default async function GuidePage({
 }) {
   const { topic } = await searchParams;
   const results = topic ? articles.filter((a) => a.topic === topic) : articles;
+  // Bài viết do Admin soạn trong khu quản trị.
+  const managedPosts = listPosts({ status: 'published' });
 
   return (
     <>
@@ -31,6 +35,31 @@ export default async function GuidePage({
         image={img(photo.europe, 1800)}
         crumbs={[{ label: 'Trang chủ', href: '/' }, { label: 'Cẩm nang' }]}
       />
+
+      {managedPosts.length > 0 ? (
+        <Section background="white">
+          <h2 className="font-display text-2xl font-medium text-midnight">Bài viết mới nhất</h2>
+          <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {managedPosts.map((p) => (
+              <li key={p.id}>
+                <Link
+                  href={`/cam-nang/bai-viet/${p.slug}`}
+                  className="flex h-full flex-col rounded-2xl border border-mist bg-ivory-100 p-5 transition-colors hover:border-champagne"
+                >
+                  <span className="font-display text-lg font-medium leading-snug text-midnight">
+                    {p.titleVi}
+                  </span>
+                  <span className="mt-2 flex-1 text-sm leading-relaxed text-ink-muted">{p.excerptVi}</span>
+                  <span className="mt-3 text-xs text-ink-soft">
+                    {p.authorName}
+                    {p.publishedAt ? ` · ${new Date(p.publishedAt).toLocaleDateString('vi-VN')}` : ''}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
 
       <section className="shell py-12">
         {/* Lọc theo chủ đề */}

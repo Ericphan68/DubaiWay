@@ -7,6 +7,8 @@ import {
   MerchantReviewError, transitionMerchant, transitionService,
 } from '@/server/services/merchant-store';
 import type { MerchantStatus, ServiceStatus } from '@/core/state-machines';
+import { recordAudit } from '@/server/services/audit-store';
+import { getMerchant } from '@/server/services/merchant-store';
 
 export interface ReviewState {
   readonly error: string | null;
@@ -37,12 +39,25 @@ export async function reviewMerchantAction(_prev: ReviewState, formData: FormDat
   }
 
   try {
+    const before = getMerchant(parsed.data.merchantId);
     const m = transitionMerchant(
       parsed.data.merchantId,
       parsed.data.to as MerchantStatus,
       user!.id,
       parsed.data.reason,
     );
+    // Ghi nhật ký: ai duyệt, đổi từ trạng thái nào sang nào, vì sao.
+    recordAudit({
+      actorId: user!.id,
+      actorName: user!.fullName ?? user!.email,
+      actorRoles: user!.roles,
+      action: `merchant.${parsed.data.to}`,
+      entityType: 'merchant',
+      entityId: m.id,
+      beforeData: { status: before?.status ?? null, displayName: before?.displayName ?? null },
+      afterData: { status: m.status },
+      reason: parsed.data.reason ?? null,
+    });
     revalidatePath('/admin/merchant');
     return { error: null, notice: `Đã chuyển hồ sơ "${m.displayName}" sang trạng thái ${parsed.data.to}.` };
   } catch (err) {
@@ -80,6 +95,16 @@ export async function reviewServiceAction(_prev: ReviewState, formData: FormData
       user!.id,
       parsed.data.reason,
     );
+    recordAudit({
+      actorId: user!.id,
+      actorName: user!.fullName ?? user!.email,
+      actorRoles: user!.roles,
+      action: `service.${parsed.data.to}`,
+      entityType: 'service',
+      entityId: s.id,
+      afterData: { status: s.status, title: s.title },
+      reason: parsed.data.reason ?? null,
+    });
     revalidatePath('/admin/dich-vu');
     return { error: null, notice: `Đã chuyển "${s.title}" sang trạng thái ${parsed.data.to}.` };
   } catch (err) {

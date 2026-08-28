@@ -25,14 +25,28 @@ export default async function MerchantServicesPage() {
 
   return (
     <>
-      <h1 className="font-display text-2xl font-medium text-midnight">Dịch vụ của bạn</h1>
-      <p className="mt-1 text-sm text-ink-muted">
-        Dịch vụ mới và thay đổi quan trọng phải được DubaiWay duyệt trước khi hiển thị công khai.
-      </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="font-display text-2xl font-medium text-midnight">Dịch vụ của bạn</h1>
+          <p className="mt-1 text-sm text-ink-muted">
+            Dịch vụ mới và thay đổi quan trọng phải được DubaiWay duyệt trước khi hiển thị công khai.
+          </p>
+        </div>
+        <Link
+          href="/merchant/dich-vu/moi"
+          className="inline-flex h-11 items-center rounded-full bg-champagne px-5 text-sm font-medium text-white transition-colors hover:bg-champagne-600"
+        >
+          + Tạo dịch vụ mới
+        </Link>
+      </div>
 
       <div className="mt-6">
         {services.length === 0 ? (
-          <EmptyState title="Chưa có dịch vụ nào" body="Tạo dịch vụ đầu tiên để bắt đầu nhận đơn." />
+          <EmptyState
+            title="Chưa có dịch vụ nào"
+            body="Tạo dịch vụ đầu tiên để bắt đầu nhận đơn."
+            action={{ label: 'Tạo dịch vụ mới', href: '/merchant/dich-vu/moi' }}
+          />
         ) : (
           <ul className="space-y-3">
             {services.map((s) => {
@@ -47,6 +61,9 @@ export default async function MerchantServicesPage() {
                   </span>
                   <span className="flex items-center gap-3">
                     <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${st.cls}`}>{st.text}</span>
+                    <Link href={`/merchant/dich-vu/${s.id}`} className="text-sm text-royal hover:underline">
+                      Sửa
+                    </Link>
                     {s.status === 'active' ? (
                       <Link href={`/dich-vu/${s.slug}`} className="text-sm text-royal hover:underline">
                         Xem trang
@@ -60,10 +77,7 @@ export default async function MerchantServicesPage() {
         )}
       </div>
 
-      <p className="mt-6 rounded-xl border border-mist bg-ivory-200 px-4 py-3 text-sm text-ink-soft">
-        Tạo và chỉnh sửa dịch vụ trực tiếp trên dashboard sẽ có ở bản cập nhật tiếp theo.
-        Hiện tại liên hệ đội hỗ trợ đối tác để thêm dịch vụ mới.
-      </p>
+
     </>
   );
 }

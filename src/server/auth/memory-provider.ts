@@ -181,6 +181,77 @@ export const memoryAuthProvider: AuthProvider = {
   },
 };
 
+// ─── QUẢN LÝ NGƯỜI DÙNG VÀ VAI TRÒ (dành cho Admin) ────────────────────────
+export interface ManagedUser {
+  readonly id: string;
+  readonly email: string;
+  readonly fullName: string;
+  readonly roles: readonly UserRole[];
+  readonly merchantId: string | null;
+  readonly emailVerified: boolean;
+}
+
+export function listAllUsers(): ManagedUser[] {
+  seedDemoAccounts();
+  return [...users.values()]
+    .map((u) => ({
+      id: u.id, email: u.email, fullName: u.fullName,
+      roles: [...u.roles], merchantId: u.merchantId, emailVerified: u.emailVerified,
+    }))
+    .sort((a, b) => a.email.localeCompare(b.email));
+}
+
+export class RoleError extends Error {
+  constructor(message: string) { super(message); this.name = 'RoleError'; }
+}
+
+/**
+ * Cấp vai trò cho một người.
+ *
+ * KHÔNG cho phép tự cấp quyền cho chính mình — người thực hiện phải khác người nhận.
+ * Đây là chốt chặn cơ bản chống leo thang đặc quyền.
+ */
+export function grantRole(actorUserId: string, targetUserId: string, role: UserRole): ManagedUser {
+  seedDemoAccounts();
+  if (actorUserId === targetUserId) {
+    throw new RoleError('Không thể tự cấp thêm quyền cho chính mình');
+  }
+  const u = usersById.get(targetUserId);
+  if (!u) throw new RoleError('Không tìm thấy người dùng');
+  if (u.roles.includes(role)) throw new RoleError('Người này đã có vai trò đó');
+  u.roles.push(role);
+  return {
+    id: u.id, email: u.email, fullName: u.fullName,
+    roles: [...u.roles], merchantId: u.merchantId, emailVerified: u.emailVerified,
+  };
+}
+
+export function revokeRole(actorUserId: string, targetUserId: string, role: UserRole): ManagedUser {
+  seedDemoAccounts();
+  if (actorUserId === targetUserId) {
+    throw new RoleError('Không thể tự thu hồi quyền của chính mình — nhờ Super Admin khác thực hiện');
+  }
+  const u = usersById.get(targetUserId);
+  if (!u) throw new RoleError('Không tìm thấy người dùng');
+
+  // Không để hệ thống rơi vào tình trạng không còn Super Admin nào.
+  if (role === 'super_admin') {
+    const remaining = [...users.values()].filter(
+      (x) => x.id !== targetUserId && x.roles.includes('super_admin'),
+    ).length;
+    if (remaining === 0) {
+      throw new RoleError('Đây là Super Admin cuối cùng — phải cấp cho người khác trước khi thu hồi');
+    }
+  }
+
+  u.roles = u.roles.filter((r) => r !== role);
+  if (u.roles.length === 0) u.roles.push('customer');
+  return {
+    id: u.id, email: u.email, fullName: u.fullName,
+    roles: [...u.roles], merchantId: u.merchantId, emailVerified: u.emailVerified,
+  };
+}
+
 /** Chỉ dùng trong test. */
 export function __resetMemoryAuth(): void {
   users.clear();

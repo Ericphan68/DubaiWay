@@ -69,9 +69,28 @@ export default function BecomePartnerPage() {
 
       <Section>
         <div className="mx-auto max-w-2xl">
-          <h2 className="font-display text-2xl font-medium text-midnight">Gửi thông tin đăng ký</h2>
+          <h2 className="font-display text-2xl font-medium text-midnight">Bắt đầu đăng ký</h2>
           <p className="mt-1 text-sm text-ink-muted">
-            Yêu cầu được chuyển thẳng tới đội hỗ trợ đối tác qua WhatsApp.
+            Có tài khoản DubaiWay thì tạo hồ sơ trực tiếp — nhanh hơn và theo dõi được tiến độ thẩm định.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <a
+              href="/merchant/dang-ky"
+              className="inline-flex h-11 items-center rounded-full bg-champagne px-6 text-sm font-medium text-white transition-colors hover:bg-champagne-600"
+            >
+              Tạo hồ sơ đối tác
+            </a>
+            <a
+              href="/dang-ky"
+              className="inline-flex h-11 items-center rounded-full border border-midnight/25 px-6 text-sm font-medium text-midnight transition-colors hover:border-champagne hover:text-champagne-600"
+            >
+              Chưa có tài khoản? Đăng ký
+            </a>
+          </div>
+
+          <h3 className="mt-10 font-display text-lg font-medium text-midnight">Hoặc gửi thông tin qua WhatsApp</h3>
+          <p className="mt-1 text-sm text-ink-muted">
+            Nếu bạn muốn trao đổi trước, điền form dưới đây.
           </p>
 
           <LeadForm

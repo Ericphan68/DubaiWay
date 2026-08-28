@@ -1,11 +1,13 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { submitBooking, type BookingActionState } from '../actions';
+import { checkCouponAction, type CouponCheckState } from '../coupon-actions';
 import { cn } from '@/lib/utils';
 
 const initial: BookingActionState = { error: null };
+const couponInitial: CouponCheckState = { error: null, code: null, discountLabel: null };
 
 const inputCls =
   'h-11 w-full rounded-xl border border-mist bg-ivory-100 px-3 text-sm text-midnight outline-none focus:border-royal';
@@ -18,14 +20,50 @@ export function CheckoutForm({
   childCount: number;
 }) {
   const [state, formAction, pending] = useActionState(submitBooking, initial);
+  const [coupon, checkCoupon, checking] = useActionState(checkCouponAction, couponInitial);
+  const [couponInput, setCouponInput] = useState('');
 
   return (
+    <>
+    {/* Ô mã khuyến mãi tách thành form riêng để kiểm tra mà không gửi đơn hàng. */}
+    <form action={checkCoupon} className="mb-5 rounded-2xl border border-mist bg-ivory-200 p-4">
+      <input type="hidden" name="slug" value={slug} />
+      <input type="hidden" name="packageId" value={packageId} />
+      <input type="hidden" name="adults" value={adults} />
+      <input type="hidden" name="children" value={childCount} />
+      <label htmlFor="couponCode" className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-muted">
+        Mã khuyến mãi
+      </label>
+      <div className="flex flex-wrap gap-2">
+        <input
+          id="couponCode" name="couponCode" maxLength={20}
+          value={couponInput}
+          onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+          placeholder="VD: DUBAI10"
+          className={cn(inputCls, 'min-w-[160px] flex-1 font-mono uppercase')}
+        />
+        <Button type="submit" variant="outline" disabled={checking}>
+          {checking ? 'Đang kiểm tra…' : 'Áp dụng'}
+        </Button>
+      </div>
+      {coupon.error ? (
+        <p role="alert" className="mt-2 text-sm text-red-700">{coupon.error}</p>
+      ) : null}
+      {coupon.code ? (
+        <p role="status" className="mt-2 text-sm text-emerald-800">
+          Đã áp mã <strong className="font-mono">{coupon.code}</strong> — giảm {coupon.discountLabel}
+        </p>
+      ) : null}
+    </form>
+
     <form action={formAction} className="rounded-2xl border border-mist bg-ivory-100 p-5 sm:p-6">
       <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="packageId" value={packageId} />
       <input type="hidden" name="date" value={date} />
       <input type="hidden" name="adults" value={adults} />
       <input type="hidden" name="children" value={childCount} />
+      {/* Chỉ gửi MÃ, không gửi số tiền giảm — máy chủ tự tính lại. */}
+      {coupon.code ? <input type="hidden" name="couponCode" value={coupon.code} /> : null}
 
       <h2 className="font-display text-xl font-medium text-midnight">Thông tin người sử dụng dịch vụ</h2>
       <p className="mt-1 text-sm text-ink-muted">
@@ -64,9 +102,10 @@ export function CheckoutForm({
       <p className="mt-3 text-center text-xs text-ink-soft">
         Bằng việc đặt dịch vụ, bạn đồng ý với{' '}
         <a href="/dieu-khoan" className="underline underline-offset-2">Điều khoản sử dụng</a> và{' '}
-        <a href="/dieu-khoan" className="underline underline-offset-2">Chính sách bảo mật</a> của DubaiWay.
+        <a href="/chinh-sach-bao-mat" className="underline underline-offset-2">Chính sách bảo mật</a> của DubaiWay.
       </p>
     </form>
+    </>
   );
 }
 
