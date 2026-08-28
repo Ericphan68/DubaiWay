@@ -19,9 +19,11 @@ import {
 type TabKey = 'flights' | 'hotels' | 'tours' | 'visa' | 'events' | 'dubai';
 
 const tabs: { key: TabKey; label: string; Icon: typeof IconPlane; href: string }[] = [
+  // Tour đứng đầu: đây là mảng DubaiWay bán trực tiếp, các mục còn lại
+  // hiện vẫn dẫn sang đối tác nên xếp sau.
+  { key: 'tours', label: 'Tour', Icon: IconCompass, href: '/du-lich' },
   { key: 'flights', label: 'Vé máy bay', Icon: IconPlane, href: '/ve-may-bay' },
   { key: 'hotels', label: 'Khách sạn', Icon: IconBed, href: '/khach-san' },
-  { key: 'tours', label: 'Tour', Icon: IconCompass, href: '/du-lich' },
   { key: 'visa', label: 'Visa', Icon: IconPassport, href: '/visa' },
   { key: 'events', label: 'Events', Icon: IconSparkle, href: '/events' },
   { key: 'dubai', label: 'Dubai', Icon: IconMapPin, href: '/dubai' },
