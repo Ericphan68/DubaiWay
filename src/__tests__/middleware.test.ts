@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 import { middleware } from '../middleware';
 
@@ -39,8 +39,8 @@ describe('Tên miền chính', () => {
   });
 
   it('trang đăng nhập nội bộ không phục vụ trên tên miền chính', () => {
-    expect(go('dubaiway.com', '/dang-nhap-doi-tac').host).toBe('merchant.dubaiway.com');
-    expect(go('dubaiway.com', '/dang-nhap-quan-tri').host).toBe('admin.dubaiway.com');
+    expect(go('dubaiway.com', '/khu-doi-tac').host).toBe('merchant.dubaiway.com');
+    expect(go('dubaiway.com', '/khu-quan-tri').host).toBe('admin.dubaiway.com');
   });
 
   it('giữ nguyên tham số truy vấn khi chuyển hướng', () => {
@@ -53,7 +53,7 @@ describe('Tên miền chính', () => {
 describe('Tên miền đối tác', () => {
   it('phục vụ khu đối tác và trang đăng nhập của khu', () => {
     expect(go('merchant.dubaiway.com', '/merchant/dich-vu').chuyenHuong).toBe(false);
-    expect(go('merchant.dubaiway.com', '/dang-nhap-doi-tac').chuyenHuong).toBe(false);
+    expect(go('merchant.dubaiway.com', '/khu-doi-tac').chuyenHuong).toBe(false);
   });
 
   it('gõ nhầm sang khu quản trị thì đẩy đúng tên miền', () => {
@@ -79,7 +79,7 @@ describe('Tên miền đối tác', () => {
 describe('Tên miền quản trị', () => {
   it('phục vụ khu quản trị và trang đăng nhập nội bộ', () => {
     expect(go('admin.dubaiway.com', '/admin/bao-cao').chuyenHuong).toBe(false);
-    expect(go('admin.dubaiway.com', '/dang-nhap-quan-tri').chuyenHuong).toBe(false);
+    expect(go('admin.dubaiway.com', '/khu-quan-tri').chuyenHuong).toBe(false);
   });
 
   it('đẩy khu đối tác sang tên miền đối tác', () => {
@@ -109,5 +109,37 @@ describe('Tài nguyên kỹ thuật không bị đụng tới', () => {
     for (const p of ['/_next/static/x.js', '/api/health', '/sitemap.xml', '/robots.txt']) {
       expect(go('merchant.dubaiway.com', p).chuyenHuong, p).toBe(false);
     }
+  });
+});
+
+describe('Chế độ chung một tên miền (mặc định, chưa dựng subdomain)', () => {
+  /** Nạp lại middleware với biến môi trường tắt để kiểm nhánh mặc định. */
+  async function loadOff() {
+    vi.resetModules();
+    vi.stubEnv('NEXT_PUBLIC_AREA_HOSTS', 'off');
+    const mod = await import('../middleware');
+    return (host: string, path: string) => {
+      const res = mod.middleware(new NextRequest(`https://${host}${path}`, { headers: { host } }));
+      return { chuyenHuong: Boolean(res.headers.get('location')), khu: res.headers.get('x-middleware-request-x-dw-area') };
+    };
+  }
+
+  afterEach(() => { vi.unstubAllEnvs(); vi.resetModules(); });
+
+  it('không đẩy sang subdomain nào — ba khu chung một tên miền', async () => {
+    const g = await loadOff();
+    expect(g('shalom1379.com', '/merchant/dich-vu').chuyenHuong).toBe(false);
+    expect(g('shalom1379.com', '/admin/bao-cao').chuyenHuong).toBe(false);
+    expect(g('shalom1379.com', '/khu-doi-tac').chuyenHuong).toBe(false);
+    expect(g('shalom1379.com', '/khu-quan-tri').chuyenHuong).toBe(false);
+  });
+
+  it('vẫn nhận đúng khu theo đường dẫn để dựng khung trang', async () => {
+    const g = await loadOff();
+    expect(g('shalom1379.com', '/khu-doi-tac').khu).toBe('merchant');
+    expect(g('shalom1379.com', '/merchant/dich-vu').khu).toBe('merchant');
+    expect(g('shalom1379.com', '/khu-quan-tri').khu).toBe('admin');
+    expect(g('shalom1379.com', '/admin/bao-cao').khu).toBe('admin');
+    expect(g('shalom1379.com', '/du-lich').khu).toBe('customer');
   });
 });

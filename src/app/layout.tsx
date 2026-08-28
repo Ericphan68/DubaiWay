@@ -7,7 +7,7 @@ import { getDisplayCurrency } from '@/server/currency';
 import { getRepositories } from '@/server/repositories';
 import { groupCategories } from '@/config/category-groups';
 import { headers } from 'next/headers';
-import { areaForHost } from '@/config/hosts';
+import type { Area } from '@/config/hosts';
 import { AreaHeader, AreaFooter } from '@/components/layout/AreaShell';
 import { getSessionUser, isMerchantMember, isPlatformStaff } from '@/server/auth';
 import { getDictionary, textDirection } from '@/i18n';
@@ -83,9 +83,10 @@ export default async function RootLayout({
   const categories = await getRepositories().catalog.listCategories(locale).catch(() => []);
   const categoryGroups = groupCategories(categories, locale);
 
-  // Tên miền quyết định khung trang. Khu đối tác và quản trị dùng khung gọn
-  // riêng, không mang menu bán hàng của trang khách vào.
-  const area = areaForHost((await headers()).get('host') ?? '');
+  // Middleware đã xác định khu (theo tên miền hoặc theo đường dẫn) và gắn vào
+  // header. Khu đối tác và quản trị dùng khung gọn riêng, không mang menu bán
+  // hàng của trang khách vào.
+  const area = ((await headers()).get('x-dw-area') ?? 'customer') as Area;
   const isStaffArea = area !== 'customer';
   const t = getDictionary(locale);
 

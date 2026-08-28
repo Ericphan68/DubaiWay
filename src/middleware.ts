@@ -1,5 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { AREA_SIGN_IN, areaForHost, hostForArea, isSingleHostDev, type Area } from '@/config/hosts';
+import {
+  AREA_HOSTS_ENABLED, AREA_ROOT_PATH, AREA_SIGN_IN,
+  areaForHost, areaForPath, hostForArea, isSingleHostDev, type Area,
+} from '@/config/hosts';
 
 /**
  * Định tuyến ba khu vực theo tên miền.
@@ -21,11 +24,7 @@ import { AREA_SIGN_IN, areaForHost, hostForArea, isSingleHostDev, type Area } fr
  * khu (kiểm tra phiên đăng nhập và vai trò). Middleware chỉ lo địa chỉ.
  */
 
-/** Thư mục gốc của từng khu trong app/. */
-const AREA_ROOT: Record<Exclude<Area, 'customer'>, string> = {
-  merchant: '/merchant',
-  admin: '/admin',
-};
+const AREA_ROOT = AREA_ROOT_PATH;
 
 /** Tài nguyên kỹ thuật, không thuộc khu nào. */
 const SHARED_PREFIXES = [
@@ -68,15 +67,30 @@ function redirectTo(host: string, path: string, req: NextRequest): NextResponse 
   return NextResponse.redirect(url, 307);
 }
 
+/**
+ * Báo cho layout biết đang ở khu nào, để dựng đúng khung đầu/cuối trang.
+ * Layout của Next không đọc được đường dẫn, nên truyền qua header.
+ */
+function passThrough(req: NextRequest, area: Area): NextResponse {
+  const headers = new Headers(req.headers);
+  headers.set('x-dw-area', area);
+  return NextResponse.next({ request: { headers } });
+}
+
 export function middleware(req: NextRequest) {
   const host = req.headers.get('host') ?? '';
   const { pathname } = req.nextUrl;
 
-  if (isShared(pathname)) return NextResponse.next();
+  if (isShared(pathname)) {
+    return passThrough(req, AREA_HOSTS_ENABLED ? areaForHost(host) : 'customer');
+  }
 
-  // Máy phát triển trên localhost trần: một tên miền chạy cả ba khu, giữ nguyên
-  // như trước để `npm run dev` không phải dựng subdomain mới chạy được.
-  if (isSingleHostDev(host)) return NextResponse.next();
+  // Chưa tách tên miền: cả ba khu chung một tên miền, phân biệt bằng đường dẫn.
+  // Đây là mặc định — dùng được ngay, không phải chờ tạo subdomain và cấp SSL.
+  if (!AREA_HOSTS_ENABLED) return passThrough(req, areaForPath(pathname));
+
+  // Máy phát triển trên localhost trần: giữ nguyên một tên miền cho tiện.
+  if (isSingleHostDev(host)) return passThrough(req, areaForPath(pathname));
 
   const area = areaForHost(host);
   const inMerchant = under(pathname, AREA_ROOT.merchant) || pathname === AREA_SIGN_IN.merchant;
@@ -86,7 +100,7 @@ export function middleware(req: NextRequest) {
   if (area === 'customer') {
     if (inMerchant) return redirectTo(hostForArea('merchant', host), pathname, req);
     if (inAdmin) return redirectTo(hostForArea('admin', host), pathname, req);
-    return NextResponse.next();
+    return passThrough(req, 'customer');
   }
 
   // ── Tên miền khu vực ──────────────────────────────────────────────────────
@@ -95,7 +109,7 @@ export function middleware(req: NextRequest) {
   const inOther = area === 'merchant' ? inAdmin : inMerchant;
 
   if (inOther) return redirectTo(hostForArea(otherArea, host), pathname, req);
-  if (inOwn) return NextResponse.next();
+  if (inOwn) return passThrough(req, area);
 
   // Còn lại là trang của khách — không thuộc tên miền này. Đưa về cửa của khu.
   return redirectTo(host, AREA_ROOT[area], req);

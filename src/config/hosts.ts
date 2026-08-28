@@ -15,18 +15,50 @@
 
 export type Area = 'customer' | 'merchant' | 'admin';
 
-/** Trang đăng nhập riêng của từng khu. Đặt ngoài layout đã chặn để không lặp vô hạn. */
+/**
+ * Cửa vào của từng khu — ba link khác nhau.
+ *
+ *   /               → khách hàng
+ *   /khu-doi-tac    → đối tác
+ *   /khu-quan-tri   → quản trị
+ *
+ * Dùng tiền tố "khu-" vì `/doi-tac/<slug>` đã là trang hồ sơ đối tác công khai
+ * dành cho khách xem — hai thứ khác hẳn nhau, không được trùng đường dẫn.
+ *
+ * Ba đường dẫn này dùng được ngay trên MỘT tên miền, không cần dựng subdomain.
+ * Khi bật chế độ nhiều tên miền, chúng nằm trên subdomain tương ứng.
+ *
+ * Đặt ngoài /merchant và /admin là có chủ ý: layout hai khu đó đẩy người chưa
+ * đăng nhập về trang đăng nhập, nên trang đăng nhập không được nằm trong chính
+ * layout ấy, nếu không sẽ chuyển hướng vòng tròn.
+ */
 export const AREA_SIGN_IN: Record<Area, string> = {
   customer: '/dang-nhap',
-  merchant: '/dang-nhap-doi-tac',
-  admin: '/dang-nhap-quan-tri',
+  merchant: '/khu-doi-tac',
+  admin: '/khu-quan-tri',
 };
+
+/**
+ * Bật tách tên miền hay chưa.
+ *
+ * MẶC ĐỊNH TẮT. Khi tắt, cả ba khu chạy trên cùng một tên miền và phân biệt
+ * bằng đường dẫn — dùng được ngay, không phải chờ tạo subdomain và cấp SSL.
+ * Tạo xong subdomain trên máy chủ thì đặt NEXT_PUBLIC_AREA_HOSTS=on.
+ */
+export const AREA_HOSTS_ENABLED =
+  (process.env.NEXT_PUBLIC_AREA_HOSTS ?? '').trim().toLowerCase() === 'on';
+
+/** Thư mục gốc của khu trong app/ — cũng là trang chủ sau khi đăng nhập. */
+export const AREA_ROOT_PATH = {
+  merchant: '/merchant',
+  admin: '/admin',
+} as const;
 
 /** Trang chủ của từng khu sau khi đăng nhập. */
 export const AREA_HOME: Record<Area, string> = {
   customer: '/tai-khoan',
-  merchant: '/merchant',
-  admin: '/admin',
+  merchant: AREA_ROOT_PATH.merchant,
+  admin: AREA_ROOT_PATH.admin,
 };
 
 /** Tiền tố đường dẫn thật trong thư mục app/ của từng khu. */
@@ -89,6 +121,22 @@ export function isLocalHostname(hostname: string): boolean {
     || bare === '127.0.0.1' || bare === '::1';
 }
 
+/**
+ * Khu vực suy từ ĐƯỜNG DẪN. Dùng khi cả ba khu ở chung một tên miền,
+ * và để chọn khung đầu/cuối trang cho đúng.
+ */
+export function areaForPath(pathname: string): Area {
+  if (pathname === AREA_SIGN_IN.merchant || pathname.startsWith(`${AREA_SIGN_IN.merchant}/`)
+    || pathname === AREA_ROOT_PATH.merchant || pathname.startsWith(`${AREA_ROOT_PATH.merchant}/`)) {
+    return 'merchant';
+  }
+  if (pathname === AREA_SIGN_IN.admin || pathname.startsWith(`${AREA_SIGN_IN.admin}/`)
+    || pathname === AREA_ROOT_PATH.admin || pathname.startsWith(`${AREA_ROOT_PATH.admin}/`)) {
+    return 'admin';
+  }
+  return 'customer';
+}
+
 /** Khu vực tương ứng với tên miền đang truy cập. */
 export function areaForHost(hostname: string): Area {
   const h = hostname.toLowerCase();
@@ -131,6 +179,12 @@ export function hostForArea(area: Area, currentHost: string): string {
  * nơi cần đường dẫn tuyệt đối chứ không phải đường dẫn tương đối.
  */
 export function urlForArea(area: Area, path = '/', currentHost?: string): string {
+  // Chưa tách tên miền: ba khu chung một tên miền, chỉ khác đường dẫn.
+  // Trả về đường dẫn tương đối để chạy đúng ở mọi môi trường.
+  if (!AREA_HOSTS_ENABLED) {
+    if (path !== '/') return path.startsWith('/') ? path : `/${path}`;
+    return area === 'customer' ? '/' : AREA_SIGN_IN[area];
+  }
   const host = hostForArea(area, currentHost ?? ROOT_HOST);
   // Phải xét cả subdomain: `merchant.localhost:3000` vẫn là máy phát triển.
   // Kiểm tra bằng startsWith trên chuỗi đầy đủ sẽ bỏ sót và sinh link https hỏng.

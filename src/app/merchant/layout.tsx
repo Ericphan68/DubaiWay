@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { AREA_SIGN_IN } from '@/config/hosts';
 import { Section } from '@/components/ui/Section';
 import { getSessionUser, isMerchantMember } from '@/server/auth';
 import { getMerchantForUser } from '@/server/services/merchant-store';
@@ -22,7 +23,7 @@ export default async function MerchantLayout({ children }: { children: ReactNode
   const user = await getSessionUser();
   // Trang đăng nhập riêng của khu đối tác. Đặt ngoài /merchant nên không lọt
   // vào chính lớp chặn này, tránh chuyển hướng vòng tròn.
-  if (!user) redirect('/dang-nhap-doi-tac');
+  if (!user) redirect(AREA_SIGN_IN.merchant);
   // Người đã có hồ sơ đối tác hoặc có vai trò merchant đều vào được.
   // Người chưa có gì thì đẩy sang trang đăng ký thay vì chặn cụt.
   const merchant = getMerchantForUser(user.id);

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { AREA_SIGN_IN } from '@/config/hosts';
 import { Section } from '@/components/ui/Section';
 import { getSessionUser, isPlatformStaff } from '@/server/auth';
 import { signOutAction } from '@/app/dang-nhap/actions';
@@ -24,7 +25,7 @@ const NAV = [
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const user = await getSessionUser();
-  if (!user) redirect('/dang-nhap-quan-tri');
+  if (!user) redirect(AREA_SIGN_IN.admin);
   // Chặn ở máy chủ theo vai trò, không dựa vào việc giấu link.
   if (!isPlatformStaff(user)) redirect('/');
 
