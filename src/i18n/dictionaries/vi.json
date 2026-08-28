@@ -210,5 +210,14 @@
     "stat3Value": "Tự chủ",
     "stat3Title": "Giá và lịch của bạn",
     "stat3Desc": "Bạn đặt giá, mở lịch, quyết định số chỗ mỗi ngày."
+  },
+  "categories": {
+    "allCategories": "Tất cả danh mục",
+    "allCategoriesDesc": "Toàn bộ dịch vụ du lịch trên sàn DubaiWay, xếp theo nhóm.",
+    "close": "Đóng",
+    "serviceCount": "dịch vụ",
+    "updating": "Đang cập nhật",
+    "viewAllPage": "Mở trang danh mục đầy đủ",
+    "empty": "Chưa có danh mục nào để hiển thị."
   }
 }

@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { mainNav } from '@/config/nav';
 import { siteConfig } from '@/config/site';
 import { LocalePicker } from './LocalePicker';
+import { AllCategoriesButton } from '@/components/categories/AllCategoriesButton';
+import type { CategoryGroup } from '@/config/category-groups';
 import { getDictionary, type Locale } from '@/i18n';
 import type { HeaderUser } from './Header';
 import { cn } from '@/lib/utils';
@@ -24,12 +26,14 @@ export function MobileMenu({
   onClose,
   locale,
   currency,
+  categoryGroups,
   user,
 }: {
   open: boolean;
   onClose: () => void;
   locale: Locale;
   currency: string;
+  categoryGroups: readonly CategoryGroup[];
   user: HeaderUser | null;
 }) {
   const t = getDictionary(locale);
@@ -80,6 +84,11 @@ export function MobileMenu({
         </div>
 
         <nav className="flex-1 overflow-y-auto px-5 py-4" aria-label="Điều hướng di động">
+          {/* Lối tắt vào toàn bộ danh mục, đặt trên cùng vì đây là đường khách
+              hay dùng nhất khi chưa biết mình muốn gì. */}
+          <div className="mb-3">
+            <AllCategoriesButton groups={categoryGroups} locale={locale} variant="menu" />
+          </div>
           <ul className="space-y-1">
             {mainNav.map((item) => {
               const hasMenu = Boolean(item.megaMenu);

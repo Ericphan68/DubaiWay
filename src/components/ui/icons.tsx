@@ -109,6 +109,30 @@ export const IconClock = (p: IconProps) => (
   <svg {...base(p)}><circle cx="12" cy="12" r="9" /><path d="M12 7.5V12l3 2" /></svg>
 );
 
+/* ── Biểu tượng cho bảng "Tất cả danh mục" ─────────────────────────────── */
+
+export const IconTicket = (p: IconProps) => (
+  <svg {...base(p)}><path d="M4 9V7.5A1.5 1.5 0 0 1 5.5 6h13A1.5 1.5 0 0 1 20 7.5V9a3 3 0 0 0 0 6v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 16.5V15a3 3 0 0 0 0-6Z" /><path d="M14 6v2M14 11v2M14 16v2" strokeDasharray="0.1 3" /></svg>
+);
+export const IconFerrisWheel = (p: IconProps) => (
+  <svg {...base(p)}><circle cx="12" cy="10" r="6" /><circle cx="12" cy="10" r="1.6" /><path d="M12 4v12M6 10h12M7.8 5.8l8.4 8.4M16.2 5.8l-8.4 8.4M12 16l-3 5M12 16l3 5M9 21h6" /></svg>
+);
+export const IconUtensils = (p: IconProps) => (
+  <svg {...base(p)}><path d="M6 3v7a2 2 0 0 0 4 0V3M8 10v11" /><path d="M17 3c-1.7 1.2-2.5 3-2.5 5.5S15.5 12 17 12.5V21" /></svg>
+);
+export const IconCamera = (p: IconProps) => (
+  <svg {...base(p)}><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2.2l1.2-2h8.2l1.2 2h2.2A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5v-9Z" /><circle cx="12" cy="13" r="3.4" /></svg>
+);
+export const IconSim = (p: IconProps) => (
+  <svg {...base(p)}><path d="M6 4.5A1.5 1.5 0 0 1 7.5 3h6.1L19 8.4v11.1a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 19.5v-15Z" /><rect x="9" y="11" width="7" height="6" rx="1.2" /><path d="M12.5 11v6M9 14h7" /></svg>
+);
+export const IconDune = (p: IconProps) => (
+  <svg {...base(p)}><circle cx="17" cy="7" r="2.6" /><path d="M2 18c2.6 0 3.6-4 6.4-4 2.3 0 2.9 2.4 5 2.4 1.8 0 2.4-1.6 4.2-1.6 1.6 0 2.3 1.2 4.4 1.2" /><path d="M2 21h20" /></svg>
+);
+export const IconGrid = (p: IconProps) => (
+  <svg {...base(p)}><rect x="3.5" y="3.5" width="7" height="7" rx="2" /><rect x="13.5" y="3.5" width="7" height="7" rx="2" /><rect x="3.5" y="13.5" width="7" height="7" rx="2" /><rect x="13.5" y="13.5" width="7" height="7" rx="2" /></svg>
+);
+
 export const iconMap = {
   home: IconHome,
   user: IconUser,

@@ -3,6 +3,8 @@ import { Section } from '@/components/ui/Section';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { getRepositories } from '@/server/repositories';
 import { getLocale } from '@/server/locale';
+import { groupCategories } from '@/config/category-groups';
+import { AllCategoriesButton } from '@/components/categories/AllCategoriesButton';
 
 /** Danh mục nổi bật — lấy từ dữ liệu thật, ưu tiên nhóm đã có dịch vụ. */
 export async function FeaturedCategories() {
@@ -11,7 +13,9 @@ export async function FeaturedCategories() {
   if (categories.length === 0) return null;
 
   const withServices = categories.filter((c) => (c.serviceCount ?? 0) > 0);
-  const shown = (withServices.length >= 8 ? withServices : categories).slice(0, 12);
+  // Chừa một ô cuối lưới cho nút mở toàn bộ danh mục.
+  const shown = (withServices.length >= 8 ? withServices : categories).slice(0, 11);
+  const groups = groupCategories(categories, locale);
 
   return (
     <Section background="white">
@@ -39,6 +43,7 @@ export async function FeaturedCategories() {
             </svg>
           </Link>
         ))}
+        <AllCategoriesButton groups={groups} locale={locale} variant="tile" />
       </div>
     </Section>
   );

@@ -4,6 +4,8 @@ import { siteConfig } from '@/config/site';
 import { Header } from '@/components/layout/Header';
 import { getLocale } from '@/server/locale';
 import { getDisplayCurrency } from '@/server/currency';
+import { getRepositories } from '@/server/repositories';
+import { groupCategories } from '@/config/category-groups';
 import { getSessionUser, isMerchantMember, isPlatformStaff } from '@/server/auth';
 import { getDictionary, textDirection } from '@/i18n';
 import { Footer } from '@/components/layout/Footer';
@@ -73,6 +75,10 @@ export default async function RootLayout({
   const locale = await getLocale();
   const currency = await getDisplayCurrency();
   const user = await getSessionUser();
+  // Danh mục cho cửa sổ "Tất cả danh mục" ở thanh đầu trang. Lỗi kho dữ liệu
+  // chỉ làm mất nút đó chứ không được làm sập khung trang.
+  const categories = await getRepositories().catalog.listCategories(locale).catch(() => []);
+  const categoryGroups = groupCategories(categories, locale);
   const t = getDictionary(locale);
 
   return (
@@ -91,6 +97,7 @@ export default async function RootLayout({
         <Header
           locale={locale}
           currency={currency.code}
+          categoryGroups={categoryGroups}
           user={user ? {
             fullName: user.fullName,
             email: user.email,

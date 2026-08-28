@@ -86,9 +86,25 @@ const config: Config = {
           from: { opacity: '0', transform: 'translateY(16px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
+        // Cửa sổ "Tất cả danh mục": nền tối hiện dần, hộp nội dung nổi lên.
+        'overlay-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+        'panel-in': {
+          from: { opacity: '0', transform: 'translateY(12px) scale(0.985)' },
+          to: { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
+        'sheet-in': {
+          from: { transform: 'translateY(100%)' },
+          to: { transform: 'translateY(0)' },
+        },
       },
       animation: {
         'fade-up': 'fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'overlay-in': 'overlay-in 0.25s ease-out both',
+        'panel-in': 'panel-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'sheet-in': 'sheet-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both',
       },
     },
   },

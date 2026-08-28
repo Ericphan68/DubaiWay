@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/icons';
 import { MegaMenu } from './MegaMenu';
 import { MobileMenu } from './MobileMenu';
+import { AllCategoriesButton } from '@/components/categories/AllCategoriesButton';
+import type { CategoryGroup } from '@/config/category-groups';
 
 export interface HeaderUser {
   readonly fullName: string | null;
@@ -27,10 +29,11 @@ export interface HeaderUser {
 }
 
 export function Header({
-  locale, currency, user,
+  locale, currency, categoryGroups, user,
 }: {
   locale: Locale;
   currency: string;
+  categoryGroups: readonly CategoryGroup[];
   user: HeaderUser | null;
 }) {
   const t = getDictionary(locale);
@@ -114,6 +117,7 @@ export function Header({
           <Logo tone="dark" />
 
           <nav className="hidden items-center xl:flex" aria-label="Điều hướng chính">
+            <AllCategoriesButton groups={categoryGroups} locale={locale} variant="nav" />
             {mainNav.map((item) => {
               const hasMenu = Boolean(item.megaMenu);
               return (
@@ -174,6 +178,7 @@ export function Header({
         onClose={() => setMobileOpen(false)}
         locale={locale}
         currency={currency}
+        categoryGroups={categoryGroups}
         user={user}
       />
     </header>

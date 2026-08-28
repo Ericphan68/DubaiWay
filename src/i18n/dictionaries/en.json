@@ -210,5 +210,14 @@
     "stat3Value": "Your call",
     "stat3Title": "Your prices, your calendar",
     "stat3Desc": "You set prices, open dates and decide daily capacity."
+  },
+  "categories": {
+    "allCategories": "All categories",
+    "allCategoriesDesc": "Every travel service on DubaiWay, arranged by group.",
+    "close": "Close",
+    "serviceCount": "services",
+    "updating": "Coming soon",
+    "viewAllPage": "Open the full category page",
+    "empty": "No categories to show yet."
   }
 }
