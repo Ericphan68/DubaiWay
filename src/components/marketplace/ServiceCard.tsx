@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { formatDisplayPrice } from './Price';
+import { ServiceCover } from './ServiceCover';
 import { DEFAULT_DISPLAY_CURRENCY, getCurrencyOption, type CurrencyOption } from '@/config/locales';
 import type { ServiceSummary } from '@/server/repositories/types';
 import { cn } from '@/lib/utils';
@@ -45,8 +46,17 @@ export function ServiceCard({
   const duration = formatDuration(service.durationMinutes, locale);
 
   return (
-    <article className={cn('group overflow-hidden rounded-2xl border border-mist bg-ivory-100 transition-shadow duration-300 ease-dubaiway hover:shadow-lg', className)}>
-      <Link href={`/dich-vu/${service.slug}`} className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-champagne">
+    <article
+      className={cn(
+        'group h-full overflow-hidden rounded-2xl border border-mist bg-ivory-100',
+        'transition-all duration-300 ease-dubaiway hover:-translate-y-0.5 hover:border-champagne/50 hover:shadow-[0_12px_28px_-14px_rgba(54,74,99,0.35)]',
+        className,
+      )}
+    >
+      <Link
+        href={`/dich-vu/${service.slug}`}
+        className="flex h-full flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
+      >
         <div className="relative aspect-[4/3] overflow-hidden bg-mist-200">
           {service.coverImageUrl ? (
             /* eslint-disable-next-line @next/next/no-img-element */
@@ -57,9 +67,7 @@ export function ServiceCard({
               loading="lazy"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-mist-200 to-ivory-200">
-              <span className="font-display text-3xl text-mist-400">DW</span>
-            </div>
+            <ServiceCover categorySlug={service.categorySlug} />
           )}
           {service.isFeatured ? (
             <span className="absolute left-3 top-3 rounded-full bg-champagne px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-wide text-white">
@@ -68,7 +76,7 @@ export function ServiceCard({
           ) : null}
         </div>
 
-        <div className="p-4">
+        <div className="flex flex-1 flex-col p-4">
           <p className="text-[0.7rem] font-semibold uppercase tracking-wide text-ink-soft">
             {service.city ?? 'Dubai'}
             {duration ? <> · {duration}</> : null}
@@ -87,7 +95,7 @@ export function ServiceCard({
             <p className="mt-2 text-sm text-ink-soft">{t.common.noReviews}</p>
           )}
 
-          <div className="mt-2.5 flex flex-wrap gap-1.5">
+          <div className="mt-2.5 flex flex-wrap gap-1.5 pb-3">
             {service.instantConfirmation ? (
               <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[0.68rem] font-medium text-emerald-700">
                 {t.service.instantConfirmation}
@@ -106,13 +114,19 @@ export function ServiceCard({
           </div>
 
           {service.priceFrom ? (
-            <p className="mt-3 border-t border-mist pt-3">
-              <span className="text-xs text-ink-soft">{t.common.from} </span>
-              <span className="font-display text-lg font-semibold text-midnight">
-                {formatDisplayPrice(service.priceFrom, cur, locale).text}
-              </span>
-              <span className="text-xs text-ink-soft"> / {t.common.perPerson}</span>
-            </p>
+            /* mt-auto đẩy giá xuống đáy thẻ, nên cả hàng thẻ có giá thẳng một
+               đường dù tên dịch vụ dài ngắn khác nhau. */
+            <div className="mt-auto border-t border-mist pt-3">
+              <p className="flex items-baseline gap-1.5">
+                <span className="shrink-0 text-xs text-ink-soft">{t.common.from}</span>
+                <span className="font-display text-lg font-semibold tabular-nums text-midnight">
+                  {formatDisplayPrice(service.priceFrom, cur, locale).text}
+                </span>
+              </p>
+              {/* Đơn vị xuống dòng riêng: thẻ hẹp nên để cùng dòng sẽ bị cắt cụt
+                  thành "mỗi kh…". Khối hai dòng vẫn cao bằng nhau ở mọi thẻ. */}
+              <p className="text-xs text-ink-soft">{t.common.perPerson}</p>
+            </div>
           ) : null}
         </div>
       </Link>

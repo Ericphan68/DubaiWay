@@ -1,22 +1,36 @@
 import type { ReactNode } from 'react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { AREA_SIGN_IN } from '@/config/hosts';
-import { Section } from '@/components/ui/Section';
+import { ConsoleShell, type ConsoleNavGroup } from '@/components/layout/ConsoleShell';
 import { getSessionUser, isMerchantMember } from '@/server/auth';
 import { getMerchantForUser } from '@/server/services/merchant-store';
 import { signOutAction } from '@/app/dang-nhap/actions';
 import { StatusChip } from '@/components/marketplace/StatusBadges';
 
-const NAV = [
-  { href: '/merchant', label: 'Tổng quan' },
-  { href: '/merchant/dich-vu', label: 'Dịch vụ' },
-  { href: '/merchant/lich', label: 'Lịch & tồn kho' },
-  { href: '/merchant/don-hang', label: 'Đơn hàng' },
-  { href: '/merchant/quet-ma', label: 'Quét voucher' },
-  { href: '/merchant/danh-gia', label: 'Đánh giá' },
-  { href: '/merchant/doanh-thu', label: 'Doanh thu' },
-  { href: '/merchant/ho-so', label: 'Hồ sơ đối tác' },
+/** Chia theo việc hằng ngày: bán gì — bán được bao nhiêu — hồ sơ. */
+const NAV: ConsoleNavGroup[] = [
+  {
+    items: [
+      { href: '/merchant', label: 'Tổng quan', icon: 'dashboard', exact: true },
+    ],
+  },
+  {
+    heading: 'Bán hàng',
+    items: [
+      { href: '/merchant/dich-vu', label: 'Dịch vụ', icon: 'service' },
+      { href: '/merchant/lich', label: 'Lịch & tồn kho', icon: 'calendar' },
+      { href: '/merchant/don-hang', label: 'Đơn hàng', icon: 'order' },
+      { href: '/merchant/quet-ma', label: 'Quét voucher', icon: 'scan' },
+    ],
+  },
+  {
+    heading: 'Theo dõi',
+    items: [
+      { href: '/merchant/doanh-thu', label: 'Doanh thu', icon: 'report' },
+      { href: '/merchant/danh-gia', label: 'Đánh giá', icon: 'review' },
+      { href: '/merchant/ho-so', label: 'Hồ sơ đối tác', icon: 'profile' },
+    ],
+  },
 ];
 
 export default async function MerchantLayout({ children }: { children: ReactNode }) {
@@ -30,44 +44,26 @@ export default async function MerchantLayout({ children }: { children: ReactNode
   if (!merchant && !isMerchantMember(user)) redirect('/merchant/dang-ky');
 
   return (
-    <Section>
-      <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
-        <aside>
-          <p className="text-xs font-semibold uppercase tracking-wide text-champagne-600">Khu vực đối tác</p>
-          <p className="mt-1 font-display text-lg font-medium text-midnight">
-            {merchant?.displayName ?? 'Đối tác'}
-          </p>
-          {merchant ? (
-            <p className="mt-1">
-              <StatusChip status={merchant.status} />
-            </p>
-          ) : null}
-
-          <nav className="mt-5 space-y-1">
-            {NAV.map((item) => (
-              <Link key={item.href} href={item.href}
-                    className="block rounded-xl px-3 py-2 text-sm text-ink-muted transition-colors hover:bg-mist-200 hover:text-midnight">
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <form action={signOutAction} className="mt-5 border-t border-mist pt-4">
-            <button type="submit" className="text-sm text-ink-soft hover:text-midnight">Đăng xuất</button>
-          </form>
-        </aside>
-
-        <div className="min-w-0">
-          {merchant && merchant.status !== 'approved' ? (
-            <p className="mb-6 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-              Hồ sơ của bạn đang ở trạng thái <strong>{merchant.status}</strong>. Dịch vụ chỉ hiển thị
-              công khai sau khi hồ sơ được duyệt.
-            </p>
-          ) : null}
-          {children}
-        </div>
-      </div>
-    </Section>
+    <ConsoleShell
+      eyebrow="Khu đối tác"
+      title={merchant?.displayName ?? 'Đối tác'}
+      subtitle={merchant ? <StatusChip status={merchant.status} /> : null}
+      groups={NAV}
+      footer={
+        <form action={signOutAction}>
+          <button type="submit" className="text-sm text-white/50 transition-colors hover:text-white">
+            Đăng xuất
+          </button>
+        </form>
+      }
+    >
+      {merchant && merchant.status !== 'approved' ? (
+        <p className="mb-6 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          Hồ sơ của bạn đang chờ duyệt. Dịch vụ chỉ hiển thị công khai sau khi hồ sơ được duyệt —
+          trong lúc chờ, bạn vẫn soạn dịch vụ và mở lịch bình thường.
+        </p>
+      ) : null}
+      {children}
+    </ConsoleShell>
   );
 }
-

@@ -35,9 +35,12 @@ export function EmptyState({
 }) {
   return (
     <Shell>
-      <svg viewBox="0 0 48 48" className="h-12 w-12 text-mist-400" fill="none" aria-hidden>
-        <circle cx="21" cy="21" r="13" stroke="currentColor" strokeWidth="2" />
-        <path d="M31 31l10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      {/* Không dùng kính lúp: "chưa có dữ liệu" khác hẳn "tìm không ra".
+          Kính lúp khiến người xem tưởng vừa có một cuộc tìm kiếm thất bại.
+          Ô rỗng có đường gạch ngang nói đúng hơn: chỗ này để trống, chờ được điền. */}
+      <svg viewBox="0 0 48 48" className="h-11 w-11 text-mist-400" fill="none" aria-hidden>
+        <rect x="7" y="11" width="34" height="26" rx="4" stroke="currentColor" strokeWidth="1.8" strokeDasharray="4 4" />
+        <path d="M16 24h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
       </svg>
       <p className="mt-4 font-display text-lg text-midnight">{title}</p>
       {body ? <p className="mt-1 max-w-md text-sm text-ink-muted">{body}</p> : null}
