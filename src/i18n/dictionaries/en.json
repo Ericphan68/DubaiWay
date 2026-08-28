@@ -75,5 +75,40 @@
     "becomePartner": "Become a partner",
     "verified": "Verified",
     "dashboard": "Dashboard"
+  },
+  "nav": {
+    "travel": "Travel",
+    "flightsHotels": "Flights & Hotels",
+    "visa": "Visa",
+    "events": "Events",
+    "explore": "Explore",
+    "guide": "Guide",
+    "about": "About DubaiWay",
+    "contact": "Contact"
+  },
+  "account": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "myAccount": "My account",
+    "merchantArea": "Partner area",
+    "adminArea": "Admin",
+    "signOut": "Sign out",
+    "language": "Language"
+  },
+  "partnerCta": {
+    "eyebrow": "For partners",
+    "title": "Do you run a service in Dubai?",
+    "titleLine2": "Sell it on DubaiWay.",
+    "body": "No listing fee, no monthly fee. DubaiWay takes 10% commission only when you make a sale — and every dirham is visible in your settlement report.",
+    "primary": "Become a partner",
+    "secondary": "Learn more first",
+    "stat1Title": "Single commission",
+    "stat1Desc": "Charged on the discounted subtotal. No hidden fees.",
+    "stat2Value": "1–2 days",
+    "stat2Title": "Review turnaround",
+    "stat2Desc": "Submit your documents and hear back quickly.",
+    "stat3Value": "Your call",
+    "stat3Title": "Your prices, your calendar",
+    "stat3Desc": "You set prices, open dates and decide daily capacity."
   }
 }

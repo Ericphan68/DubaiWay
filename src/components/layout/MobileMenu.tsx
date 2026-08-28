@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { mainNav } from '@/config/nav';
 import { siteConfig } from '@/config/site';
+import { LocaleSwitcher } from './LocaleSwitcher';
+import { getDictionary, type Locale } from '@/i18n';
+import type { HeaderUser } from './Header';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui/Logo';
 import { Button } from '@/components/ui/Button';
@@ -19,10 +22,18 @@ import { whatsappLink, whatsappMessages } from '@/lib/whatsapp';
 export function MobileMenu({
   open,
   onClose,
+  locale,
+  user,
 }: {
   open: boolean;
   onClose: () => void;
+  locale: Locale;
+  user: HeaderUser | null;
 }) {
+  const t = getDictionary(locale);
+  /** Nhãn menu theo ngôn ngữ; thiếu bản dịch thì giữ nhãn tiếng Việt. */
+  const navLabel = (item: { label: string; labelKey?: keyof typeof t.nav }) =>
+    item.labelKey ? t.nav[item.labelKey] : item.label;
   const [expanded, setExpanded] = useState<string | null>(null);
 
   // Khoá cuộn nền khi menu mở.
@@ -79,14 +90,14 @@ export function MobileMenu({
                       onClick={onClose}
                       className="flex-1 py-3.5 text-base font-medium text-white/90"
                     >
-                      {item.label}
+                      {navLabel(item)}
                     </Link>
                     {hasMenu && (
                       <button
                         type="button"
                         onClick={() => setExpanded(isOpen ? null : item.label)}
                         className="p-2 text-white/60"
-                        aria-label={`Mở ${item.label}`}
+                        aria-label={`Mở ${navLabel(item)}`}
                         aria-expanded={isOpen}
                       >
                         <IconChevronDown
@@ -117,8 +128,55 @@ export function MobileMenu({
         </nav>
 
         <div className="space-y-3 border-t border-white/10 px-5 py-4">
-          <Button href="/yeu-cau-bao-gia" variant="gold" className="w-full" onClick={onClose}>
-            Nhận tư vấn & báo giá
+          {/* Tài khoản — thanh tiện ích trên cùng chỉ hiện ở màn lớn nên đưa xuống đây */}
+          {user ? (
+            <div className="space-y-2">
+              <Link
+                href="/tai-khoan"
+                onClick={onClose}
+                className="block rounded-full bg-white/10 py-2.5 text-center text-sm font-medium text-white hover:bg-white/15"
+              >
+                {user.fullName ?? user.email}
+              </Link>
+              {user.isMerchant ? (
+                <Link href="/merchant" onClick={onClose}
+                      className="block rounded-full border border-white/25 py-2.5 text-center text-sm text-white hover:bg-white/10">
+                  {t.account.merchantArea}
+                </Link>
+              ) : null}
+              {user.isStaff ? (
+                <Link href="/admin" onClick={onClose}
+                      className="block rounded-full border border-white/25 py-2.5 text-center text-sm text-white hover:bg-white/10">
+                  {t.account.adminArea}
+                </Link>
+              ) : null}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              <Link
+                href="/dang-nhap"
+                onClick={onClose}
+                className="inline-flex items-center justify-center rounded-full border border-white/25 py-2.5 text-sm text-white hover:bg-white/10"
+              >
+                {t.account.signIn}
+              </Link>
+              <Link
+                href="/dang-ky"
+                onClick={onClose}
+                className="inline-flex items-center justify-center rounded-full bg-champagne py-2.5 text-sm font-medium text-white hover:bg-champagne-600"
+              >
+                {t.account.signUp}
+              </Link>
+            </div>
+          )}
+
+          <div className="flex items-center justify-between rounded-full border border-white/15 px-3 py-2">
+            <span className="text-xs uppercase tracking-wide text-white/60">{t.account.language}</span>
+            <LocaleSwitcher current={locale} tone="dark" />
+          </div>
+
+          <Button href="/tro-thanh-doi-tac" variant="gold" className="w-full" onClick={onClose}>
+            Trở thành đối tác
           </Button>
           <div className="grid grid-cols-2 gap-3">
             <a

@@ -75,5 +75,40 @@
     "becomePartner": "Trở thành đối tác",
     "verified": "Đã xác minh",
     "dashboard": "Bảng điều khiển"
+  },
+  "nav": {
+    "travel": "Du lịch",
+    "flightsHotels": "Vé & Khách sạn",
+    "visa": "Visa",
+    "events": "Events",
+    "explore": "Khám phá",
+    "guide": "Cẩm nang",
+    "about": "Về DubaiWay",
+    "contact": "Liên hệ"
+  },
+  "account": {
+    "signIn": "Đăng nhập",
+    "signUp": "Đăng ký",
+    "myAccount": "Tài khoản",
+    "merchantArea": "Khu đối tác",
+    "adminArea": "Quản trị",
+    "signOut": "Đăng xuất",
+    "language": "Ngôn ngữ"
+  },
+  "partnerCta": {
+    "eyebrow": "Dành cho đối tác",
+    "title": "Bạn cung cấp dịch vụ tại Dubai?",
+    "titleLine2": "Đăng bán trên DubaiWay.",
+    "body": "Không phí niêm yết, không phí duy trì. DubaiWay chỉ nhận 10% hoa hồng khi bạn bán được — và bạn thấy rõ từng đồng trên bảng đối soát.",
+    "primary": "Đăng ký làm đối tác",
+    "secondary": "Tìm hiểu trước",
+    "stat1Title": "Hoa hồng duy nhất",
+    "stat1Desc": "Tính trên tiền hàng sau giảm giá, không phí ẩn.",
+    "stat2Value": "1–2 ngày",
+    "stat2Title": "Thời gian thẩm định",
+    "stat2Desc": "Nộp giấy tờ, đội thẩm định phản hồi nhanh.",
+    "stat3Value": "Tự chủ",
+    "stat3Title": "Giá và lịch của bạn",
+    "stat3Desc": "Bạn đặt giá, mở lịch, quyết định số chỗ mỗi ngày."
   }
 }

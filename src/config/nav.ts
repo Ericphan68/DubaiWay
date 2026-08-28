@@ -15,7 +15,10 @@ export interface NavGroup {
 }
 
 export interface NavItem {
+  /** Nhãn tiếng Việt — dùng khi chưa có bản dịch cho ngôn ngữ đang chọn. */
   label: string;
+  /** Khoá tra trong từ điển i18n (dictionary.nav). Thiếu thì dùng `label`. */
+  labelKey?: 'travel' | 'flightsHotels' | 'visa' | 'events' | 'explore' | 'guide' | 'about' | 'contact';
   href: string;
   /** Mega menu nhiều cột (Du lịch, Vé & Khách sạn, Events). */
   megaMenu?: NavGroup[];
@@ -24,9 +27,9 @@ export interface NavItem {
 }
 
 export const mainNav: NavItem[] = [
-  { label: 'Trang chủ', href: '/' },
   {
     label: 'Du lịch',
+    labelKey: 'travel',
     href: '/du-lich',
     megaMenu: [
       {
@@ -60,6 +63,7 @@ export const mainNav: NavItem[] = [
   },
   {
     label: 'Vé & Khách sạn',
+    labelKey: 'flightsHotels',
     href: '/ve-may-bay',
     megaMenu: [
       {
@@ -89,9 +93,10 @@ export const mainNav: NavItem[] = [
         'https://images.unsplash.com/photo-1540339832862-474599807836?auto=format&fit=crop&w=900&q=80',
     },
   },
-  { label: 'Visa', href: '/visa' },
+  { label: 'Visa', labelKey: 'visa', href: '/visa' },
   {
     label: 'Events',
+    labelKey: 'events',
     href: '/events',
     megaMenu: [
       {
@@ -123,10 +128,10 @@ export const mainNav: NavItem[] = [
         'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=900&q=80',
     },
   },
-  { label: 'Khám phá', href: '/danh-muc' },
-  { label: 'Cẩm nang', href: '/cam-nang' },
-  { label: 'Về DubaiWay', href: '/ve-dubaiway' },
-  { label: 'Liên hệ', href: '/lien-he' },
+  { label: 'Khám phá', labelKey: 'explore', href: '/danh-muc' },
+  { label: 'Cẩm nang', labelKey: 'guide', href: '/cam-nang' },
+  { label: 'Về DubaiWay', labelKey: 'about', href: '/ve-dubaiway' },
+  { label: 'Liên hệ', labelKey: 'contact', href: '/lien-he' },
 ];
 
 /** Điều hướng đáy cho mobile. */

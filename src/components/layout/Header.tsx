@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 import { mainNav, type NavItem } from '@/config/nav';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
+import { LocaleSwitcher } from './LocaleSwitcher';
+import { getDictionary, type Locale } from '@/i18n';
 import { Logo } from '@/components/ui/Logo';
 import { Button } from '@/components/ui/Button';
 import {
@@ -17,7 +19,17 @@ import {
 import { MegaMenu } from './MegaMenu';
 import { MobileMenu } from './MobileMenu';
 
-export function Header() {
+export interface HeaderUser {
+  readonly fullName: string | null;
+  readonly email: string;
+  readonly isMerchant: boolean;
+  readonly isStaff: boolean;
+}
+
+export function Header({ locale, user }: { locale: Locale; user: HeaderUser | null }) {
+  const t = getDictionary(locale);
+  /** Nhãn menu theo ngôn ngữ; thiếu bản dịch thì giữ nhãn tiếng Việt. */
+  const navLabel = (item: NavItem) => (item.labelKey ? t.nav[item.labelKey] : item.label);
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -52,11 +64,32 @@ export function Header() {
               {siteConfig.contact.email}
             </a>
           </div>
-          <div className="flex items-center gap-5">
-            <span>Văn phòng: TP.HCM · Dubai</span>
-            <Link href="/yeu-cau-bao-gia" className="inline-flex items-center gap-1 font-semibold text-champagne-600 hover:text-midnight">
-              Yêu cầu báo giá <IconArrowUpRight className="h-3 w-3" />
-            </Link>
+          <div className="flex items-center gap-4">
+            <LocaleSwitcher current={locale} />
+
+            {user ? (
+              <>
+                {user.isStaff ? (
+                  <Link href="/admin" className="hover:text-champagne-600">{t.account.adminArea}</Link>
+                ) : null}
+                {user.isMerchant ? (
+                  <Link href="/merchant" className="hover:text-champagne-600">{t.account.merchantArea}</Link>
+                ) : null}
+                <Link href="/tai-khoan" className="font-semibold text-champagne-600 hover:text-midnight">
+                  {user.fullName ?? user.email}
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/dang-nhap" className="hover:text-champagne-600">{t.account.signIn}</Link>
+                <Link
+                  href="/dang-ky"
+                  className="inline-flex items-center gap-1 font-semibold text-champagne-600 hover:text-midnight"
+                >
+                  {t.account.signUp} <IconArrowUpRight className="h-3 w-3" />
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -93,7 +126,7 @@ export function Header() {
                         : 'text-midnight/80 hover:text-champagne-600',
                     )}
                   >
-                    {item.label}
+                    {navLabel(item)}
                     {hasMenu && (
                       <IconChevronDown
                         className={cn(
@@ -130,7 +163,12 @@ export function Header() {
         </div>
       </div>
 
-      <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
+      <MobileMenu
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        locale={locale}
+        user={user}
+      />
     </header>
   );
 }

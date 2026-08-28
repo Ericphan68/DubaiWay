@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { footerNav } from '@/config/nav';
 import { siteConfig } from '@/config/site';
 import { Logo } from '@/components/ui/Logo';
+import { getLocale } from '@/server/locale';
+import { getDictionary } from '@/i18n';
 import {
   IconMapPin,
   IconPhone,
@@ -17,9 +19,64 @@ const socials = [
   { href: siteConfig.contact.youtube, label: 'YouTube', Icon: IconYoutube },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const locale = await getLocale();
+  const t = getDictionary(locale);
+
   return (
     <footer className="bg-midnight-950 text-white/70">
+      {/*
+        Dải mời đối tác — đặt ngay đầu footer nên xuất hiện ở cuối MỌI trang.
+        Đây là kênh tăng nguồn cung của sàn: không có đối tác thì không có gì để bán.
+      */}
+      <section className="border-b border-white/10 bg-gradient-to-r from-midnight-950 via-midnight-900 to-midnight-800">
+        <div className="shell grid gap-8 py-14 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-champagne-400">
+              {t.partnerCta.eyebrow}
+            </p>
+            <h2 className="mt-3 font-display text-2xl font-medium leading-tight text-white sm:text-3xl">
+              {t.partnerCta.title}{' '}
+              {/* Xuống dòng ở màn rộng; màn hẹp cần dấu cách để hai câu không dính nhau. */}
+              <br className="hidden sm:block" />
+              {t.partnerCta.titleLine2}
+            </h2>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70">
+              {t.partnerCta.body}
+            </p>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                href="/merchant/dang-ky"
+                className="inline-flex h-12 items-center rounded-full bg-champagne px-7 text-sm font-medium text-white transition-colors hover:bg-champagne-600"
+              >
+                {t.partnerCta.primary}
+              </Link>
+              <Link
+                href="/tro-thanh-doi-tac"
+                className="inline-flex h-12 items-center rounded-full border border-white/30 px-7 text-sm font-medium text-white transition-colors hover:border-champagne-400 hover:text-champagne-400"
+              >
+                {t.partnerCta.secondary}
+              </Link>
+            </div>
+          </div>
+
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            {[
+              ['10%', t.partnerCta.stat1Title, t.partnerCta.stat1Desc],
+              [t.partnerCta.stat2Value, t.partnerCta.stat2Title, t.partnerCta.stat2Desc],
+              [t.partnerCta.stat3Value, t.partnerCta.stat3Title, t.partnerCta.stat3Desc],
+            ].map(([value, title, desc]) => (
+              <li key={title} className="rounded-2xl border border-white/12 bg-white/[0.04] p-5">
+                <p className="font-display text-xl font-semibold text-champagne-400">{value}</p>
+                <p className="mt-1 text-sm font-medium text-white">{title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-white/60">{desc}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* Dải cam kết */}
       <div className="border-b border-white/10">
         <div className="shell grid gap-6 py-10 sm:grid-cols-2 lg:grid-cols-4">

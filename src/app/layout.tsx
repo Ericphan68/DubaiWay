@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from 'next';
 import { Fraunces, Be_Vietnam_Pro } from 'next/font/google';
 import { siteConfig } from '@/config/site';
 import { Header } from '@/components/layout/Header';
+import { getLocale } from '@/server/locale';
+import { getSessionUser, isMerchantMember, isPlatformStaff } from '@/server/auth';
+import { textDirection } from '@/i18n';
 import { Footer } from '@/components/layout/Footer';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { FloatingWhatsApp } from '@/components/layout/FloatingWhatsApp';
@@ -61,11 +64,20 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // Ngôn ngữ và phiên đọc ở máy chủ rồi truyền xuống Header,
+  // để menu hiện đúng trạng thái đăng nhập ngay từ lần render đầu.
+  const locale = await getLocale();
+  const user = await getSessionUser();
+
   return (
-    <html lang="vi" className={`${display.variable} ${sans.variable}`}>
+    <html
+      lang={locale}
+      dir={textDirection(locale)}
+      className={`${display.variable} ${sans.variable}`}
+    >
       <body className="flex min-h-screen flex-col">
         <a
           href="#main"
@@ -73,7 +85,15 @@ export default function RootLayout({
         >
           Bỏ qua tới nội dung
         </a>
-        <Header />
+        <Header
+          locale={locale}
+          user={user ? {
+            fullName: user.fullName,
+            email: user.email,
+            isMerchant: isMerchantMember(user),
+            isStaff: isPlatformStaff(user),
+          } : null}
+        />
         <main id="main" className="flex-1 pb-16 lg:pb-0">
           {children}
         </main>
